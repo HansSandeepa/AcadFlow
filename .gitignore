@@ -1,3 +1,9 @@
+### remove .env ###
+.env
+
+### ignore marven genarated source code ###
+target/
+
 ### IntelliJ IDEA ###
 out/
 !**/src/main/**/out/
