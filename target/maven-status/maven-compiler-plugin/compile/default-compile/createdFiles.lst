@@ -1,3 +1,4 @@
 acadflow\db\DBConnection.class
+acadflow\contollers\login\LoginPageController.class
 acadflow\Main.class
 acadflow\contollers\MainViewController.class

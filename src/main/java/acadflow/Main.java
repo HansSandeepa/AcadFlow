@@ -2,52 +2,59 @@ package acadflow;
 
 import acadflow.db.DBConnection;
 import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
+import javafx.application.Platform;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.stage.Stage;
-import java.io.IOException;
 
 public class Main extends Application {
+
     public static void main(String[] args) {
         launch(args);
     }
 
     @Override
     public void start(Stage stage) {
-
-        //setup view
-        try {
-            FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("mainView.fxml"));
-            Scene scene = new Scene(fxmlLoader.load(), 320, 240);
+        if (DBConnection.getConnection()) {
             stage.setTitle("Acadflow");
-            stage.setScene(scene);
             stage.show();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+        } else {
+            showErrorDialog();
         }
-
-        setupDatabaseConnection();
     }
 
-    private void setupDatabaseConnection() {
+    private void showErrorDialog() {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Connection Failed");
+        alert.setHeaderText("Unable to connect to the database");
+        alert.setContentText("Please check your connection settings and try again.");
 
-        if (DBConnection.getConnection()) {
-            //show to login page
-        }else{
-            //show the unable to connect page
-        }
-//        Notifications.create()
-//                .title("Database Connected!")
-//                .text("Welcome to AcadFlow!!!")
-//                .position(Pos.CENTER)
-//                .showInformation();
-//        System.out.println("Database Connected!");
-//        //e.printStackTrace();
-//        Notifications.create()
-//                .title("Unable to Connect ot server")
-//                .text(e.getMessage())
-//                .position(Pos.CENTER)
-//                .showInformation();
+        ButtonType retry = new ButtonType("Retry");
+        ButtonType exit  = new ButtonType("Exit");
+        alert.getButtonTypes().setAll(retry, exit);
 
+        alert.showAndWait().ifPresent(response -> {
+
+            if (response == retry) {
+                if (DBConnection.getConnection()) {
+                    // retry to start db connection
+                    Stage newStage = new Stage();
+                    try {
+                        start(newStage);
+                    }
+                    catch (Exception e) {
+                        System.out.println("\u001B[31mERROR: " + e.getMessage() + "\u001B[0m");
+                    }
+
+                } else {
+                    //try again if retry failed
+                    showErrorDialog();
+                }
+            } else {
+                // exit program in exit button click
+                Platform.exit();
+                System.exit(0);
+            }
+        });
     }
 }
