@@ -3,9 +3,13 @@ package acadflow;
 import acadflow.db.DBConnection;
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.stage.Stage;
+
+import java.io.IOException;
 
 public class Main extends Application {
 
@@ -14,9 +18,12 @@ public class Main extends Application {
     }
 
     @Override
-    public void start(Stage stage) {
+    public void start(Stage stage) throws IOException {
         if (DBConnection.getConnection()) {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/acadflow/login/loginPage.fxml"));
+            Scene scene = new Scene(loader.load());
             stage.setTitle("Acadflow");
+            stage.setScene(scene);
             stage.show();
         } else {
             showErrorDialog();
