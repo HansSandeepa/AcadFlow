@@ -1,6 +1,6 @@
 package acadflow;
 
-import acadflow.db.DBConnection;
+import acadflow.util.DBConnection;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
@@ -10,6 +10,7 @@ import javafx.scene.control.ButtonType;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.sql.*;
 
 public class Main extends Application {
 
@@ -19,7 +20,9 @@ public class Main extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
-        if (DBConnection.getConnection()) {
+        if (DBConnection.getAndCheckConnection()) {
+            createAdminIfNotExists();   //create admin user in database if not exists
+
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/acadflow/login/loginPage.fxml"));
             Scene scene = new Scene(loader.load());
             stage.setTitle("Acadflow");
@@ -43,8 +46,8 @@ public class Main extends Application {
         alert.showAndWait().ifPresent(response -> {
 
             if (response == retry) {
-                if (DBConnection.getConnection()) {
-                    // retry to start db connection
+                if (DBConnection.getAndCheckConnection()) {
+                    // retry to start util connection
                     Stage newStage = new Stage();
                     try {
                         start(newStage);
@@ -63,5 +66,68 @@ public class Main extends Application {
                 System.exit(0);
             }
         });
+    }
+
+    //setup admin in database if not exists
+    private void createAdminIfNotExists(){
+
+        //check if there is an admin user already exists in the database
+        String checkQuery = "SELECT EXISTS(SELECT 1 FROM user WHERE Fullname = ?)";
+        try {
+            Connection conn = DBConnection.getConnection();
+            PreparedStatement checkStmt = conn.prepareStatement(checkQuery);
+            checkStmt.setString(1,"admin");
+            ResultSet rs =  checkStmt.executeQuery();
+            while (rs.next()){
+                if (rs.getInt(1) == 1){
+                    System.out.println("Admin already exists!");
+                    rs.close();
+                    checkStmt.close();
+                    conn.close();
+                    return;
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("\u001B[31mSQL ERROR: " + e.getMessage() + "\u001B[0m");
+        }
+
+        //create admin if not exists
+        String insertUser = "INSERT INTO user (Fullname,Address,Dob,Gender,Password,Email) VALUES (?,?,?,?,?,?)";
+        String insertAdmin = "INSERT INTO admin VALUES (?,?)";
+        String adminId = "admin0001";
+
+        try {
+            Connection conn = DBConnection.getConnection();
+            conn.setAutoCommit(false);  //disable auto-commit for handle 2 insert statements
+
+            PreparedStatement userStmt = conn.prepareStatement(insertUser, Statement.RETURN_GENERATED_KEYS);
+            userStmt.setString(1,"admin");
+            userStmt.setString(2,"Faculty of Technology,University of Ruhuna, Karagoda, Uyangoda");
+            userStmt.setDate(3, java.sql.Date.valueOf("2000-01-01"));
+            userStmt.setString(4,"M");
+            userStmt.setString(5,"admin");
+            userStmt.setString(6,"admin_acadflow@fot.ruh.ac.lk");
+            userStmt.executeUpdate();
+
+            //get generated user id
+            ResultSet rs = userStmt.getGeneratedKeys();
+            if (rs.next()) {
+                //insert user id to admin table
+                int userId = rs.getInt(1);
+
+                PreparedStatement adminStmt = conn.prepareStatement(insertAdmin);
+                adminStmt.setString(1,adminId);
+                adminStmt.setInt(2,userId);
+                adminStmt.executeUpdate();
+                adminStmt.close();
+            }
+
+            conn.commit();  //add both statements to the database
+            rs.close();
+            userStmt.close();
+            conn.close();
+        } catch (SQLException e) {
+            System.out.println("\u001B[31mSQL ERROR: " + e.getMessage() + "\u001B[0m");
+        }
     }
 }
