@@ -1,5 +1,6 @@
 package acadflow.contollers.login;
 
+import acadflow.util.DBConnection;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
@@ -24,6 +25,14 @@ public class LoginPageController {
         String pwd = pwdField.getText() == null ? "" : pwdField.getText().trim();
 
         if (validationCheck(regNo,pwd)){
+            try {
+                String check
+                Connection conn = DBConnection.getConnection();
+
+
+            } catch (SQLException e) {
+                System.out.println("\u001B[31mSQL ERROR: " + e.getMessage() + "\u001B[0m");
+            }
             System.out.println("LOG: end");
         }
 

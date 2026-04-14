@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CopilotDiffPersistence">
+    <option name="pendingDiffs">
+      <map>
+        <entry key="$PROJECT_DIR$/src/main/resources/acadflow/mainView.fxml">
+          <value>
+            <PendingDiffInfo>
+              <option name="filePath" value="$PROJECT_DIR$/src/main/resources/acadflow/mainView.fxml" />
+              <option name="originalContent" value="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&#10;&#10;&lt;?import javafx.scene.control.Button?&gt;&#10;&lt;?import javafx.scene.control.Label?&gt;&#10;&lt;?import javafx.scene.layout.VBox?&gt;&#10;&#10;&lt;VBox alignment=&quot;CENTER&quot; maxHeight=&quot;-Infinity&quot; maxWidth=&quot;-Infinity&quot; minHeight=&quot;-Infinity&quot; minWidth=&quot;-Infinity&quot; prefHeight=&quot;203.0&quot; prefWidth=&quot;311.0&quot; xmlns=&quot;http://javafx.com/javafx/25&quot; xmlns:fx=&quot;http://javafx.com/fxml/1&quot; fx:controller=&quot;acadflow.contollers.MainViewController&quot;&gt;&#10;   &lt;Label fx:id=&quot;testLabel&quot; text=&quot;weqef&quot; textFill=&quot;#fa0000&quot; /&gt;&#10;   &lt;Button fx:id=&quot;clickBtn&quot; alignment=&quot;BOTTOM_CENTER&quot; contentDisplay=&quot;CENTER&quot; mnemonicParsing=&quot;false&quot; onAction=&quot;#showText&quot; text=&quot; Btn 01&quot; textOverrun=&quot;CENTER_ELLIPSIS&quot; /&gt;&#10;   &lt;Button fx:id=&quot;cancelBtn&quot; mnemonicParsing=&quot;false&quot; onAction=&quot;#setDefalutText&quot; text=&quot;Cancel&quot; /&gt;&#10;&lt;/VBox&gt;&#10;" />
+              <option name="updatedContent" value="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&#10;&#10;&lt;?import javafx.scene.control.Button?&gt;&#10;&lt;?import javafx.scene.control.Label?&gt;&#10;&lt;?import javafx.scene.image.ImageView?&gt;&#10;&lt;?import javafx.scene.layout.VBox?&gt;&#10;&#10;&lt;VBox alignment=&quot;CENTER&quot; maxHeight=&quot;-Infinity&quot; maxWidth=&quot;-Infinity&quot; minHeight=&quot;-Infinity&quot; minWidth=&quot;-Infinity&quot; prefHeight=&quot;203.0&quot; prefWidth=&quot;311.0&quot; xmlns=&quot;http://javafx.com/javafx/25&quot; xmlns:fx=&quot;http://javafx.com/fxml/1&quot; fx:controller=&quot;acadflow.contollers.MainViewController&quot;&gt;&#10;   &lt;ImageView fx:id=&quot;profileImageView&quot; fitHeight=&quot;150.0&quot; fitWidth=&quot;150.0&quot; pickOnBounds=&quot;true&quot; preserveRatio=&quot;true&quot; /&gt;&#10;   &lt;Label fx:id=&quot;testLabel&quot; text=&quot;weqef&quot; textFill=&quot;#fa0000&quot; /&gt;&#10;   &lt;Button fx:id=&quot;clickBtn&quot; alignment=&quot;BOTTOM_CENTER&quot; contentDisplay=&quot;CENTER&quot; mnemonicParsing=&quot;false&quot; onAction=&quot;#showText&quot; text=&quot; Btn 01&quot; textOverrun=&quot;CENTER_ELLIPSIS&quot; /&gt;&#10;   &lt;Button fx:id=&quot;cancelBtn&quot; mnemonicParsing=&quot;false&quot; onAction=&quot;#setDefalutText&quot; text=&quot;Cancel&quot; /&gt;&#10;&lt;/VBox&gt;&#10;" />
+            </PendingDiffInfo>
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+</project>
