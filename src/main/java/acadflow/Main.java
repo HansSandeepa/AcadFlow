@@ -1,6 +1,7 @@
 package acadflow;
 
 import acadflow.util.DBConnection;
+import acadflow.util.PasswordHash;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
@@ -96,6 +97,10 @@ public class Main extends Application {
         String insertAdmin = "INSERT INTO admin VALUES (?,?)";
         String adminId = "admin0001";
 
+        //setup password hash
+        String adminPassword = "admin@123";
+        PasswordHash passwordHash = new PasswordHash(adminPassword);
+
         try {
             Connection conn = DBConnection.getConnection();
             conn.setAutoCommit(false);  //disable auto-commit for handle 2 insert statements
@@ -105,7 +110,7 @@ public class Main extends Application {
             userStmt.setString(2,"Faculty of Technology,University of Ruhuna, Karagoda, Uyangoda");
             userStmt.setDate(3, java.sql.Date.valueOf("2000-01-01"));
             userStmt.setString(4,"M");
-            userStmt.setString(5,"admin");
+            userStmt.setString(5,passwordHash.createHash());
             userStmt.setString(6,"admin_acadflow@fot.ruh.ac.lk");
             userStmt.executeUpdate();
 

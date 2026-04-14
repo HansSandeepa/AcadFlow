@@ -1,4 +1,5 @@
 acadflow\contollers\login\LoginPageController.class
 acadflow\util\DBConnection.class
 acadflow\Main.class
+acadflow\util\PasswordHash.class
 acadflow\contollers\TestViewController.class
