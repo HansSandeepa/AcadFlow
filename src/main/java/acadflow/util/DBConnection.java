@@ -1,6 +1,8 @@
-package acadflow.db;
+package acadflow.util;
 
 import io.github.cdimascio.dotenv.Dotenv;
+
+import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
@@ -15,14 +17,17 @@ public class DBConnection {
     private static final String USER = "root";
     private static final String PASSWORD = dotenv.get("DB_PASSWORD") != null ? dotenv.get("DB_PASSWORD") : "";
 
-    public static boolean getConnection(){
+    public static boolean getAndCheckConnection(){
         try {
-            DriverManager.getConnection(URL,USER,PASSWORD);
+            getConnection();
             return true;
         } catch (SQLException e) {
-            System.out.println("\u001B[31mERROR: " + e.getMessage() + "\u001B[0m");
+            System.out.println("\u001B[31mSQL ERROR: " + e.getMessage() + "\u001B[0m");
             return false;
         }
     }
 
+    public static Connection getConnection() throws SQLException {
+        return DriverManager.getConnection(URL,USER,PASSWORD);
+    }
 }
