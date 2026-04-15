@@ -22,7 +22,7 @@ public class DBConnection {
             getConnection();
             return true;
         } catch (SQLException e) {
-            System.out.println("\u001B[31mERROR: " + e.getMessage() + "\u001B[0m");
+            System.out.println("\u001B[31mSQL ERROR: " + e.getMessage() + "\u001B[0m");
             return false;
         }
     }
