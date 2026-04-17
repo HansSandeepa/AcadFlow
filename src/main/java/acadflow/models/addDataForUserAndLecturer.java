@@ -1,0 +1,43 @@
+package acadflow.models;
+
+import acadflow.util.DBConnection;
+import acadflow.util.PasswordHash;
+
+import java.sql.Connection;
+import java.sql.SQLException;
+
+public class addDataForUserAndLecturer {
+
+    public void addUserAndLecturerData() {
+        UserAndLecturerData[] users = {
+                new UserAndLecturerData("lec0001", "ICT", "P.H.P. Nuwan Laksiri", "1990-05-12", "M", "nuwanLaksiri@gmailcom", 01),
+                new UserAndLecturerData("lec0002", "MDS", "Dr. K K N B Adikaram", "1991-03-08", "F", "adhikaram@gmailcom", 02),
+                new UserAndLecturerData("lec0003", "ICT", "S.J.k RiDMI Kumarihami", "1992-07-19", "F", "ridmiKumarihami@gmailcom", 03),
+                new UserAndLecturerData("lec0004", "ET", "K.M.K. Weerasnghe", "1993-01-25", "M", "weerasinghe@gmailcom", 04),
+                new UserAndLecturerData("lec0005", "BST", "J.M. Chinthaka Kumara", "1994-11-03", "M", "chinathaka@gmailcom", 05),
+                new UserAndLecturerData("Lec0002", "BST", "S.M. Kavindu Perera", "1991-03-08", "F", "kavindu.perera@company.com", 06)
+        };
+
+        String address = "Faculty of Technology, University of Ruhuna";
+        PasswordHash passwordHash = new PasswordHash("lec@123");
+
+        try(Connection conn = DBConnection.getConnection()){
+            conn.setAutoCommit(false);
+
+            userDBLogic udbl = new userDBLogic();
+
+            for (UserAndLecturerData u : users) {
+                if (udbl.isEmailExists(conn, u.email)){
+                    System.out.println("Email Already Exists" + u.email);
+                }
+                udbl.insertUserAndLecturer(conn, u, address, passwordHash);
+            }
+
+            conn.commit();
+            System.out.println("Lecturers inserted!");
+
+        } catch (Exception e) {
+            System.out.println("Error in inserting User And Lecturer Data");
+        }
+    }
+}

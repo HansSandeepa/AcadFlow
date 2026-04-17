@@ -1,5 +1,8 @@
 package acadflow;
 
+
+import acadflow.models.addDataForUserAndLecturer;
+import acadflow.models.addDataForUserAndOfficer;
 import acadflow.util.DBConnection;
 import acadflow.util.PasswordHash;
 import javafx.application.Application;
@@ -23,6 +26,15 @@ public class Main extends Application {
     public void start(Stage stage) throws IOException {
         if (DBConnection.getAndCheckConnection()) {
             createAdminIfNotExists();   //create admin user in database if not exists
+
+            //INSERT TECHNICAL OFFICERS DATA
+            addDataForUserAndOfficer addDataForUserAndOfficer = new addDataForUserAndOfficer();
+            addDataForUserAndOfficer.addUserAndOfficerData();
+
+            //INSERT LECTURER DATA
+            addDataForUserAndLecturer addDataForUserAndLecturer = new addDataForUserAndLecturer();
+            addDataForUserAndLecturer.addUserAndLecturerData();
+
 
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/acadflow/login/loginPage.fxml"));
             Scene scene = new Scene(loader.load());
