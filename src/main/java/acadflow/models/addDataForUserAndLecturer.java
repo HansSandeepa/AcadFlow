@@ -14,7 +14,7 @@ public class addDataForUserAndLecturer {
                 new UserAndLecturerData("lec0003", "ICT", "S.J.k RiDMI Kumarihami", "1992-07-19", "F", "ridmiKumarihami@gmailcom", 3),
                 new UserAndLecturerData("lec0004", "ET", "K.M.K. Weerasnghe", "1993-01-25", "M", "weerasinghe@gmailcom", 4),
                 new UserAndLecturerData("lec0005", "BST", "J.M. Chinthaka Kumara", "1994-11-03", "M", "chinathaka@gmailcom", 5),
-                new UserAndLecturerData("Lec0006", "BST", "S.M. Kavindu Perera", "1991-03-08", "F", "kavindu.perera@company.com", 6)
+                new UserAndLecturerData("lec0006", "BST", "S.M. Kavindu Perera", "1991-03-08", "F", "kavindu.perera@company.com", 6)
         };
 
         String address = "Faculty of Technology, University of Ruhuna";
