@@ -73,7 +73,11 @@ public class userDBLogic {
                 lecStmt.setInt(2, u.office_room);
                 lecStmt.setString(3, u.dept);
                 lecStmt.setInt(4, userId);
+                lecStmt.executeUpdate();
+                lecStmt.close();
             }
+            rs.close();
+            userStmt.close();
         }
     }
 

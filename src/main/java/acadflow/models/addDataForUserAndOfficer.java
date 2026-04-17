@@ -34,7 +34,7 @@ public class addDataForUserAndOfficer {
             }
 
             conn.commit();
-            System.out.println("All done!");
+            System.out.println("Tech Officers inserted!");
 
         } catch (Exception e) {
                 System.out.println("Error in inserting User And Officers Data");
