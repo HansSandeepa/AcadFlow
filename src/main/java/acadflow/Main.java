@@ -36,6 +36,7 @@ public class Main extends Application {
             addDataForUserAndLecturer addDataForUserAndLecturer = new addDataForUserAndLecturer();
             addDataForUserAndLecturer.addUserAndLecturerData();
 
+            //INSERT COURSES DATA
             addCourseData addCourseData = new addCourseData();
             addCourseData.addDataForCourse();
 
