@@ -1,8 +1,5 @@
 package acadflow.models;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class Student extends User {
     private String studentId;
     private int batchYear;

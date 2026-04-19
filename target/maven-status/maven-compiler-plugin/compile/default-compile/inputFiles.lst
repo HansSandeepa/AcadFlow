@@ -1,7 +1,14 @@
 G:\inteliJ Java Projects\AcadFlow\src\main\java\acadflow\contollers\login\LoginPageController.java
 G:\inteliJ Java Projects\AcadFlow\src\main\java\acadflow\contollers\TestViewController.java
 G:\inteliJ Java Projects\AcadFlow\src\main\java\acadflow\Main.java
-G:\inteliJ Java Projects\AcadFlow\src\main\java\acadflow\models\LoadUserViewModel.java
+G:\inteliJ Java Projects\AcadFlow\src\main\java\acadflow\models\Admin.java
+G:\inteliJ Java Projects\AcadFlow\src\main\java\acadflow\models\Lecturer.java
+G:\inteliJ Java Projects\AcadFlow\src\main\java\acadflow\models\Student.java
+G:\inteliJ Java Projects\AcadFlow\src\main\java\acadflow\models\TechnicalOfficer.java
+G:\inteliJ Java Projects\AcadFlow\src\main\java\acadflow\models\User.java
+G:\inteliJ Java Projects\AcadFlow\src\main\java\acadflow\models\UserLoginLogic.java
+G:\inteliJ Java Projects\AcadFlow\src\main\java\acadflow\models\users\User.java
+G:\inteliJ Java Projects\AcadFlow\src\main\java\acadflow\models\users\UserImplementations.java
 G:\inteliJ Java Projects\AcadFlow\src\main\java\acadflow\util\DBConnection.java
 G:\inteliJ Java Projects\AcadFlow\src\main\java\acadflow\util\PasswordHash.java
 G:\inteliJ Java Projects\AcadFlow\src\main\java\acadflow\util\UserType.java

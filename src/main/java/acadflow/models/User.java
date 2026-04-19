@@ -1,6 +1,6 @@
 package acadflow.models;
 
-public abstract class User {
+public abstract class User{
     protected int userId;
     protected String username;
     protected String password;
