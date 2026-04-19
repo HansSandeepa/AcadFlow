@@ -1,11 +1,307 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.String?>
+<?import javafx.collections.FXCollections?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.ProgressBar?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.TitledPane?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
+<BorderPane style="-fx-background-color: #f4f6f9;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="my.Student_controller">
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1">
-    <children>
-        <Label layoutX="286.0" layoutY="191.0" prefHeight="43.0" prefWidth="119.0" text="undergraduate dashboard" />
-    </children>
-</AnchorPane>
+    <top>
+        <VBox>
+            <HBox prefWidth="1126.0" spacing="20" style="-fx-background-color: #000060; -fx-padding: 15;">
+                <children>
+                    <VBox prefHeight="96.0" prefWidth="475.0">
+                        <children>
+                            <Label prefHeight="40.0" text="Acadflow - Undergraduate Potral" textFill="WHITE">
+                                <font>
+                                    <Font name="System Bold" size="28.0" />
+                                </font>
+                            </Label>
+                            <HBox prefHeight="26.0" prefWidth="344.0">
+                                <children>
+                                    <Label fx:id="adminNameLabel" style="-fx-font-size: 14px;" text="Welcome " textFill="#ecf0f1">
+                                        <font>
+                                            <Font size="14.0" />
+                                        </font>
+                                    </Label>
+                                    <Label fx:id="userName" text="Jhon Doe" textFill="WHITE">
+                                        <font>
+                                            <Font size="14.0" />
+                                        </font>
+                                    </Label>
+                                </children>
+                                <VBox.margin>
+                                    <Insets top="10.0" />
+                                </VBox.margin>
+                            </HBox>
+                            <HBox prefHeight="100.0" prefWidth="200.0">
+                                <children>
+                                    <Label text="Registration Number: " textFill="WHITE">
+                                        <font>
+                                            <Font size="14.0" />
+                                        </font>
+                                        <HBox.margin>
+                                            <Insets />
+                                        </HBox.margin>
+                                    </Label>
+                                    <Label fx:id="userRegNo" prefHeight="20.0" text="tg1234" textFill="WHITE">
+                                        <font>
+                                            <Font size="14.0" />
+                                        </font>
+                                    </Label>
+                                </children>
+                                <VBox.margin>
+                                    <Insets top="5.0" />
+                                </VBox.margin>
+                            </HBox>
+                        </children>
+                    </VBox>
+                    <Region prefHeight="96.0" prefWidth="226.0" HBox.hgrow="ALWAYS" />
+                    <VBox prefHeight="88.0" prefWidth="100.0">
+                        <children>
+                            <ImageView fx:id="userImg" fitHeight="76.0" fitWidth="98.0" pickOnBounds="true" preserveRatio="true" />
+                            <Label alignment="CENTER" prefHeight="18.0" prefWidth="125.0" text="Undergraduate" textAlignment="CENTER" textFill="WHITE">
+                                <font>
+                                    <Font size="14.0" />
+                                </font>
+                            </Label>
+                        </children>
+                    </VBox>
+                    <VBox prefHeight="96.0" prefWidth="70.0">
+                        <children>
+                            <Region prefHeight="33.0" prefWidth="100.0" visible="false" />
+                            <Button fx:id="logoutBtn" onAction="#logout" prefHeight="34.0" prefWidth="68.0" style="-fx-background-color: #e74c3c; -fx-text-fill: white; -fx-background-radius: 5;" text="Logout">
+                                <font>
+                                    <Font name="System Bold" size="14.0" />
+                                </font>
+                                <VBox.margin>
+                                    <Insets />
+                                </VBox.margin>
+                            </Button>
+                        </children>
+                    </VBox>
+                </children>
+            </HBox>
+
+            <TabPane tabClosingPolicy="UNAVAILABLE">
+                <Tab text="My Profile">
+                    <HBox spacing="30" style="-fx-padding: 20;">
+                        <!-- Profile Picture Section -->
+                        <VBox spacing="15" style="-fx-alignment: center; -fx-pref-width: 250;">
+                            <ImageView fx:id="userMainImage" fitHeight="150" fitWidth="150" style="-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 5);">
+                                <Image url="@/profile_pics/default_pic.jpg" />
+                            </ImageView>
+                            <Button style="-fx-background-color: #3498db; -fx-text-fill: white;" text="Change Profile Picture" />
+                        </VBox>
+
+                        <!-- Profile Details -->
+                        <VBox spacing="15" style="-fx-pref-width: 400;">
+                            <Label style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;" text="Personal Information" />
+
+                            <GridPane hgap="15" vgap="10">
+                                <Label style="-fx-font-weight: bold;" text="Full Name:" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+                                <Label text="John Michael Doe" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+
+                                <Label style="-fx-font-weight: bold;" text="Student ID:" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+                                <Label text="ICT21001" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+
+                                <Label style="-fx-font-weight: bold;" text="Email:" GridPane.columnIndex="0" GridPane.rowIndex="2" />
+                                <TextField editable="true" text="john.doe@students.ruhuna.ac.lk" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+
+                                <Label style="-fx-font-weight: bold;" text="Contact No:" GridPane.columnIndex="0" GridPane.rowIndex="3" />
+                                <TextField editable="true" text="0712345678" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+
+                                <Label style="-fx-font-weight: bold;" text="Address:" GridPane.columnIndex="0" GridPane.rowIndex="4" />
+                                <TextArea style="-fx-pref-height: 60;" text="No. 123, Main Street, Galle" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+
+                                <HBox spacing="10" GridPane.columnIndex="1" GridPane.rowIndex="5">
+                                    <Button style="-fx-background-color: #27ae60; -fx-text-fill: white;" text="Update Profile" />
+                                    <Button style="-fx-background-color: #95a5a6; -fx-text-fill: white;" text="Cancel" />
+                                </HBox>
+                                <columnConstraints>
+                                    <ColumnConstraints />
+                                    <ColumnConstraints />
+                                </columnConstraints>
+                                <rowConstraints>
+                                    <RowConstraints />
+                                    <RowConstraints />
+                                    <RowConstraints />
+                                    <RowConstraints />
+                                    <RowConstraints />
+                                    <RowConstraints />
+                                </rowConstraints>
+                            </GridPane>
+                        </VBox>
+                    </HBox>
+                </Tab>
+
+                <Tab text="My Courses &amp; Grades">
+                    <VBox spacing="15" style="-fx-padding: 20;">
+                        <Label style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;" text="Academic Performance" />
+
+                        <!-- GPA Card -->
+                        <HBox spacing="20">
+                            <VBox spacing="10" style="-fx-background-color: #ecf0f1; -fx-padding: 15; -fx-border-radius: 10; -fx-background-radius: 10;">
+                                <Label style="-fx-font-size: 14px; -fx-text-fill: #7f8c8d;" text="Current GPA" />
+                                <Label style="-fx-font-size: 36px; -fx-font-weight: bold; -fx-text-fill: #27ae60;" text="3.75" />
+                                <Label text="Overall GPA: 3.65" />
+                            </VBox>
+
+                            <VBox spacing="10" style="-fx-background-color: #ecf0f1; -fx-padding: 15; -fx-border-radius: 10; -fx-background-radius: 10;">
+                                <Label style="-fx-font-size: 14px; -fx-text-fill: #7f8c8d;" text="Credits Completed" />
+                                <Label style="-fx-font-size: 36px; -fx-font-weight: bold; -fx-text-fill: #3498db;" text="45" />
+                                <Label text="Total Credits: 90" />
+                            </VBox>
+                        </HBox>
+
+                        <!-- Courses Table -->
+                        <TableView style="-fx-pref-height: 350;">
+                            <columns>
+                                <TableColumn prefWidth="100" text="Course Code" />
+                                <TableColumn prefWidth="200" text="Course Name" />
+                                <TableColumn prefWidth="80" text="Credits" />
+                                <TableColumn prefWidth="100" text="CA Marks" />
+                                <TableColumn prefWidth="100" text="Exam Marks" />
+                                <TableColumn prefWidth="80" text="Total" />
+                                <TableColumn prefWidth="80" text="Grade" />
+                                <TableColumn prefWidth="100" text="Status" />
+                            </columns>
+                        </TableView>
+
+                        <!-- Eligibility Status -->
+                        <TitledPane text="Exam Eligibility">
+                            <VBox spacing="10" style="-fx-padding: 15;">
+                                <Label text="CA Marks Requirement: ≥40% to sit for final exam" />
+                                <Label style="-fx-text-fill: #27ae60;" text="OOP (ICT2132): CA = 78% - Eligible ✓" />
+                                <Label style="-fx-text-fill: #27ae60;" text="Database (ICT2133): CA = 85% - Eligible ✓" />
+                                <Label style="-fx-text-fill: #27ae60;" text="Web Dev (ICT2134): CA = 92% - Eligible ✓" />
+                                <ProgressBar progress="0.85" style="-fx-pref-width: 300;" />
+                            </VBox>
+                        </TitledPane>
+                    </VBox>
+                </Tab>
+
+                <Tab text="Attendance">
+                    <VBox spacing="15" style="-fx-padding: 20;">
+                        <Label style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;" text="Attendance Records" />
+
+                        <HBox spacing="15">
+                            <ComboBox promptText="Select Course" style="-fx-pref-width: 200;">
+                                <items>
+                                    <FXCollections fx:factory="observableArrayList">
+                                        <String fx:value="OOP - ICT2132" />
+                                        <String fx:value="Database - ICT2133" />
+                                        <String fx:value="Web Development - ICT2134" />
+                                    </FXCollections>
+                                </items>
+                            </ComboBox>
+                            <Button style="-fx-background-color: #3498db; -fx-text-fill: white;" text="View Attendance" />
+                        </HBox>
+
+                        <HBox spacing="20">
+                            <!-- Theory Attendance -->
+                            <VBox spacing="10" style="-fx-background-color: white; -fx-padding: 15; -fx-border-color: #bdc3c7; -fx-border-radius: 5;">
+                                <Label style="-fx-font-size: 16px; -fx-font-weight: bold;" text="Theory Sessions" />
+                                <Label style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #27ae60;" text="12 / 15" />
+                                <Label text="80% Attendance" />
+                                <ProgressBar progress="0.80" style="-fx-pref-width: 200;" />
+                            </VBox>
+
+                            <!-- Practical Attendance -->
+                            <VBox spacing="10" style="-fx-background-color: white; -fx-padding: 15; -fx-border-color: #bdc3c7; -fx-border-radius: 5;">
+                                <Label style="-fx-font-size: 16px; -fx-font-weight: bold;" text="Practical Sessions" />
+                                <Label style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #f39c12;" text="10 / 15" />
+                                <Label text="66.7% Attendance" />
+                                <ProgressBar progress="0.667" style="-fx-pref-width: 200;" />
+                            </VBox>
+
+                            <!-- Combined -->
+                            <VBox spacing="10" style="-fx-background-color: white; -fx-padding: 15; -fx-border-color: #bdc3c7; -fx-border-radius: 5;">
+                                <Label style="-fx-font-size: 16px; -fx-font-weight: bold;" text="Combined" />
+                                <Label style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #e74c3c;" text="22 / 30" />
+                                <Label text="73.3% Attendance" />
+                                <ProgressBar progress="0.733" style="-fx-pref-width: 200;" />
+                            </VBox>
+                        </HBox>
+
+                        <!-- Attendance Calendar/Table -->
+                        <TableView style="-fx-pref-height: 200;">
+                            <columns>
+                                <TableColumn prefWidth="120" text="Date" />
+                                <TableColumn prefWidth="120" text="Session Type" />
+                                <TableColumn prefWidth="100" text="Status" />
+                                <TableColumn prefWidth="120" text="Medical Submitted" />
+                            </columns>
+                        </TableView>
+                    </VBox>
+                </Tab>
+
+                <Tab text="Medical">
+                    <VBox spacing="15" style="-fx-padding: 20;">
+                        <Label style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;" text="Medical Records" />
+
+                        <TableView style="-fx-pref-height: 300;">
+                            <columns>
+                                <TableColumn prefWidth="120" text="Date" />
+                                <TableColumn prefWidth="150" text="Session" />
+                                <TableColumn prefWidth="200" text="Reason" />
+                                <TableColumn prefWidth="100" text="Status" />
+                            </columns>
+                        </TableView>
+
+                        <Button style="-fx-background-color: #27ae60; -fx-text-fill: white; -fx-pref-width: 200;" text="Submit New Medical" />
+                    </VBox>
+                </Tab>
+
+                <Tab text="Timetable">
+                    <VBox spacing="10" style="-fx-padding: 20;">
+                        <Label style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;" text="Weekly Timetable" />
+
+                        <ComboBox promptText="Select Week" style="-fx-pref-width: 150;" />
+
+                        <TableView style="-fx-pref-height: 450;">
+                            <columns>
+                                <TableColumn prefWidth="100" text="Time" />
+                                <TableColumn prefWidth="150" text="Monday" />
+                                <TableColumn prefWidth="150" text="Tuesday" />
+                                <TableColumn prefWidth="150" text="Wednesday" />
+                                <TableColumn prefWidth="150" text="Thursday" />
+                                <TableColumn prefWidth="150" text="Friday" />
+                            </columns>
+                        </TableView>
+                    </VBox>
+                </Tab>
+
+                <Tab text="Notices">
+                    <VBox spacing="10" style="-fx-padding: 20;">
+                        <ListView style="-fx-pref-height: 450;">
+                            <!-- Notice items -->
+                        </ListView>
+                    </VBox>
+                </Tab>
+            </TabPane>
+        </VBox>
+    </top>
+</BorderPane>
