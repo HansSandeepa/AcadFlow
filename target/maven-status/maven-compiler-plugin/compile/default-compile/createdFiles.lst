@@ -1,11 +1,13 @@
 acadflow\util\DBConnection.class
+acadflow\models\UserLoginLogic$LoadResult.class
+acadflow\models\UserLoginLogic.class
 acadflow\contollers\login\LoginPageController.class
+acadflow\models\users\User.class
 acadflow\models\Admin.class
 acadflow\models\TechnicalOfficer.class
 acadflow\util\PasswordHash.class
-acadflow\models\LoadUserViewModel$LoadResult.class
+acadflow\models\users\UserImplementations.class
 acadflow\models\Lecturer.class
-acadflow\models\LoadUserViewModel.class
 acadflow\contollers\login\LoginPageController$1.class
 acadflow\util\UserType.class
 acadflow\models\User.class

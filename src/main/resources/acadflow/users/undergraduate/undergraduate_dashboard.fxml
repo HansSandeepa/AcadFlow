@@ -1,11 +1,127 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1080.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1">
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1">
-    <children>
-        <Label layoutX="286.0" layoutY="191.0" prefHeight="43.0" prefWidth="119.0" text="undergraduate dashboard" />
-    </children>
-</AnchorPane>
+    <left>
+        <VBox prefHeight="720.0" prefWidth="240.0" style="-fx-background-color: #E5E7EB;" BorderPane.alignment="CENTER">
+            <children>
+                <VBox alignment="CENTER" prefHeight="150.0" prefWidth="240.0" spacing="10.0">
+                    <children>
+                        <Label fx:id="userRegNo" text="Registration No" textFill="#36383e">
+                            <font>
+                                <Font name="System Bold" size="16.0" />
+                            </font>
+                            <VBox.margin>
+                                <Insets top="20.0" />
+                            </VBox.margin></Label>
+                        <ImageView fx:id="userImage" fitHeight="82.0" fitWidth="82.0" pickOnBounds="true" preserveRatio="true" />
+                        <Label text="Student" textFill="#36383e">
+                     <font>
+                        <Font size="14.0" />
+                     </font></Label>
+                        <Separator opacity="0.2" prefWidth="180.0" style="-fx-background-color: #36383e;">
+                            <VBox.margin>
+                                <Insets left="20.0" right="20.0" />
+                            </VBox.margin>
+                        </Separator>
+                    </children>
+                </VBox>
+
+                <VBox spacing="5.0" VBox.vgrow="ALWAYS">
+                    <children>
+                        <Button fx:id="coursesBtn" alignment="CENTER" mnemonicParsing="false" prefHeight="50.0" prefWidth="240.0" style="-fx-background-color: #000060; -fx-cursor: hand;" text="My Courses" textFill="WHITE">
+                            <font><Font name="System Bold" size="15.0" /></font>
+                            <VBox.margin>
+                                <Insets left="20.0" right="20.0" />
+                            </VBox.margin>
+                        </Button>
+                        <Button fx:id="attendanceBtn" alignment="CENTER" mnemonicParsing="false" prefHeight="50.0" prefWidth="240.0" style="-fx-background-color: #000060; -fx-cursor: hand;" text="View Attendance" textFill="WHITE">
+                            <font><Font name="System Bold" size="15.0" /></font>
+                            <VBox.margin>
+                                <Insets left="20.0" right="20.0" />
+                            </VBox.margin>
+                        </Button>
+                        <Button fx:id="gradesBtn" alignment="CENTER" mnemonicParsing="false" prefHeight="50.0" prefWidth="240.0" style="-fx-background-color: #000060; -fx-cursor: hand;" text="Grades &amp; Marks" textFill="WHITE">
+                            <font><Font name="System Bold" size="15.0" /></font>
+                            <VBox.margin>
+                                <Insets left="20.0" right="20.0" />
+                            </VBox.margin>
+                        </Button>
+                        <Button fx:id="timeTablesBtn" alignment="CENTER" mnemonicParsing="false" prefHeight="50.0" prefWidth="240.0" style="-fx-background-color: #000060; -fx-cursor: hand;" text="  Show Timetables" textFill="WHITE">
+                            <font><Font name="System Bold" size="15.0" /></font>
+                            <VBox.margin>
+                                <Insets left="20.0" right="20.0" />
+                            </VBox.margin>
+                        </Button>
+                  <Button fx:id="noticesBtn" alignment="CENTER" mnemonicParsing="false" prefHeight="50.0" prefWidth="240.0" style="-fx-background-color: #000060; -fx-cursor: hand;" text="Show Notices" textFill="WHITE">
+                     <font>
+                        <Font name="System Bold" size="15.0" />
+                     </font>
+                     <VBox.margin>
+                        <Insets left="20.0" right="20.0" />
+                     </VBox.margin>
+                  </Button>
+                        <Button fx:id="myAccountBtn" alignment="CENTER" mnemonicParsing="false" prefHeight="50.0" prefWidth="240.0" style="-fx-background-color: #000060; -fx-cursor: hand;" text="  Manage My Account" textFill="WHITE">
+                            <font>
+                                <Font name="System Bold" size="15.0" />
+                            </font>
+                            <VBox.margin>
+                                <Insets left="20.0" right="20.0" />
+                            </VBox.margin>
+                        </Button>
+
+                        <Button fx:id="logoutBtn" mnemonicParsing="false" prefHeight="50.0" prefWidth="240.0" style="-fx-background-color: #e74c3c; -fx-cursor: hand;" text="Logout" textFill="WHITE">
+                            <font>
+                                <Font name="System Bold" size="15.0" /> </font>
+                            <VBox.margin>
+                                <Insets left="20.0" right="20.0" top="120.0" />
+                            </VBox.margin>
+                        </Button>
+                    </children>
+                    <padding>
+                        <Insets top="10.0" />
+                    </padding>
+                </VBox>
+            </children>
+        </VBox>
+    </left>
+
+    <center>
+        <AnchorPane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #f7f7f7;" BorderPane.alignment="CENTER">
+            <children>
+                <AnchorPane prefHeight="60.0" prefWidth="840.0" style="-fx-background-color: white; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 5);" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+                    <children>
+                        <Label fx:id="userName" layoutX="30.0" layoutY="18.0" text="Welcome User Name!" textFill="#2c3e50">
+                            <font>
+                                <Font name="System Bold" size="18.0" />
+                            </font>
+                        </Label>
+                    </children>
+                </AnchorPane>
+
+                <AnchorPane fx:id="contentArea" layoutX="20.0" layoutY="80.0" prefHeight="620.0" prefWidth="800.0" style="-fx-background-color: white; -fx-background-radius: 10;" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="80.0">
+                    <children>
+                        <VBox fx:id="canvas" alignment="CENTER" layoutX="250.0" layoutY="200.0" spacing="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                            <children>
+                                <Text fill="#bdc3c7" strokeType="OUTSIDE" strokeWidth="0.0" text="Select an option from the Side Panel">
+                                    <font><Font size="24.0" /></font>
+                                </Text>
+                            </children>
+                        </VBox>
+                    </children>
+                </AnchorPane>
+            </children>
+        </AnchorPane>
+    </center>
+</BorderPane>

@@ -4,7 +4,6 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Separator?>
-<?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
@@ -26,10 +25,7 @@
                      <VBox.margin>
                         <Insets top="20.0" />
                      </VBox.margin></Label>
-                  <ImageView fx:id="userImage" fitHeight="82.0" fitWidth="82.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../../../profile_pics/default_pic.jpg" />
-                     </image></ImageView>
+                  <ImageView fx:id="userImage" fitHeight="82.0" fitWidth="82.0" pickOnBounds="true" preserveRatio="true" />
                   <Label text="System Administrator" textFill="#36383e" />
                   <Separator opacity="0.2" prefWidth="180.0" style="-fx-background-color: #36383e;">
                      <VBox.margin>
@@ -41,7 +37,7 @@
 
             <VBox spacing="5.0" VBox.vgrow="ALWAYS">
                <children>
-                  <Button fx:id="userBtn" alignment="CENTER" mnemonicParsing="false" prefHeight="50.0" prefWidth="240.0" style="-fx-background-color: #000060; -fx-cursor: hand;" text="  Manage User Profiles" textFill="WHITE">
+                  <Button fx:id="userProfilesBtn" alignment="CENTER" mnemonicParsing="false" prefHeight="50.0" prefWidth="240.0" style="-fx-background-color: #000060; -fx-cursor: hand;" text="  Manage User Profiles" textFill="WHITE">
                      <font><Font name="System Bold" size="15.0" /></font>
                      <VBox.margin>
                         <Insets left="20.0" right="20.0" />
@@ -59,8 +55,16 @@
                         <Insets left="20.0" right="20.0" />
                      </VBox.margin>
                   </Button>
-                  <Button fx:id="timeTableBtn" alignment="CENTER" mnemonicParsing="false" prefHeight="50.0" prefWidth="240.0" style="-fx-background-color: #000060; -fx-cursor: hand;" text="  Manage Timetables" textFill="WHITE">
+                  <Button fx:id="timeTablesBtn" alignment="CENTER" mnemonicParsing="false" prefHeight="50.0" prefWidth="240.0" style="-fx-background-color: #000060; -fx-cursor: hand;" text="  Manage Timetables" textFill="WHITE">
                      <font><Font name="System Bold" size="15.0" /></font>
+                     <VBox.margin>
+                        <Insets left="20.0" right="20.0" />
+                     </VBox.margin>
+                  </Button>
+                  <Button fx:id="myAccountBtn" alignment="CENTER" mnemonicParsing="false" prefHeight="50.0" prefWidth="240.0" style="-fx-background-color: #000060; -fx-cursor: hand;" text="  Manage My Account" textFill="WHITE">
+                     <font>
+                        <Font name="System Bold" size="15.0" />
+                     </font>
                      <VBox.margin>
                         <Insets left="20.0" right="20.0" />
                      </VBox.margin>
@@ -70,7 +74,7 @@
                      <font>
                         <Font name="System Bold" size="15.0" /> </font>
                      <VBox.margin>
-                        <Insets left="20.0" right="20.0" top="220.0" />
+                        <Insets left="20.0" right="20.0" top="180.0" />
                      </VBox.margin>
                   </Button>
                </children>

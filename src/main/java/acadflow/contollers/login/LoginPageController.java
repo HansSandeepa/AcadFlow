@@ -1,6 +1,6 @@
 package acadflow.contollers.login;
 
-import acadflow.models.LoadUserViewModel;
+import acadflow.models.UserLoginLogic;
 import acadflow.util.UserType;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -11,7 +11,6 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import java.io.IOException;
-import java.sql.*;
 
 public class LoginPageController {
     @FXML
@@ -99,7 +98,7 @@ public class LoginPageController {
     /**
      * Handle the result of the load page attempt and display appropriate validation messages
      */
-    private boolean handleLoadResult(LoadUserViewModel.LoadResult result) {
+    private boolean handleLoadResult(UserLoginLogic.LoadResult result) {
         switch (result) {
             case SUCCESS:
                 // User found and page can be loaded
@@ -133,7 +132,7 @@ public class LoginPageController {
     }
 
     private void loadCorrespondingUserPage(UserType userType,String regNo,String pwd){
-        LoadUserViewModel.LoadResult result = new LoadUserViewModel(userType.getTableName(), regNo, pwd).loadPage();    //handle logical requirements to load the login page
+        UserLoginLogic.LoadResult result = new UserLoginLogic(userType.getTableName(), regNo, pwd).loadPage();    //handle logical requirements to load the login page
 
         //handle validation messages based on the load result
         if (handleLoadResult(result)) {
