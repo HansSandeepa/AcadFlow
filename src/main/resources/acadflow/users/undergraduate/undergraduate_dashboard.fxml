@@ -15,7 +15,6 @@
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.TitledPane?>
-<?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
@@ -26,7 +25,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane style="-fx-background-color: #f4f6f9;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="my.Student_controller">
+<BorderPane style="-fx-background-color: #f4f6f9;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="acadflow.contollers.users.undergraduate.UndergraduateDashboardController">
 
     <top>
         <VBox>
@@ -92,7 +91,7 @@
                     <VBox prefHeight="96.0" prefWidth="70.0">
                         <children>
                             <Region prefHeight="33.0" prefWidth="100.0" visible="false" />
-                            <Button fx:id="logoutBtn" onAction="#logout" prefHeight="34.0" prefWidth="68.0" style="-fx-background-color: #e74c3c; -fx-text-fill: white; -fx-background-radius: 5;" text="Logout">
+                            <Button fx:id="logoutBtn" onAction="#onLogoutBtnClick" prefHeight="34.0" prefWidth="68.0" style="-fx-background-color: #e74c3c; -fx-text-fill: white; -fx-background-radius: 5; -fx-cursor: hand;" text="Logout">
                                 <font>
                                     <Font name="System Bold" size="14.0" />
                                 </font>
@@ -110,9 +109,7 @@
                     <HBox spacing="30" style="-fx-padding: 20;">
                         <!-- Profile Picture Section -->
                         <VBox spacing="15" style="-fx-alignment: center; -fx-pref-width: 250;">
-                            <ImageView fx:id="userMainImage" fitHeight="150" fitWidth="150" style="-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 5);">
-                                <Image url="@/profile_pics/default_pic.jpg" />
-                            </ImageView>
+                            <ImageView fx:id="userMainImage" fitHeight="150" fitWidth="150" style="-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 5);" />
                             <Button style="-fx-background-color: #3498db; -fx-text-fill: white;" text="Change Profile Picture" />
                         </VBox>
 
