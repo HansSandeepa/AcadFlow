@@ -20,6 +20,20 @@ public class userDBLogic {
             return exists;
         }
 
+        //CHECK IS COURSES EXISTS
+        public boolean isCourseExists(Connection conn, String Course_id) throws SQLException {
+            String query = "SELECT 1 FROM `course` WHERE Course_id = ?";
+            PreparedStatement stmt = conn.prepareStatement(query);
+            stmt.setString(1, Course_id);
+
+            ResultSet rs = stmt.executeQuery();
+            boolean exists = rs.next();
+
+            rs.close();
+            stmt.close();
+            return exists;
+        }
+
         //INSERT USERS AND TECHNICAL OFFICERS DATA
         public void insertUserAndOfficer(Connection conn, UserAndOfficerData u, String address, PasswordHash passwordHash) throws SQLException {
 
@@ -52,7 +66,7 @@ public class userDBLogic {
             userStmt.close();
         }
 
-        public void insertUserAndLecturer(Connection conn, UserAndLecturerData u, String address, PasswordHash passwordHash) throws Exception{
+        public void insertUserAndLecturer(Connection conn, UserAndLecturerData u, String address, PasswordHash passwordHash) throws SQLException{
             String insertUser = "INSERT INTO `user` (Fullname,Address,Dob,Gender,Password,Email) VALUES (?,?,?,?,?,?)";
             String insertLecture = "INSERT INTO `lecturer` (Lecturer_id, Office_room, Department, User_id) VALUES (?, ?, ?, ?)";
 
@@ -78,6 +92,19 @@ public class userDBLogic {
             }
             rs.close();
             userStmt.close();
+        }
+
+        //INSERT DATA TO COURSES TABLE
+        public void insertCourses(Connection conn, CoursesData d) throws SQLException {
+            String insertCourse =  "INSERT INTO `course` (Course_id, Name, Credit, Type) VALUES (?, ?, ?, ?)";
+
+            PreparedStatement courseStmt = conn.prepareStatement(insertCourse);
+            courseStmt.setString(1, d.course_id);
+            courseStmt.setString(2, d.name);
+            courseStmt.setInt(3, d.credit);
+            courseStmt.setString(4, d.type);
+            courseStmt.executeUpdate();
+            courseStmt.close();
         }
     }
 

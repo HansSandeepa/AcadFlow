@@ -1,6 +1,7 @@
 package acadflow;
 
 
+import acadflow.models.addCourseData;
 import acadflow.models.addDataForUserAndLecturer;
 import acadflow.models.addDataForUserAndOfficer;
 import acadflow.util.DBConnection;
@@ -34,6 +35,9 @@ public class Main extends Application {
             //INSERT LECTURER DATA
             addDataForUserAndLecturer addDataForUserAndLecturer = new addDataForUserAndLecturer();
             addDataForUserAndLecturer.addUserAndLecturerData();
+
+            addCourseData addCourseData = new addCourseData();
+            addCourseData.addDataForCourse();
 
 
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/acadflow/login/loginPage.fxml"));
