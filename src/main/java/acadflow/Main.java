@@ -28,6 +28,7 @@ public class Main extends Application {
             Scene scene = new Scene(loader.load());
             stage.setTitle("Acadflow");
             stage.setScene(scene);
+            stage.setResizable(false);
             stage.show();
         } else {
             showErrorDialog();
