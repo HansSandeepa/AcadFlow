@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 19, 2026 at 07:26 PM
+-- Generation Time: Apr 19, 2026 at 08:58 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -78,6 +78,19 @@ CREATE TABLE `course` (
   `Credit` int(11) NOT NULL,
   `Type` enum('T','P') NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `course`
+--
+
+INSERT INTO `course` (`Course_id`, `Name`, `Credit`, `Type`) VALUES
+('BST2112', 'Application of Biosystems Technology', 2, 'T'),
+('BST2123', 'Engineering Properties of Biomaterials', 3, 'P'),
+('ENT2122', 'Thermodynamics', 2, 'T'),
+('ENT2152', 'Properties of Materials and Application', 2, 'T'),
+('ICT2122', 'Object Oriented Programming', 2, 'T'),
+('ICT2132', 'Object Oriented Programming Practicum', 2, 'P'),
+('TCS2112', 'Business Economics', 2, 'T');
 
 -- --------------------------------------------------------
 
@@ -235,7 +248,6 @@ CREATE TABLE `undergraduate` (
   `Level` int(11) NOT NULL,
   `Semester` int(11) NOT NULL,
   `Department` varchar(100) NOT NULL,
-  `Attendance_id` int(11) NOT NULL,
   `User_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -436,7 +448,7 @@ ALTER TABLE `time_table`
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-  MODIFY `User_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=52;
+  MODIFY `User_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=61;
 
 --
 -- Constraints for dumped tables
@@ -524,8 +536,7 @@ ALTER TABLE `time_table`
 -- Constraints for table `undergraduate`
 --
 ALTER TABLE `undergraduate`
-  ADD CONSTRAINT `undergraduate_ibfk_1` FOREIGN KEY (`User_id`) REFERENCES `user` (`User_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `undergraduate_ibfk_2` FOREIGN KEY (`Attendance_id`) REFERENCES `attendance` (`Attendance_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `undergraduate_ibfk_1` FOREIGN KEY (`User_id`) REFERENCES `user` (`User_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
