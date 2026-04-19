@@ -8,12 +8,12 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class LoadUserViewModel {
+public class UserLoginLogic {
     private final String tableName;
     private final String regNo;
     private final String password;
 
-    public LoadUserViewModel(String tableName, String regNo, String password) {
+    public UserLoginLogic(String tableName, String regNo, String password) {
         this.tableName = tableName;
         this.regNo = regNo;
         this.password = password;
