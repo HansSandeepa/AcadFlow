@@ -106,5 +106,39 @@ public class userDBLogic {
             courseStmt.executeUpdate();
             courseStmt.close();
         }
+
+        //INSERT DATA TO UNDERGRADUATE TABLE
+        public void insertUserAndUndergraduate(Connection conn, UserAndUndergraduateData d, String address, PasswordHash passwordHash) throws SQLException {
+
+            String insertUser = "INSERT INTO `user` (Fullname,Address,Dob,Gender,Password,Email) VALUES (?,?,?,?,?,?)";
+            String insertUndergraduate = "INSERT INTO `undergraduate` (Stu_id, Batch, Level, Semester, Department, User_id) VALUES (?, ?, ?, ?, ?, ?)";
+
+            PreparedStatement userStmt = conn.prepareStatement(insertUser, Statement.RETURN_GENERATED_KEYS);
+            userStmt.setString(1, d.name);
+            userStmt.setString(2, address);
+            userStmt.setDate(3, Date.valueOf(d.dob));
+            userStmt.setString(4, d.gender);
+            userStmt.setString(5, passwordHash.createHash());
+            userStmt.setString(6, d.email);
+            userStmt.executeUpdate();
+
+            ResultSet rs = userStmt.getGeneratedKeys();
+            if (rs.next()) {
+                int userId = rs.getInt(1);
+
+                PreparedStatement undergraduateStmt = conn.prepareStatement(insertUndergraduate);
+                undergraduateStmt.setString(1, d.stu_id);
+                undergraduateStmt.setInt(2, d.batch);
+                undergraduateStmt.setInt(3, d.level);
+                undergraduateStmt.setInt(4, d.semester);
+                undergraduateStmt.setString(5, d.dept);
+                undergraduateStmt.setInt(6, userId);
+                undergraduateStmt.executeUpdate();
+                undergraduateStmt.close();
+            }
+            rs.close();
+            userStmt.close();
+
+        }
     }
 

@@ -4,6 +4,7 @@ package acadflow;
 import acadflow.models.addCourseData;
 import acadflow.models.addDataForUserAndLecturer;
 import acadflow.models.addDataForUserAndOfficer;
+import acadflow.models.addDataForUserAndUndergraduate;
 import acadflow.util.DBConnection;
 import acadflow.util.PasswordHash;
 import javafx.application.Application;
@@ -32,12 +33,17 @@ public class Main extends Application {
             addDataForUserAndOfficer addDataForUserAndOfficer = new addDataForUserAndOfficer();
             addDataForUserAndOfficer.addUserAndOfficerData();
 
-            //INSERT LECTURER DATA
+            //INSERT LECTURERS DATA
             addDataForUserAndLecturer addDataForUserAndLecturer = new addDataForUserAndLecturer();
             addDataForUserAndLecturer.addUserAndLecturerData();
 
+            //INSERT COURSES DATA
             addCourseData addCourseData = new addCourseData();
             addCourseData.addDataForCourse();
+
+            //INSERT UNDERGRADUATES DATA
+            addDataForUserAndUndergraduate addDataForUserAndUndergraduate = new addDataForUserAndUndergraduate();
+            addDataForUserAndUndergraduate.addUserAndUndergraduateData();
 
 
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/acadflow/login/loginPage.fxml"));
