@@ -9,8 +9,6 @@ public interface UserImplementations {
 
     void logout(Button logoutBtn);
 
-    void showUserName();
-
     void loadUserName();
 
     void loadUserId();
