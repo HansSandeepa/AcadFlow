@@ -1,5 +1,9 @@
 package acadflow.contollers.login;
 
+import acadflow.contollers.users.admin.AdminDashboardController;
+import acadflow.contollers.users.lecturer.LecturerDashboardController;
+import acadflow.contollers.users.tech_officer.TechOfficerDashboardController;
+import acadflow.contollers.users.undergraduate.UndergraduateDashboardController;
 import acadflow.models.UserLoginLogic;
 import acadflow.util.UserType;
 import javafx.fxml.FXML;
@@ -22,10 +26,15 @@ public class LoginPageController {
     @FXML
     private PasswordField pwdField;
 
+    private String regNo;
+    private UserType userType;
+
     @FXML
     private void onLoginBtnClicked(){
         String regNo = regNoField.getText() == null ? "" : regNoField.getText().trim();
         String pwd = pwdField.getText() == null ? "" : pwdField.getText().trim();
+
+        this.regNo = regNo;
 
         if (validationCheck(regNo,pwd)){
             //determine the user type from the registration number
@@ -36,6 +45,8 @@ public class LoginPageController {
                 regNoValidation.setText("Invalid user type for registration number!");
                 return;
             }
+
+            this.userType = userType;
 
             //load corresponding view for the user
             switch (userType){
@@ -54,7 +65,7 @@ public class LoginPageController {
                     //load lecturer view here
                     loadCorrespondingUserPage(userType, regNo, pwd);
                     break;
-                case TEACHER_OFFICER:
+                case TECHNICAL_OFFICER:
                     System.out.println("Teacher Officer type");
                     //load technical officer view here
                     loadCorrespondingUserPage(userType, regNo, pwd);
@@ -148,7 +159,7 @@ public class LoginPageController {
                 case LECTURER:
                     viewResource = "/acadflow/users/lecturer/lecturer_dashboard.fxml";
                     break;
-                case TEACHER_OFFICER:
+                case TECHNICAL_OFFICER:
                     viewResource = "/acadflow/users/tech_officer/tech_officer_dashboard.fxml";
                     break;
                 default:
@@ -159,6 +170,7 @@ public class LoginPageController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(viewResource));
             try {
                 Parent root = loader.load();
+                loadSpecificDashboardController(loader);
                 Stage newStage = new Stage();
                 newStage.setScene(new Scene(root));
                 newStage.setTitle("Dashboard");
@@ -171,6 +183,28 @@ public class LoginPageController {
             } catch (IOException e) {
                 System.out.println("\u001B[31mERROR: Failed to load user dashboard view! " + e.getMessage() + "\u001B[0m");
             }
+        }
+    }
+
+    private void loadSpecificDashboardController(FXMLLoader loader){
+        System.out.println("Reg no in Login Controller: " + regNo);
+        switch (userType){
+            case ADMIN:
+                AdminDashboardController adminDashboardController = loader.getController();
+                adminDashboardController.setUserRegNo(regNo);
+                break;
+            case LECTURER:
+                LecturerDashboardController lecturerDashboardController = loader.getController();
+                lecturerDashboardController.setUserRegNo(regNo);
+                break;
+            case TECHNICAL_OFFICER:
+                TechOfficerDashboardController techOfficerDashboardController = loader.getController();
+                techOfficerDashboardController.setUserRegNo(regNo);
+                break;
+            case STUDENT:
+                UndergraduateDashboardController undergraduateDashboardController = loader.getController();
+                undergraduateDashboardController.setUserRegNo(regNo);
+                break;
         }
     }
 }

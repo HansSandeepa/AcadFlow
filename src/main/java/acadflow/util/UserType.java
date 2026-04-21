@@ -10,7 +10,7 @@ public enum UserType {
     STUDENT("undergraduate", "^tg[0-9]{4}$"),
     LECTURER("lecturer", "^lec[0-9]{4}$"),
     ADMIN("admin", "^admin[0-9]{4}$"),
-    TEACHER_OFFICER("tec_officer", "^to[0-9]{4}$");
+    TECHNICAL_OFFICER("tec_officer", "^to[0-9]{4}$");
 
     private final String tableName;
     private final Pattern pattern;
