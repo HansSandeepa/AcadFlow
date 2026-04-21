@@ -1,245 +1,122 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
+<?import java.lang.String?>
+<?import javafx.collections.FXCollections?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Region?>
-<?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane style="-fx-background-color: #f4f6f9;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="acadflow.contollers.users.admin.AdminDashboardController">
+<BorderPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"  style="-fx-background-color: #f4f6f9;">
 
-   <!-- TOP MENU BAR -->
    <top>
       <VBox>
          <!-- Header -->
-         <HBox prefWidth="1126.0" spacing="20" style="-fx-background-color: #000060; -fx-padding: 15;">
-            <VBox prefHeight="96.0" prefWidth="335.0">
-               <children>
-                  <Label prefHeight="40.0" text="Acadflow-Admin Potral" textFill="WHITE">
-                     <font>
-                        <Font name="System Bold" size="28.0" />
-                     </font>
-                  </Label>
-                  <HBox prefHeight="26.0" prefWidth="344.0">
-                     <children>
-                        <Label fx:id="adminNameLabel" style="-fx-font-size: 14px;" text="Welcome " textFill="#ecf0f1">
-                           <font>
-                              <Font size="14.0" />
-                           </font>
-                        </Label>
-                        <Label fx:id="userName" text="Jhon Doe" textFill="WHITE">
-                           <font>
-                              <Font size="14.0" />
-                           </font>
-                        </Label>
-                     </children>
-                     <VBox.margin>
-                        <Insets top="10.0" />
-                     </VBox.margin>
-                  </HBox>
-                  <HBox prefHeight="100.0" prefWidth="200.0">
-                     <children>
-                        <Label text="Registration Number: " textFill="WHITE">
-                           <font>
-                              <Font size="14.0" />
-                           </font>
-                           <HBox.margin>
-                              <Insets />
-                           </HBox.margin>
-                        </Label>
-                        <Label fx:id="userRegNo" prefHeight="20.0" text="admin1234" textFill="WHITE">
-                           <font>
-                              <Font size="14.0" />
-                           </font>
-                        </Label>
-                     </children>
-                     <VBox.margin>
-                        <Insets top="5.0" />
-                     </VBox.margin>
-                  </HBox>
-               </children>
-            </VBox>
-            <Region prefHeight="96.0" prefWidth="439.0" HBox.hgrow="ALWAYS" />
-            <VBox prefHeight="88.0" prefWidth="100.0">
-               <children>
-                  <ImageView fx:id="userImg" fitHeight="76.0" fitWidth="98.0" pickOnBounds="true" preserveRatio="true" />
-                  <Label alignment="CENTER" prefHeight="18.0" prefWidth="125.0" text="Administrator" textAlignment="CENTER" textFill="WHITE">
-                     <font>
-                        <Font size="14.0" />
-                     </font>
-                  </Label>
-               </children>
-            </VBox>
-            <VBox prefHeight="96.0" prefWidth="70.0">
-               <children>
-                  <Region prefHeight="33.0" prefWidth="100.0" visible="false" />
-                  <Button fx:id="logoutBtn" onAction="#onLogoutBtnClick" prefHeight="34.0" prefWidth="68.0" style="-fx-background-color: #e74c3c; -fx-text-fill: white; -fx-background-radius: 5; -fx-cursor: hand;" text="Logout">
-                     <font>
-                        <Font name="System Bold" size="14.0" />
-                     </font>
-                     <VBox.margin>
-                        <Insets />
-                     </VBox.margin>
-                  </Button>
-               </children>
-            </VBox>
+         <HBox spacing="20" style="-fx-background-color: #2c3e50; -fx-padding: 15;">
+            <Label style="-fx-font-size: 20px; -fx-font-weight: bold;" text="LMS - Faculty of Technology" textFill="white">
+               <font>
+                  <Font name="Arial" size="20" />
+               </font>
+            </Label>
+            <Region HBox.hgrow="ALWAYS" />
+            <Label fx:id="adminNameLabel" style="-fx-font-size: 14px;" text="Admin" textFill="#ecf0f1" />
+            <Label fx:id="adminRoleLabel" style="-fx-font-size: 12px;" text="Administrator" textFill="#bdc3c7" />
+            <Button fx:id="logoutButton"  style="-fx-background-color: #e74c3c; -fx-text-fill: white; -fx-background-radius: 5;" text="Logout" />
          </HBox>
+
+         <TabPane tabClosingPolicy="UNAVAILABLE" style="-fx-background-color: white;">
+
+            <!-- ==================== USERS TAB ==================== -->
+            <Tab text="User Profiles">
+               <VBox spacing="10" style="-fx-padding: 20;">
+                  <Label style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;" text="User Management" />
+
+                  <HBox spacing="15">
+                     <Label text="User Type:" />
+                     <ComboBox fx:id="userTypeCombo" promptText="Select User Type" prefWidth="150" />
+                     <TextField fx:id="searchUserField" promptText="Search..." prefWidth="200" />
+                     <Button fx:id="addUserButton"  style="-fx-background-color: #27ae60; -fx-text-fill: white;" text="Add New" />
+                     <Button fx:id="editUserButton"  style="-fx-background-color: #f39c12; -fx-text-fill: white;" text="Edit" />
+                     <Button fx:id="deleteUserButton"  style="-fx-background-color: #e74c3c; -fx-text-fill: white;" text="Delete" />
+                     <Button fx:id="refreshUsersButton" style="-fx-background-color: #3498db; -fx-text-fill: white;" text="Refresh" />
+                  </HBox>
+
+                  <TableView fx:id="usersTable" prefHeight="400" />
+               </VBox>
+            </Tab>
+
+            <!-- ==================== COURSES TAB ==================== -->
+            <Tab text="Courses">
+               <VBox spacing="10" style="-fx-padding: 20;">
+                  <Label style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;" text="Course Management" />
+
+                  <HBox spacing="15">
+                     <TextField fx:id="courseCodeField" promptText="Course Code" prefWidth="120" />
+                     <TextField fx:id="courseNameField" promptText="Course Name" prefWidth="200" />
+                     <TextField fx:id="creditsField" promptText="Credits" prefWidth="80" />
+                     <ComboBox fx:id="courseDepartmentCombo" promptText="Department" prefWidth="120" />
+                     <TextField fx:id="semesterField" promptText="Semester" prefWidth="80" />
+                     <ComboBox fx:id="courseLecturerCombo" promptText="Select Lecturer" prefWidth="180" />
+                     <Button fx:id="addCourseButton" style="-fx-background-color: #27ae60; -fx-text-fill: white;" text="Add Course" />
+                     <Button fx:id="updateCourseButton"  style="-fx-background-color: #f39c12; -fx-text-fill: white;" text="Update" />
+                     <Button fx:id="deleteCourseButton" style="-fx-background-color: #e74c3c; -fx-text-fill: white;" text="Delete" />
+                  </HBox>
+
+                  <TableView fx:id="coursesTable" prefHeight="350" />
+               </VBox>
+            </Tab>
+
+            <!-- ==================== NOTICES TAB ==================== -->
+            <Tab text="Notices">
+               <VBox spacing="10" style="-fx-padding: 20;">
+                  <Label style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;" text="Notice Board" />
+
+                  <HBox spacing="15">
+                     <TextField fx:id="noticeTitleField" promptText="Notice Title" HBox.hgrow="ALWAYS" />
+                     <ComboBox fx:id="noticeAudienceCombo" promptText="Audience" prefWidth="150" />
+                     <CheckBox fx:id="importantNoticeCheck" text="Important" />
+                  </HBox>
+
+                  <TextArea fx:id="noticeContentArea" promptText="Enter notice content here..." prefHeight="150" />
+
+                  <HBox spacing="15">
+                     <Button fx:id="publishNoticeButton"  style="-fx-background-color: #27ae60; -fx-text-fill: white;" text="Publish Notice" />
+                     <Button fx:id="editNoticeButton"  style="-fx-background-color: #f39c12; -fx-text-fill: white;" text="Edit" />
+                     <Button fx:id="deleteNoticeButton"  style="-fx-background-color: #e74c3c; -fx-text-fill: white;" text="Delete" />
+                  </HBox>
+
+                  <TableView fx:id="noticesTable" prefHeight="250" />
+               </VBox>
+            </Tab>
+
+            <!-- ==================== TIMETABLES TAB ==================== -->
+            <Tab text="Timetables">
+               <VBox spacing="10" style="-fx-padding: 20;">
+                  <Label style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;" text="Timetable Management" />
+
+                  <HBox spacing="15">
+                     <ComboBox fx:id="timetableDepartmentCombo" promptText="Select Department" prefWidth="150" />
+                     <ComboBox fx:id="timetableWeekCombo" promptText="Select Week" prefWidth="150" />
+                     <ComboBox fx:id="timetableSemesterCombo" promptText="Select Semester" prefWidth="150" />
+                     <Button fx:id="generateTimetableButton"  style="-fx-background-color: #3498db; -fx-text-fill: white;" text="Generate" />
+                     <Button fx:id="saveTimetableButton"  style="-fx-background-color: #27ae60; -fx-text-fill: white;" text="Save" />
+                  </HBox>
+
+                  <TableView fx:id="timetableTable" prefHeight="350" />
+               </VBox>
+            </Tab>
+         </TabPane>
       </VBox>
    </top>
-   <center>
-
-      <!-- Navigation Tabs -->
-      <TabPane style="-fx-background-color: white;" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
-
-         <!-- USERS TAB -->
-         <Tab text="User Profiles">
-            <VBox spacing="10" style="-fx-padding: 20;">
-               <Label style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;" text="User Management" />
-
-               <HBox spacing="15">
-                  <Label style="-fx-font-size: 14px;" text="User Type:" />
-                  <ComboBox fx:id="userTypeCombo" prefWidth="150" promptText="Select User Type" />
-                  <TextField fx:id="searchUserField" prefWidth="200" promptText="Search..." />
-                  <Button fx:id="addUserButton" style="-fx-background-color: #27ae60; -fx-text-fill: white;" text="Add New" />
-                  <Button fx:id="editUserButton" style="-fx-background-color: #f39c12; -fx-text-fill: white;" text="Edit" />
-                  <Button fx:id="deleteUserButton" style="-fx-background-color: #e74c3c; -fx-text-fill: white;" text="Delete" />
-                  <Button fx:id="refreshUsersButton" style="-fx-background-color: #3498db; -fx-text-fill: white;" text="Refresh" />
-               </HBox>
-
-               <TableView fx:id="usersTable" prefHeight="400" />
-            </VBox>
-         </Tab>
-
-         <!-- COURSES TAB -->
-         <Tab text="Courses">
-            <VBox spacing="10" style="-fx-padding: 20;">
-               <Label style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;" text="Course Management" />
-
-               <HBox spacing="15">
-                  <TextField fx:id="courseCodeField" prefWidth="120" promptText="Course Code" />
-                  <TextField fx:id="courseNameField" prefWidth="200" promptText="Course Name" />
-                  <TextField fx:id="creditsField" prefWidth="80" promptText="Credits" />
-                  <ComboBox fx:id="courseDepartmentCombo" prefWidth="120" promptText="Department" />
-                  <TextField fx:id="semesterField" prefWidth="80" promptText="Semester" />
-                  <ComboBox fx:id="courseLecturerCombo" prefWidth="180" promptText="Select Lecturer" />
-                  <Button fx:id="addCourseButton" style="-fx-background-color: #27ae60; -fx-text-fill: white;" text="Add Course" />
-                  <Button fx:id="updateCourseButton" style="-fx-background-color: #f39c12; -fx-text-fill: white;" text="Update" />
-                  <Button fx:id="deleteCourseButton" style="-fx-background-color: #e74c3c; -fx-text-fill: white;" text="Delete" />
-               </HBox>
-
-               <TableView fx:id="coursesTable" prefHeight="350" />
-            </VBox>
-         </Tab>
-
-         <!-- NOTICES TAB -->
-         <Tab text="Notices">
-            <VBox spacing="10" style="-fx-padding: 20;">
-               <Label style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;" text="Notice Board" />
-
-               <HBox spacing="15">
-                  <TextField fx:id="noticeTitleField" promptText="Notice Title" HBox.hgrow="ALWAYS" />
-                  <ComboBox fx:id="noticeAudienceCombo" prefWidth="150" promptText="Audience" />
-                  <CheckBox fx:id="importantNoticeCheck" text="Important" />
-               </HBox>
-
-               <TextArea fx:id="noticeContentArea" prefHeight="150" promptText="Enter notice content here..." />
-
-               <HBox spacing="15">
-                  <Button fx:id="publishNoticeButton" style="-fx-background-color: #27ae60; -fx-text-fill: white;" text="Publish Notice" />
-                  <Button fx:id="editNoticeButton" style="-fx-background-color: #f39c12; -fx-text-fill: white;" text="Edit" />
-                  <Button fx:id="deleteNoticeButton" style="-fx-background-color: #e74c3c; -fx-text-fill: white;" text="Delete" />
-               </HBox>
-
-               <TableView fx:id="noticesTable" prefHeight="250" />
-            </VBox>
-         </Tab>
-
-         <!-- TIMETABLES TAB -->
-         <Tab text="Timetables">
-            <VBox spacing="10" style="-fx-padding: 20;">
-               <Label style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;" text="Timetable Management" />
-
-               <HBox spacing="15">
-                  <ComboBox fx:id="timetableDepartmentCombo" prefWidth="150" promptText="Select Department" />
-                  <ComboBox fx:id="timetableWeekCombo" prefWidth="150" promptText="Select Week" />
-                  <ComboBox fx:id="timetableSemesterCombo" prefWidth="150" promptText="Select Semester" />
-                  <Button fx:id="generateTimetableButton" style="-fx-background-color: #3498db; -fx-text-fill: white;" text="Generate" />
-                  <Button fx:id="saveTimetableButton" style="-fx-background-color: #27ae60; -fx-text-fill: white;" text="Save" />
-               </HBox>
-
-               <TableView fx:id="timetableTable" prefHeight="350" />
-            </VBox>
-         </Tab>
-         <Tab text="My Profile">
-            <content>
-               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-                  <children>
-                     <HBox prefHeight="562.0" prefWidth="1126.0" spacing="30" style="-fx-padding: 20;">
-                        <children>
-                           <VBox spacing="15" style="-fx-alignment: center; -fx-pref-width: 250;">
-                              <children>
-                                 <ImageView fx:id="userMainImage" fitHeight="150" fitWidth="150" style="-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 5);" />
-                                 <Button style="-fx-background-color: #3498db; -fx-text-fill: white;" text="Change Profile Picture" />
-                              </children>
-                           </VBox>
-                           <VBox prefHeight="522.0" prefWidth="771.0" spacing="15" style="-fx-pref-width: 400;">
-                              <children>
-                                 <Label style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;" text="Personal Information" />
-                                 <GridPane hgap="15" vgap="10">
-                                    <columnConstraints>
-                                       <ColumnConstraints />
-                                       <ColumnConstraints />
-                                    </columnConstraints>
-                                    <rowConstraints>
-                                       <RowConstraints />
-                                       <RowConstraints />
-                                       <RowConstraints />
-                                       <RowConstraints />
-                                       <RowConstraints />
-                                       <RowConstraints />
-                                    </rowConstraints>
-                                    <children>
-                                       <Label prefHeight="18.0" prefWidth="369.0" style="-fx-font-weight: bold;" text="Full Name:" GridPane.columnIndex="0" GridPane.rowIndex="0" />
-                                       <Label text="John Michael Doe" GridPane.columnIndex="1" GridPane.rowIndex="0" />
-                                       <Label style="-fx-font-weight: bold;" text="Student ID:" GridPane.columnIndex="0" GridPane.rowIndex="1" />
-                                       <Label text="ICT21001" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                                       <Label style="-fx-font-weight: bold;" text="Email:" GridPane.columnIndex="0" GridPane.rowIndex="2" />
-                                       <TextField editable="true" text="john.doe@students.ruhuna.ac.lk" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                                       <Label style="-fx-font-weight: bold;" text="Contact No:" GridPane.columnIndex="0" GridPane.rowIndex="3" />
-                                       <TextField editable="true" text="0712345678" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-                                       <Label style="-fx-font-weight: bold;" text="Address:" GridPane.columnIndex="0" GridPane.rowIndex="4" />
-                                       <TextArea style="-fx-pref-height: 60;" text="No. 123, Main Street, Galle" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-                                       <HBox spacing="10" GridPane.columnIndex="1" GridPane.rowIndex="5">
-                                          <children>
-                                             <Button style="-fx-background-color: #27ae60; -fx-text-fill: white;" text="Update Profile" />
-                                             <Button style="-fx-background-color: #95a5a6; -fx-text-fill: white;" text="Cancel" />
-                                          </children>
-                                       </HBox>
-                                    </children>
-                                 </GridPane>
-                              </children>
-                           </VBox>
-                        </children>
-                     </HBox>
-                  </children>
-               </AnchorPane>
-            </content>
-         </Tab>
-      </TabPane>
-   </center>
 </BorderPane>
