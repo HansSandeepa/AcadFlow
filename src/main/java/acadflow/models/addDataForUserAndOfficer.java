@@ -27,7 +27,7 @@ public class addDataForUserAndOfficer {
 
             for (UserAndOfficerData u : users) {
                 if (udbl.isEmailExists(conn, u.email)) {
-                    System.out.println("Email exists: " + u.email);
+                    System.out.println("Email is already exists: " + u.email);
                     continue;
                 }
                 udbl.insertUserAndOfficer(conn, u, address, passwordHash);
@@ -37,7 +37,7 @@ public class addDataForUserAndOfficer {
             System.out.println("Tech Officers inserted!");
 
         } catch (Exception e) {
-                System.out.println("Error in inserting User And Officers Data");
+                System.out.println("Error in inserting User And Officers Data: " + e.getMessage());
         }
     }
 }
