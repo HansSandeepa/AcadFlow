@@ -11,10 +11,13 @@ public class LecturerDashboardController extends CommonUserController {
     private Button logoutBtn;
     @FXML
     private Label userRegNo;
+    @FXML
+    private Label username;
 
     @Override
     public void initializeWithUserData(){
         userRegNo.setText(regNo);
+        username.setText(nameOfUser);
     }
 
     @FXML

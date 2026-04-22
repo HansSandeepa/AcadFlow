@@ -1,4 +1,6 @@
 package acadflow.models.users;
+import acadflow.util.DBConnection;
+import acadflow.util.UserType;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import org.controlsfx.dialog.CommandLinksDialog;
@@ -9,9 +11,13 @@ import javafx.scene.control.Button;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Optional;
 
-public abstract class User implements UserImplementations{
+public class User implements UserImplementations{
     @Override
     public void logout(Button logoutBtn) {
         //show confirmation alert
@@ -41,17 +47,43 @@ public abstract class User implements UserImplementations{
     }
 
     @Override
-    public void loadUserName() {
+    public String loadUserName(String regNo) {
+        String userName = "";
+        String query = "";
+        UserType userType = UserType.findUserTypeFromRegNo(regNo);
+        switch (userType){
+            case ADMIN:
+                query = "SELECT Fullname FROM user WHERE User_id = (SELECT User_id FROM admin WHERE Admin_id = ?)";
+                break;
+            case LECTURER:
+                query = "SELECT Fullname FROM user WHERE User_id = (SELECT User_id FROM lecturer WHERE Lecturer_id = ?)";
+                break;
+            case STUDENT:
+                query = "SELECT Fullname FROM user WHERE User_id = (SELECT User_id FROM undergraduate WHERE Stu_id = ?)";
+                break;
+            case TECHNICAL_OFFICER:
+                query = "SELECT Fullname FROM user WHERE User_id = (SELECT User_id FROM tec_officer WHERE T_officer_id = ?)";
+                break;
+        }
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
 
+            stmt.setString(1, regNo);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    userName = rs.getString("Fullname"); // Use column name for clarity
+                } else {
+                    System.out.println("\u001B[33mWARNING: No user found with regNo: " + regNo + "\u001B[0m");
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("\u001B[31mSQL ERROR: Failed to load user name! " + e.getMessage() + "\u001B[0m");
+        }
+        return userName;
     }
 
     @Override
-    public void loadUserId() {
-
-    }
-
-    @Override
-    public void loadUserImage() {
+    public void loadUserImagePath(String regNo) {
 
     }
 
