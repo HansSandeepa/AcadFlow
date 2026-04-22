@@ -4,13 +4,12 @@ import acadflow.models.Notice;
 import acadflow.util.DBConnection;
 
 import java.sql.*;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 public class NoticeDAO {
 
-    // Get all notices
+    //  all notices
     public List<Notice> getAllNotices() {
         List<Notice> notices = new ArrayList<>();
         String query = "SELECT * FROM notice ORDER BY Date DESC, Notice_id DESC";
@@ -29,7 +28,7 @@ public class NoticeDAO {
         return notices;
     }
 
-    // Get notice by ID
+    //  notice ID
     public Notice getNoticeById(int noticeId) {
         String query = "SELECT * FROM notice WHERE Notice_id = ?";
 
@@ -49,7 +48,7 @@ public class NoticeDAO {
         return null;
     }
 
-    // Add new notice
+    // Add  notice
     public boolean addNotice(Notice notice) {
         String query = "INSERT INTO notice (Title, Content, Date, Admin_id, Audience, IsImportant) " +
                 "VALUES (?, ?, ?, ?, ?, ?)";
@@ -121,7 +120,7 @@ public class NoticeDAO {
         return false;
     }
 
-    // Get notices by audience
+    // notices audience
     public List<Notice> getNoticesByAudience(String audience) {
         List<Notice> notices = new ArrayList<>();
         String query = "SELECT * FROM notice WHERE Audience = ? OR Audience = 'All' ORDER BY Date DESC";
@@ -142,7 +141,7 @@ public class NoticeDAO {
         return notices;
     }
 
-    // Get important notices
+    //  important notices
     public List<Notice> getImportantNotices() {
         List<Notice> notices = new ArrayList<>();
         String query = "SELECT * FROM notice WHERE IsImportant = true ORDER BY Date DESC";
@@ -161,7 +160,7 @@ public class NoticeDAO {
         return notices;
     }
 
-    // Search notices by title
+    // Search notices  title
     public List<Notice> searchNoticesByTitle(String keyword) {
         List<Notice> notices = new ArrayList<>();
         String query = "SELECT * FROM notice WHERE Title LIKE ? ORDER BY Date DESC";
@@ -182,7 +181,7 @@ public class NoticeDAO {
         return notices;
     }
 
-    // Helper method to extract Notice from ResultSet
+    // Notice  ResultSet
     private Notice extractNoticeFromResultSet(ResultSet rs) throws SQLException {
         return new Notice(
                 rs.getInt("Notice_id"),

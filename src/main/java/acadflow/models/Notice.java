@@ -22,7 +22,7 @@ public class Notice {
         this.isImportant = isImportant;
     }
 
-    // Getters
+
     public int getNoticeId() { return noticeId; }
     public String getTitle() { return title; }
     public String getContent() { return content; }
@@ -31,7 +31,7 @@ public class Notice {
     public String getAudience() { return audience; }
     public boolean isImportant() { return isImportant; }
 
-    // Setters
+
     public void setNoticeId(int noticeId) { this.noticeId = noticeId; }
     public void setTitle(String title) { this.title = title; }
     public void setContent(String content) { this.content = content; }
