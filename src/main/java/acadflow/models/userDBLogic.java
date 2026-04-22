@@ -96,13 +96,14 @@ public class userDBLogic {
 
         //INSERT DATA TO COURSES TABLE
         public void insertCourses(Connection conn, CoursesData d) throws SQLException {
-            String insertCourse =  "INSERT INTO `course` (Course_id, Name, Credit, Type) VALUES (?, ?, ?, ?)";
+            String insertCourse =  "INSERT INTO `course` (Course_id, Name, Credit, Type, department) VALUES (?, ?, ?, ?, ?)";
 
             PreparedStatement courseStmt = conn.prepareStatement(insertCourse);
             courseStmt.setString(1, d.course_id);
             courseStmt.setString(2, d.name);
             courseStmt.setInt(3, d.credit);
             courseStmt.setString(4, d.type);
+            courseStmt.setString(5, d.department);
             courseStmt.executeUpdate();
             courseStmt.close();
         }
