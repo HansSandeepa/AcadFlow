@@ -1,5 +1,6 @@
 package acadflow.models;
 
+import acadflow.models.users.NoticeData;
 import acadflow.util.PasswordHash;
 
 import java.sql.*;
@@ -21,10 +22,10 @@ public class userDBLogic {
         }
 
         //CHECK IS COURSES EXISTS
-        public boolean isCourseExists(Connection conn, String Course_id) throws SQLException {
-            String query = "SELECT 1 FROM `course` WHERE Course_id = ?";
+        public boolean isCourseExists(Connection conn, String Title) throws SQLException {
+            String query = "SELECT 2 FROM `course` WHERE Course_id = ?";
             PreparedStatement stmt = conn.prepareStatement(query);
-            stmt.setString(1, Course_id);
+            stmt.setString(1, Title);
 
             ResultSet rs = stmt.executeQuery();
             boolean exists = rs.next();
@@ -33,6 +34,21 @@ public class userDBLogic {
             stmt.close();
             return exists;
         }
+
+    //CHECK NOTICE IS EXISTS
+    public  boolean isNoticeExists(Connection conn, String title) throws SQLException {
+        String query = "SELECT 2 FROM `notice` WHERE Title = ?";
+        PreparedStatement stmt = conn.prepareStatement(query);
+        stmt.setString(1, title);
+
+        ResultSet rs = stmt.executeQuery();
+        boolean exists = rs.next();
+
+        rs.close();
+        stmt.close();
+        return exists;
+    }
+
 
         //INSERT USERS AND TECHNICAL OFFICERS DATA
         public void insertUserAndOfficer(Connection conn, UserAndOfficerData u, String address, PasswordHash passwordHash) throws SQLException {
@@ -139,6 +155,20 @@ public class userDBLogic {
             rs.close();
             userStmt.close();
 
+        }
+
+        public void insertNotices(Connection conn, NoticeData d, String admin) throws SQLException {
+            String insertNotice = "INSERT INTO `notice` (Title, Content, Date, Admin_id, Audience, IsImportant) VALUES (?, ?, ?, ?, ?, ?)";
+
+            PreparedStatement noticeStmt = conn.prepareStatement(insertNotice, Statement.RETURN_GENERATED_KEYS);
+            noticeStmt.setString(1, d.noticeTitle);
+            noticeStmt.setString(2, d.noticeContent);
+            noticeStmt.setDate(3, Date.valueOf(d.noticeDate));
+            noticeStmt.setString(4, admin);
+            noticeStmt.setString(5, d.audience);
+            noticeStmt.setInt(6, d.isImportant);
+            noticeStmt.executeUpdate();
+            noticeStmt.close();
         }
     }
 
