@@ -1,5 +1,6 @@
 package acadflow.contollers.users.admin;
 
+import acadflow.contollers.users.CommonUserController;
 import acadflow.models.users.Admin;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -20,9 +21,19 @@ import java.util.List;
 import java.util.Optional;
 
 
-public class AdminDashboardController {
+public class AdminDashboardController extends CommonUserController {
     @FXML
     private Button logoutBtn;
+    @FXML
+    private Label userRegNo;
+    @FXML
+    private Label username;
+
+    @Override
+    protected void initializeWithUserData(){
+        userRegNo.setText(regNo);
+        username.setText(nameOfUser);
+    }
 
     @FXML
     private void onLogoutBtnClick() {

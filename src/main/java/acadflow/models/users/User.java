@@ -1,4 +1,7 @@
 package acadflow.models.users;
+
+import acadflow.util.DBConnection;
+import acadflow.util.UserType;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import org.controlsfx.dialog.CommandLinksDialog;
@@ -9,9 +12,25 @@ import javafx.scene.control.Button;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Optional;
 
-public abstract class User implements UserImplementations{
+public class User implements UserImplementations {
+
+    protected String userId;
+    protected String regNo;
+
+    public User() {
+    }
+
+    public User(String regNo) {
+        this.regNo = regNo;
+        userId = loadUserId(regNo);
+    }
+
     @Override
     public void logout(Button logoutBtn) {
         //show confirmation alert
@@ -41,17 +60,61 @@ public abstract class User implements UserImplementations{
     }
 
     @Override
-    public void loadUserName() {
+    public String loadUserName() {
+        String userName = null;
+        String query = "SELECT Fullname FROM user WHERE User_id = ?";
 
+        try (
+                Connection conn = DBConnection.getConnection();
+                PreparedStatement stmt = conn.prepareStatement(query);
+        ) {
+
+            stmt.setString(1, userId);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    userName = rs.getString("Fullname");
+                } else {
+                    System.out.println("\u001B[33mWARNING: No user found with regNo: " + regNo + "\u001B[0m");
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("\u001B[31mSQL ERROR: Failed to load user name! " + e.getMessage() + "\u001B[0m");
+        }
+        return userName;
     }
 
     @Override
-    public void loadUserId() {
+    public String loadUserId(String regNo) {
+        String userId = null;
+        String query = "";
+        UserType userType = UserType.findUserTypeFromRegNo(regNo);
 
+        query = switch (userType) {
+            case ADMIN -> "SELECT User_id FROM admin WHERE Admin_id = ?";
+            case LECTURER -> "SELECT User_id FROM lecturer WHERE Lecturer_id = ?";
+            case STUDENT -> "SELECT User_id FROM undergraduate WHERE Stu_id = ?";
+            case TECHNICAL_OFFICER -> "SELECT User_id FROM tec_officer WHERE T_officer_id = ?";
+        };
+
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+
+            stmt.setString(1, regNo);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    userId = rs.getString("User_id");
+                } else {
+                    System.out.println("\u001B[33mWARNING: No user found with regNo: " + regNo + "\u001B[0m");
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("\u001B[31mSQL ERROR: Failed to load user ID! " + e.getMessage() + "\u001B[0m");
+        }
+        return userId;
     }
 
     @Override
-    public void loadUserImage() {
+    public void loadUserImagePath(String regNo) {
 
     }
 
@@ -66,7 +129,7 @@ public abstract class User implements UserImplementations{
     }
 
     @Override
-    public void showTimetable(){
+    public void showTimetable() {
 
     }
 }

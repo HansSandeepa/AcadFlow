@@ -22,8 +22,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<?import javafx.scene.control.TitledPane?>
-<BorderPane style="-fx-background-color: #f4f6f9;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="acadflow.contollers.users.admin.AdminDashboardController">
+<BorderPane style="-fx-background-color: #f4f6f9;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="acadflow.contollers.users.admin.AdminDashboardController">
 
    <!-- TOP MENU BAR -->
    <top>
@@ -44,7 +43,7 @@
                               <Font size="14.0" />
                            </font>
                         </Label>
-                        <Label fx:id="userName" text="Jhon Doe" textFill="WHITE">
+                        <Label fx:id="username" text="Jhon Doe" textFill="WHITE">
                            <font>
                               <Font size="14.0" />
                            </font>

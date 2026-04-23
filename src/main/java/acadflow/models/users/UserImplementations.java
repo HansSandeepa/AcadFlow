@@ -9,11 +9,11 @@ public interface UserImplementations {
 
     void logout(Button logoutBtn);
 
-    void loadUserName();
+    String loadUserName();
 
-    void loadUserId();
+    String loadUserId(String regNo);
 
-    void loadUserImage();
+    void loadUserImagePath(String regNo);
 
     void updateMyUserImage(String picturePath);
 
