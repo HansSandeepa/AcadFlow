@@ -37,7 +37,7 @@ public class userDBLogic {
         //INSERT USERS AND TECHNICAL OFFICERS DATA
         public void insertUserAndOfficer(Connection conn, UserAndOfficerData u, String address, PasswordHash passwordHash) throws SQLException {
 
-            String insertUser = "INSERT INTO `user` (Fullname,Address,Dob,Gender,Password,Email) VALUES (?,?,?,?,?,?)";
+            String insertUser = "INSERT INTO `user` (Fullname,Address,Dob,Gender,Password,Email,User_type) VALUES (?,?,?,?,?,?,?)";
             String insertOfficer = "INSERT INTO tec_officer (T_officer_id, Hire_date, User_id, Department) VALUES (?, ?, ?, ?)";
 
             PreparedStatement userStmt = conn.prepareStatement(insertUser, Statement.RETURN_GENERATED_KEYS);
@@ -47,6 +47,7 @@ public class userDBLogic {
             userStmt.setString(4, u.gender);
             userStmt.setString(5, passwordHash.createHash());
             userStmt.setString(6, u.email);
+            userStmt.setString(7,"Technical_Officer");
             userStmt.executeUpdate();
 
             ResultSet rs = userStmt.getGeneratedKeys();
@@ -67,7 +68,7 @@ public class userDBLogic {
         }
 
         public void insertUserAndLecturer(Connection conn, UserAndLecturerData u, String address, PasswordHash passwordHash) throws SQLException{
-            String insertUser = "INSERT INTO `user` (Fullname,Address,Dob,Gender,Password,Email) VALUES (?,?,?,?,?,?)";
+            String insertUser = "INSERT INTO `user` (Fullname,Address,Dob,Gender,Password,Email,User_type) VALUES (?,?,?,?,?,?,?)";
             String insertLecture = "INSERT INTO `lecturer` (Lecturer_id, Office_room, Department, User_id) VALUES (?, ?, ?, ?)";
 
             PreparedStatement userStmt = conn.prepareStatement(insertUser, Statement.RETURN_GENERATED_KEYS);
@@ -77,6 +78,7 @@ public class userDBLogic {
             userStmt.setString(4, u.gender);
             userStmt.setString(5, passwordHash.createHash());
             userStmt.setString(6, u.email);
+            userStmt.setString(7, "Lecturer");
             userStmt.executeUpdate();
 
             ResultSet rs = userStmt.getGeneratedKeys();
@@ -96,13 +98,14 @@ public class userDBLogic {
 
         //INSERT DATA TO COURSES TABLE
         public void insertCourses(Connection conn, CoursesData d) throws SQLException {
-            String insertCourse =  "INSERT INTO `course` (Course_id, Name, Credit, Type) VALUES (?, ?, ?, ?)";
+            String insertCourse =  "INSERT INTO `course` (Course_id, Name, Credit, Type, department) VALUES (?, ?, ?, ?, ?)";
 
             PreparedStatement courseStmt = conn.prepareStatement(insertCourse);
             courseStmt.setString(1, d.course_id);
             courseStmt.setString(2, d.name);
             courseStmt.setInt(3, d.credit);
             courseStmt.setString(4, d.type);
+            courseStmt.setString(5, d.department);
             courseStmt.executeUpdate();
             courseStmt.close();
         }
@@ -110,7 +113,7 @@ public class userDBLogic {
         //INSERT DATA TO UNDERGRADUATE TABLE
         public void insertUserAndUndergraduate(Connection conn, UserAndUndergraduateData d, String address, PasswordHash passwordHash) throws SQLException {
 
-            String insertUser = "INSERT INTO `user` (Fullname,Address,Dob,Gender,Password,Email) VALUES (?,?,?,?,?,?)";
+            String insertUser = "INSERT INTO `user` (Fullname,Address,Dob,Gender,Password,Email,User_type) VALUES (?,?,?,?,?,?,?)";
             String insertUndergraduate = "INSERT INTO `undergraduate` (Stu_id, Batch, Level, Semester, Department, User_id) VALUES (?, ?, ?, ?, ?, ?)";
 
             PreparedStatement userStmt = conn.prepareStatement(insertUser, Statement.RETURN_GENERATED_KEYS);
@@ -120,6 +123,7 @@ public class userDBLogic {
             userStmt.setString(4, d.gender);
             userStmt.setString(5, passwordHash.createHash());
             userStmt.setString(6, d.email);
+            userStmt.setString(7,"Student");
             userStmt.executeUpdate();
 
             ResultSet rs = userStmt.getGeneratedKeys();

@@ -174,6 +174,7 @@ public class LoginPageController {
                 Stage newStage = new Stage();
                 newStage.setScene(new Scene(root));
                 newStage.setTitle("Dashboard");
+                newStage.setMaximized(true);
                 newStage.show();
 
                 //close the current login window
