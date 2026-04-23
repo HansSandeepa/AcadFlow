@@ -245,7 +245,8 @@ CREATE TABLE `user` (
                         `Gender` enum('M','F') COLLATE utf8mb4_general_ci NOT NULL,
                         `Password` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
                         `Email` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
-                        `Profile_picture` varchar(100) COLLATE utf8mb4_general_ci NOT NULL DEFAULT '/profile_pics/default_pic.jpg'
+                        `Profile_picture` varchar(100) COLLATE utf8mb4_general_ci NOT NULL DEFAULT '/profile_pics/default_pic.jpg',
+                        `User_type` varchar(50) NOT NULL DEFAULT 'Student'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --

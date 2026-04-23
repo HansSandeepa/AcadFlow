@@ -116,7 +116,7 @@ public class Main extends Application {
         }
 
         //create admin if not exists
-        String insertUser = "INSERT INTO user (Fullname,Address,Dob,Gender,Password,Email) VALUES (?,?,?,?,?,?)";
+        String insertUser = "INSERT INTO user (Fullname,Address,Dob,Gender,Password,Email,User_type) VALUES (?,?,?,?,?,?,?)";
         String insertAdmin = "INSERT INTO admin VALUES (?,?)";
         String adminId = "admin0001";
 
@@ -135,6 +135,7 @@ public class Main extends Application {
             userStmt.setString(4,"M");
             userStmt.setString(5,passwordHash.createHash());
             userStmt.setString(6,"admin_acadflow@fot.ruh.ac.lk");
+            userStmt.setString(7,"Admin");
             userStmt.executeUpdate();
 
             //get generated user id
