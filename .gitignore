@@ -4,6 +4,10 @@
 ### ignore marven genarated source code ###
 target/
 
+### Ignore proflie pictures from users (without ignoring the default profile picture)###
+src/main/resources/static/images/profile_pictures/
+!src/main/resources/static/images/profile_pictures/default_pic.jpg
+
 ### IntelliJ IDEA ###
 out/
 !**/src/main/**/out/

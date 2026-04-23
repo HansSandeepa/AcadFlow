@@ -192,19 +192,19 @@ public class LoginPageController {
         switch (userType){
             case ADMIN:
                 AdminDashboardController adminDashboardController = loader.getController();
-                adminDashboardController.setUserRegNo(regNo);
+                adminDashboardController.setUserDetails(regNo);
                 break;
             case LECTURER:
                 LecturerDashboardController lecturerDashboardController = loader.getController();
-                lecturerDashboardController.setUserRegNo(regNo);
+                lecturerDashboardController.setUserDetails(regNo);
                 break;
             case TECHNICAL_OFFICER:
                 TechOfficerDashboardController techOfficerDashboardController = loader.getController();
-                techOfficerDashboardController.setUserRegNo(regNo);
+                techOfficerDashboardController.setUserDetails(regNo);
                 break;
             case STUDENT:
                 UndergraduateDashboardController undergraduateDashboardController = loader.getController();
-                undergraduateDashboardController.setUserRegNo(regNo);
+                undergraduateDashboardController.setUserDetails(regNo);
                 break;
         }
     }

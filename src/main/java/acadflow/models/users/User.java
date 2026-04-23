@@ -96,8 +96,10 @@ public class User implements UserImplementations {
             case TECHNICAL_OFFICER -> "SELECT User_id FROM tec_officer WHERE T_officer_id = ?";
         };
 
-        try (Connection conn = DBConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(query)) {
+        try (
+                Connection conn = DBConnection.getConnection();
+                PreparedStatement stmt = conn.prepareStatement(query)
+        ) {
 
             stmt.setString(1, regNo);
             try (ResultSet rs = stmt.executeQuery()) {
@@ -114,8 +116,27 @@ public class User implements UserImplementations {
     }
 
     @Override
-    public void loadUserImagePath(String regNo) {
+    public String loadUserImagePath() {
+        String imagePath = null;
+        String query = "SELECT Profile_picture FROM user WHERE User_id = ?";
+        try (
+                Connection conn = DBConnection.getConnection();
+                PreparedStatement stmt = conn.prepareStatement(query)
+        ) {
+            stmt.setString(1, userId);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    imagePath = rs.getString("Profile_picture");
 
+                } else {
+                    System.out.println("\u001B[33mWARNING: No user found with regNo: " + regNo + "\u001B[0m");
+                }
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return imagePath;
     }
 
     @Override
