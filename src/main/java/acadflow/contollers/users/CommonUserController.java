@@ -22,6 +22,7 @@ public abstract class CommonUserController {
     }
 
     protected void loadTopPanelUserDetails(){
-        nameOfUser = new User().loadUserName(regNo);
+        User user = new User(regNo);
+        nameOfUser = user.loadUserName();
     }
 }

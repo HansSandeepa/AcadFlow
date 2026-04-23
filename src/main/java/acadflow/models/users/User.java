@@ -1,4 +1,5 @@
 package acadflow.models.users;
+
 import acadflow.util.DBConnection;
 import acadflow.util.UserType;
 import javafx.scene.control.Alert;
@@ -17,7 +18,19 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Optional;
 
-public class User implements UserImplementations{
+public class User implements UserImplementations {
+
+    protected String userId;
+    protected String regNo;
+
+    public User() {
+    }
+
+    public User(String regNo) {
+        this.regNo = regNo;
+        userId = loadUserId(regNo);
+    }
+
     @Override
     public void logout(Button logoutBtn) {
         //show confirmation alert
@@ -47,31 +60,19 @@ public class User implements UserImplementations{
     }
 
     @Override
-    public String loadUserName(String regNo) {
-        String userName = "";
-        String query = "";
-        UserType userType = UserType.findUserTypeFromRegNo(regNo);
-        switch (userType){
-            case ADMIN:
-                query = "SELECT Fullname FROM user WHERE User_id = (SELECT User_id FROM admin WHERE Admin_id = ?)";
-                break;
-            case LECTURER:
-                query = "SELECT Fullname FROM user WHERE User_id = (SELECT User_id FROM lecturer WHERE Lecturer_id = ?)";
-                break;
-            case STUDENT:
-                query = "SELECT Fullname FROM user WHERE User_id = (SELECT User_id FROM undergraduate WHERE Stu_id = ?)";
-                break;
-            case TECHNICAL_OFFICER:
-                query = "SELECT Fullname FROM user WHERE User_id = (SELECT User_id FROM tec_officer WHERE T_officer_id = ?)";
-                break;
-        }
-        try (Connection conn = DBConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(query)) {
+    public String loadUserName() {
+        String userName = null;
+        String query = "SELECT Fullname FROM user WHERE User_id = ?";
 
-            stmt.setString(1, regNo);
+        try (
+                Connection conn = DBConnection.getConnection();
+                PreparedStatement stmt = conn.prepareStatement(query);
+        ) {
+
+            stmt.setString(1, userId);
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
-                    userName = rs.getString("Fullname"); // Use column name for clarity
+                    userName = rs.getString("Fullname");
                 } else {
                     System.out.println("\u001B[33mWARNING: No user found with regNo: " + regNo + "\u001B[0m");
                 }
@@ -80,6 +81,36 @@ public class User implements UserImplementations{
             System.out.println("\u001B[31mSQL ERROR: Failed to load user name! " + e.getMessage() + "\u001B[0m");
         }
         return userName;
+    }
+
+    @Override
+    public String loadUserId(String regNo) {
+        String userId = null;
+        String query = "";
+        UserType userType = UserType.findUserTypeFromRegNo(regNo);
+
+        query = switch (userType) {
+            case ADMIN -> "SELECT User_id FROM admin WHERE Admin_id = ?";
+            case LECTURER -> "SELECT User_id FROM lecturer WHERE Lecturer_id = ?";
+            case STUDENT -> "SELECT User_id FROM undergraduate WHERE Stu_id = ?";
+            case TECHNICAL_OFFICER -> "SELECT User_id FROM tec_officer WHERE T_officer_id = ?";
+        };
+
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+
+            stmt.setString(1, regNo);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    userId = rs.getString("User_id");
+                } else {
+                    System.out.println("\u001B[33mWARNING: No user found with regNo: " + regNo + "\u001B[0m");
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("\u001B[31mSQL ERROR: Failed to load user ID! " + e.getMessage() + "\u001B[0m");
+        }
+        return userId;
     }
 
     @Override
@@ -98,7 +129,7 @@ public class User implements UserImplementations{
     }
 
     @Override
-    public void showTimetable(){
+    public void showTimetable() {
 
     }
 }
