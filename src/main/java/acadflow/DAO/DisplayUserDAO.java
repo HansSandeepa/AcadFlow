@@ -67,8 +67,8 @@ public class DisplayUserDAO {
     }
 
     public boolean addDisplayUser(DisplayUser user) {
-        String query = "INSERT INTO user (Fullname, Address, Dob, Gender, Password, Email, Profile_picture, User_type) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        String query = "INSERT INTO user (Fullname, Address, Dob, Gender, Password, Email, /*Profile_picture,*/ User_type) " +
+                "VALUES (?, ?, ?, ?, ?, ?/*, ?*/, ?)";
 
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
@@ -79,7 +79,7 @@ public class DisplayUserDAO {
             pstmt.setString(4, user.getGender());
             pstmt.setString(5, user.getPassword());
             pstmt.setString(6, user.getEmail());
-            pstmt.setString(7, user.getProfilePicture());
+           /* pstmt.setString(7, user.getProfilePicture());*/
             pstmt.setString(8, user.getUserType());
 
             int affectedRows = pstmt.executeUpdate();

@@ -352,7 +352,7 @@ public class AdminDashboardController extends CommonUserController {
         private void initializeUserSection() {
             if (userTypeCombo == null) return;
             userTypeCombo.setItems(FXCollections.observableArrayList(
-                    "All", "Student", "Teacher", "Staff", "Admin"
+                    "All", "Student", "Lecturer", "Technical_Officer", "Admin"
             ));
             userTypeCombo.setValue("All");
 
@@ -418,12 +418,12 @@ public class AdminDashboardController extends CommonUserController {
 //            typeCol.setCellValueFactory(new PropertyValueFactory<>("userType"));
 //            typeCol.setPrefWidth(100);
 
-            TableColumn<DisplayUser, String> pictureCol = new TableColumn<>("Profile Picture");
-            pictureCol.setCellValueFactory(new PropertyValueFactory<>("profilePicture"));
-            pictureCol.setPrefWidth(120);
+//            TableColumn<DisplayUser, String> pictureCol = new TableColumn<>("Profile Picture");
+//            pictureCol.setCellValueFactory(new PropertyValueFactory<>("profilePicture"));
+//            pictureCol.setPrefWidth(120);
 
             usersTable.getColumns().addAll(idCol, nameCol, emailCol, addressCol,
-                    dobCol, genderCol/*, typeCol*/, pictureCol);
+                    dobCol, genderCol/*, typeCol*//*, pictureCol*/);
             usersTable.setItems(userList);
         }
 
@@ -641,8 +641,8 @@ public class AdminDashboardController extends CommonUserController {
             grid.add(passwordField, 1, 5);
             grid.add(new Label("User Type:"), 0, 6);
             grid.add(userTypeCombo, 1, 6);
-            grid.add(new Label("Profile Picture:"), 0, 7);
-            grid.add(profilePictureField, 1, 7);
+//            grid.add(new Label("Profile Picture:"), 0, 7);
+//            grid.add(profilePictureField, 1, 7);
 
             dialog.getDialogPane().setContent(grid);
 
