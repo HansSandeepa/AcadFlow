@@ -15,10 +15,11 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.GridPane;
 import javafx.scene.image.ImageView;
-
+import javafx.scene.image.Image;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 
@@ -30,7 +31,9 @@ public class AdminDashboardController extends CommonUserController {
     @FXML
     private Label username;
     @FXML
-    private ImageView userImg;
+    private ImageView userImg;  //user Image on top panel
+    @FXML
+    private ImageView userMainImage;    //user Image on change self profile view
 
 //        notice section
         @FXML private TextField noticeTitleField;
@@ -73,6 +76,10 @@ public class AdminDashboardController extends CommonUserController {
     protected void initializeWithUserData(){
         userRegNo.setText(regNo);
         username.setText(nameOfUser);
+        //setup user image
+        Image userProfilePic = new Image(Objects.requireNonNull(getClass().getResourceAsStream(userImagePath)));
+        userImg.setImage(userProfilePic);
+        userMainImage.setImage(userProfilePic);
     }
 
     @FXML

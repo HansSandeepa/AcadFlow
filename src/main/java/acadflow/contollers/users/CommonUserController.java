@@ -3,12 +3,12 @@ package acadflow.contollers.users;
 import acadflow.models.users.User;
 
 public abstract class CommonUserController {
-    public String regNo;
-    public String nameOfUser;
+    protected String regNo;
+    protected String nameOfUser;
+    protected String userImagePath;
 
-    public void setUserRegNo(String regNo){
+    public void setUserDetails(String regNo){
         this.regNo = regNo;
-        // Call this after regNo is set so initialization happens with valid data
         loadTopPanelUserDetails();
         initializeWithUserData();
     }
@@ -24,5 +24,6 @@ public abstract class CommonUserController {
     protected void loadTopPanelUserDetails(){
         User user = new User(regNo);
         nameOfUser = user.loadUserName();
+        userImagePath = user.loadUserImagePath();
     }
 }

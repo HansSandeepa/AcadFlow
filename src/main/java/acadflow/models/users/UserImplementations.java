@@ -13,7 +13,7 @@ public interface UserImplementations {
 
     String loadUserId(String regNo);
 
-    void loadUserImagePath(String regNo);
+    String loadUserImagePath();
 
     void updateMyUserImage(String picturePath);
 
