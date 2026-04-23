@@ -14,6 +14,7 @@ import javafx.collections.ObservableList;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.GridPane;
+import javafx.scene.image.ImageView;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -28,19 +29,10 @@ public class AdminDashboardController extends CommonUserController {
     private Label userRegNo;
     @FXML
     private Label username;
-
-    @Override
-    protected void initializeWithUserData(){
-        userRegNo.setText(regNo);
-        username.setText(nameOfUser);
-    }
-
     @FXML
-    private void onLogoutBtnClick() {
-        new Admin().logout(logoutBtn);
-    }
+    private ImageView userImg;
 
-//        notice section 
+//        notice section
         @FXML private TextField noticeTitleField;
         @FXML private ComboBox<String> noticeAudienceCombo;
         @FXML private CheckBox importantNoticeCheck;
@@ -77,6 +69,17 @@ public class AdminDashboardController extends CommonUserController {
         @FXML private Label totalUsersDashboardLabel;
         @FXML private Label importantNoticesLabel;
 
+    @Override
+    protected void initializeWithUserData(){
+        userRegNo.setText(regNo);
+        username.setText(nameOfUser);
+    }
+
+    @FXML
+    private void onLogoutBtnClick() {
+        new Admin().logout(logoutBtn);
+    }
+
         private NoticeDAO noticeDAO = new NoticeDAO();
         private DisplayUserDAO displayUserDAO = new DisplayUserDAO();
 
@@ -96,37 +99,52 @@ public class AdminDashboardController extends CommonUserController {
         //  notice section
         private void initializeNoticeSection() {
             List<String> audiences = List.of("All", "Students", "Teachers", "Staff", "Parents");
-            noticeAudienceCombo.setItems(FXCollections.observableArrayList(audiences));
-            filterAudienceCombo.setItems(FXCollections.observableArrayList(audiences));
-            filterAudienceCombo.setValue("All");
+            if (noticeAudienceCombo != null) {
+                noticeAudienceCombo.setItems(FXCollections.observableArrayList(audiences));
+            }
+            if (filterAudienceCombo != null) {
+                filterAudienceCombo.setItems(FXCollections.observableArrayList(audiences));
+                filterAudienceCombo.setValue("All");
+            }
 
             setupNoticeTableColumns();
             loadAllNotices();
 
-            noticesTable.getSelectionModel().selectedItemProperty().addListener(
-                    (obs, oldSelection, newSelection) -> {
-                        if (newSelection != null) {
-                            selectedNotice = newSelection;
-                            populateNoticeFields(selectedNotice);
-                            editNoticeButton.setDisable(false);
-                            deleteNoticeButton.setDisable(false);
-                        } else {
-                            editNoticeButton.setDisable(true);
-                            deleteNoticeButton.setDisable(true);
+            if (noticesTable != null) {
+                noticesTable.getSelectionModel().selectedItemProperty().addListener(
+                        (obs, oldSelection, newSelection) -> {
+                            if (newSelection != null) {
+                                selectedNotice = newSelection;
+                                populateNoticeFields(selectedNotice);
+                                if (editNoticeButton != null) editNoticeButton.setDisable(false);
+                                if (deleteNoticeButton != null) deleteNoticeButton.setDisable(false);
+                            } else {
+                                if (editNoticeButton != null) editNoticeButton.setDisable(true);
+                                if (deleteNoticeButton != null) deleteNoticeButton.setDisable(true);
+                            }
                         }
-                    }
-            );
+                );
+            }
 
-            searchButton.setOnAction(e -> searchNotices());
-            searchNoticeField.setOnAction(e -> searchNotices());
-            filterAudienceCombo.setOnAction(e -> applyNoticeFilters());
-            showImportantOnlyCheck.setOnAction(e -> applyNoticeFilters());
+            if (searchButton != null) {
+                searchButton.setOnAction(e -> searchNotices());
+            }
+            if (searchNoticeField != null) {
+                searchNoticeField.setOnAction(e -> searchNotices());
+            }
+            if (filterAudienceCombo != null) {
+                filterAudienceCombo.setOnAction(e -> applyNoticeFilters());
+            }
+            if (showImportantOnlyCheck != null) {
+                showImportantOnlyCheck.setOnAction(e -> applyNoticeFilters());
+            }
 
-            editNoticeButton.setDisable(true);
-            deleteNoticeButton.setDisable(true);
+            if (editNoticeButton != null) editNoticeButton.setDisable(true);
+            if (deleteNoticeButton != null) deleteNoticeButton.setDisable(true);
         }
 
         private void setupNoticeTableColumns() {
+            if (noticesTable == null) return;
             noticesTable.getColumns().clear();
 
             TableColumn<Notice, Integer> idCol = new TableColumn<>("ID");
@@ -325,37 +343,44 @@ public class AdminDashboardController extends CommonUserController {
 
         //  USER SECTION 
         private void initializeUserSection() {
+            if (userTypeCombo == null) return;
             userTypeCombo.setItems(FXCollections.observableArrayList(
                     "All", "Student", "Teacher", "Staff", "Admin"
             ));
             userTypeCombo.setValue("All");
 
             setupUserTableColumns();
-            loadAllDisplayUsers();
 
-            usersTable.getSelectionModel().selectedItemProperty().addListener(
-                    (obs, oldSelection, newSelection) -> {
-                        selectedDisplayUser = newSelection;
-                        boolean isSelected = newSelection != null;
-                        editUserButton.setDisable(!isSelected);
-                        deleteUserButton.setDisable(!isSelected);
+            if (usersTable != null) {
+                usersTable.getSelectionModel().selectedItemProperty().addListener(
+                        (obs, oldSelection, newSelection) -> {
+                            selectedDisplayUser = newSelection;
+                            boolean isSelected = newSelection != null;
+                            if (editUserButton != null) editUserButton.setDisable(!isSelected);
+                            if (deleteUserButton != null) deleteUserButton.setDisable(!isSelected);
+                        }
+                );
+            }
+
+            if (userTypeCombo != null) {
+                userTypeCombo.setOnAction(e -> filterDisplayUsers());
+            }
+            if (searchUserField != null) {
+                searchUserField.textProperty().addListener((obs, oldVal, newVal) -> {
+                    if (newVal.isEmpty()) {
+                        filterDisplayUsers();
                     }
-            );
+                });
+            }
 
-            userTypeCombo.setOnAction(e -> filterDisplayUsers());
-            searchUserField.textProperty().addListener((obs, oldVal, newVal) -> {
-                if (newVal.isEmpty()) {
-                    filterDisplayUsers();
-                }
-            });
-
-            editUserButton.setDisable(true);
-            deleteUserButton.setDisable(true);
+            if (editUserButton != null) editUserButton.setDisable(true);
+            if (deleteUserButton != null) deleteUserButton.setDisable(true);
 
             updateUserStatistics();
         }
 
         private void setupUserTableColumns() {
+            if (usersTable == null) return;
             usersTable.getColumns().clear();
 
             TableColumn<DisplayUser, Integer> idCol = new TableColumn<>("ID");
@@ -653,3 +678,4 @@ public class AdminDashboardController extends CommonUserController {
         }
 
     }
+
