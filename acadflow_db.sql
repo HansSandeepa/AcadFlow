@@ -92,8 +92,8 @@ CREATE TABLE `course_material` (
 --
 
 CREATE TABLE `department` (
-                              `department_id` enum('ICT','ET','BST','MDS') CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+                              `department_id` enum('ICT','ET','BST','MDS') CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL PRIMARY KEY
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `department`
@@ -288,12 +288,6 @@ ALTER TABLE `course`
 ALTER TABLE `course_material`
     ADD PRIMARY KEY (`Material_id`),
   ADD KEY `Course_id` (`Course_id`);
-
---
--- Indexes for table `department`
---
-ALTER TABLE `department`
-    ADD PRIMARY KEY (`department_id`);
 
 --
 -- Indexes for table `exam_marks`
