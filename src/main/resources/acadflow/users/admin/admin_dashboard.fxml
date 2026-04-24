@@ -153,10 +153,10 @@
                         <ComboBox fx:id="courseDepartmentCombo" prefWidth="120" promptText="Department" />
                         <ComboBox fx:id="courseLecturerCombo" prefWidth="180" promptText="Select Lecturer" />
                         <Button fx:id="addCourseButton" onAction="#addCourse" style="-fx-background-color: #27ae60; -fx-text-fill: white;" text="Add Course" />
-                        <Button fx:id="updateCourseButton" style="-fx-background-color: #f39c12; -fx-text-fill: white;" text="Update" />
+                        <Button fx:id="updateCourseButton" onAction="#updateDialog" style="-fx-background-color: #f39c12; -fx-text-fill: white;" text="Update" />
                         <Button fx:id="deleteCourseButton" onAction="#deleteCourse" style="-fx-background-color: #e74c3c; -fx-text-fill: white;" text="Delete" />
                      </HBox>
-                     <Label fx:id="statusField" prefHeight="16.0" prefWidth="938.0" textFill="#433d3d" />
+                     <Label fx:id="statusField" prefHeight="16.0" prefWidth="938.0" textFill="#f40000" />
                      <ScrollPane>
                         <content>
             
