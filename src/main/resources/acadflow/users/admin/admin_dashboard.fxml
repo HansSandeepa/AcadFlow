@@ -1,28 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.CheckBox?>
-<?import javafx.scene.control.ComboBox?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.control.Tab?>
-<?import javafx.scene.control.TabPane?>
-<?import javafx.scene.control.TableView?>
-<?import javafx.scene.control.TextArea?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Region?>
-<?import javafx.scene.layout.RowConstraints?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-<BorderPane style="-fx-background-color: #f4f6f9;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="acadflow.contollers.users.admin.AdminDashboardController">
+<BorderPane style="-fx-background-color: #f4f6f9;" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="acadflow.contollers.users.admin.AdminDashboardController">
 
    <!-- TOP MENU BAR -->
    <top>
@@ -116,8 +100,8 @@
 
                      <!-- Search and Filter Controls -->
                      <HBox spacing="15">
-                        <Label text="User Type:" style="-fx-font-weight: bold;" />
-                        <ComboBox fx:id="userTypeCombo" promptText="Select User Type" prefWidth="150" />
+                        <Label style="-fx-font-weight: bold;" text="User Type:" />
+                        <ComboBox fx:id="userTypeCombo" prefWidth="150" promptText="Select User Type" />
                         <TextField fx:id="searchUserField" promptText="Search by name, email..." HBox.hgrow="ALWAYS" />
                         <Button fx:id="searchUserButton" onAction="#searchUsers" style="-fx-background-color: #3498db; -fx-text-fill: white;" text="Search" />
                      </HBox>
@@ -133,25 +117,25 @@
                      <!-- Statistics Section -->
                      <HBox spacing="15" style="-fx-padding: 10 0 10 0;">
                         <Label style="-fx-font-weight: bold;" text="Statistics:" />
-                        <Label fx:id="totalUsersLabel" text="Total Users: 0" style="-fx-text-fill: #2c3e50;" />
-                        <Label fx:id="studentsCountLabel" text="Students: 0" style="-fx-text-fill: #2980b9;" />
-                        <Label fx:id="teachersCountLabel" text="Teachers: 0" style="-fx-text-fill: #27ae60;" />
-                        <Label fx:id="staffCountLabel" text="Staff: 0" style="-fx-text-fill: #f39c12;" />
-                        <Label fx:id="adminsCountLabel" text="Admins: 0" style="-fx-text-fill: #e74c3c;" />
+                        <Label fx:id="totalUsersLabel" style="-fx-text-fill: #2c3e50;" text="Total Users: 0" />
+                        <Label fx:id="studentsCountLabel" style="-fx-text-fill: #2980b9;" text="Students: 0" />
+                        <Label fx:id="teachersCountLabel" style="-fx-text-fill: #27ae60;" text="Teachers: 0" />
+                        <Label fx:id="staffCountLabel" style="-fx-text-fill: #f39c12;" text="Staff: 0" />
+                        <Label fx:id="adminsCountLabel" style="-fx-text-fill: #e74c3c;" text="Admins: 0" />
                      </HBox>
 
                      <!-- Users Table -->
                      <TableView fx:id="usersTable" prefHeight="400">
                         <placeholder>
-                           <Label text="No users found. Click 'Add New User' to create one." style="-fx-text-fill: #7f8c8d;" />
+                           <Label style="-fx-text-fill: #7f8c8d;" text="No users found. Click 'Add New User' to create one." />
                         </placeholder>
                      </TableView>
 
                      <!-- Status Bar -->
                      <HBox spacing="10" style="-fx-padding: 5 0 0 0;">
-                        <Label fx:id="statusLabel" text="Ready" style="-fx-text-fill: #7f8c8d; -fx-font-size: 11px;" />
+                        <Label fx:id="statusLabel" style="-fx-text-fill: #7f8c8d; -fx-font-size: 11px;" text="Ready" />
                         <Region HBox.hgrow="ALWAYS" />
-                        <Label fx:id="recordCountLabel" text="Showing 0 records" style="-fx-text-fill: #7f8c8d; -fx-font-size: 11px;" />
+                        <Label fx:id="recordCountLabel" style="-fx-text-fill: #7f8c8d; -fx-font-size: 11px;" text="Showing 0 records" />
                      </HBox>
                   </VBox>
                </Tab>
@@ -165,15 +149,28 @@
                         <TextField fx:id="courseCodeField" prefWidth="120" promptText="Course Code" />
                         <TextField fx:id="courseNameField" prefWidth="200" promptText="Course Name" />
                         <TextField fx:id="creditsField" prefWidth="80" promptText="Credits" />
+                        <ComboBox fx:id="courseTypeField" prefHeight="26.0" prefWidth="119.0" promptText="Course Type" />
                         <ComboBox fx:id="courseDepartmentCombo" prefWidth="120" promptText="Department" />
-                        <TextField fx:id="semesterField" prefWidth="80" promptText="Semester" />
                         <ComboBox fx:id="courseLecturerCombo" prefWidth="180" promptText="Select Lecturer" />
-                        <Button fx:id="addCourseButton" style="-fx-background-color: #27ae60; -fx-text-fill: white;" text="Add Course" />
+                        <Button fx:id="addCourseButton" onAction="#addCourse" style="-fx-background-color: #27ae60; -fx-text-fill: white;" text="Add Course" />
                         <Button fx:id="updateCourseButton" style="-fx-background-color: #f39c12; -fx-text-fill: white;" text="Update" />
-                        <Button fx:id="deleteCourseButton" style="-fx-background-color: #e74c3c; -fx-text-fill: white;" text="Delete" />
+                        <Button fx:id="deleteCourseButton" onAction="#deleteCourse" style="-fx-background-color: #e74c3c; -fx-text-fill: white;" text="Delete" />
                      </HBox>
-      
-                                 <TableView fx:id="coursesTable" prefHeight="350" />
+                     <Label fx:id="statusField" prefHeight="16.0" prefWidth="938.0" textFill="#433d3d" />
+                     <ScrollPane>
+                        <content>
+            
+                                       <TableView fx:id="coursesTable" prefHeight="350" prefWidth="1130.0">
+                              <columns>
+                                 <TableColumn fx:id="courseCodeColomn" prefWidth="275.9999740719795" text="Course Code" />
+                                 <TableColumn fx:id="CourseNameColomn" prefWidth="413.60003662109375" text="Course Name" />
+                                 <TableColumn fx:id="CreditsColomn" prefWidth="97.60003662109375" text="Credits" />
+                                 <TableColumn fx:id="CourseTypeColomn" prefWidth="171.20001220703125" text="Course Type" />
+                                 <TableColumn fx:id="DepartmentColomn" prefWidth="174.39990234375" text="Department" />
+                              </columns>
+                           </TableView>
+                        </content>
+                     </ScrollPane>
                   </VBox>
                </Tab>
       

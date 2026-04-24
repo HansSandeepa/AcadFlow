@@ -1,7 +1,10 @@
 package acadflow.contollers.users.admin;
 
 import acadflow.contollers.users.CommonUserController;
+import acadflow.models.Course;
+import acadflow.models.CourseOperations;
 import acadflow.models.users.Admin;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import acadflow.DAO.NoticeDAO;
@@ -72,6 +75,142 @@ public class AdminDashboardController extends CommonUserController {
         @FXML private Label totalUsersDashboardLabel;
         @FXML private Label importantNoticesLabel;
 
+
+        //Courses Section
+        @FXML private Button addCourseButton;
+        @FXML private Button deleteCourseButton;
+        @FXML private TextField courseCodeField;
+        @FXML private TextField courseNameField;
+        @FXML private TextField creditsField;
+        @FXML private Label statusField;
+
+    @FXML
+    private ComboBox<String> courseTypeField;
+    ObservableList<String> courseTypeList = FXCollections.observableArrayList("Theory","Practical","Both");
+
+
+    @FXML
+    private ComboBox<String> courseDepartmentCombo;
+    ObservableList<String> courseDepartmentList = FXCollections.observableArrayList("ICT","ET","BST","MDS");
+
+    @FXML
+    private ComboBox<String> courseLecturerCombo;
+    CourseOperations courseOperations = new CourseOperations();
+    ObservableList<String> courseLecturerList =  FXCollections.observableArrayList();
+
+
+
+    @FXML private TableView<Course> coursesTable;
+        @FXML private TableColumn<Course, String> CourseNameColomn;
+        @FXML private TableColumn<Course, String> CourseTypeColomn;
+        @FXML private TableColumn<Course, Integer> CreditsColomn;
+        @FXML private TableColumn<Course, String> DepartmentColomn;
+        @FXML private TableColumn<Course, String> courseCodeColomn;
+
+
+    private void clearFields() {
+
+        courseCodeField.clear();
+        courseNameField.clear();
+        creditsField.clear();
+
+        javafx.animation.PauseTransition delay = new javafx.animation.PauseTransition(javafx.util.Duration.seconds(4));
+        delay.setOnFinished(e -> statusField.setText(""));
+        delay.play();
+
+        courseCodeField.requestFocus();
+
+
+    }
+
+    private void loadCoursesTable() {
+        CourseOperations courseOps = new CourseOperations();
+        ObservableList<Course> courses = courseOps.getAllCourses();
+        coursesTable.setItems(courses);
+    }
+
+    @FXML
+    public void addCourse(ActionEvent event) {
+        CourseOperations c = new CourseOperations();
+
+
+        String courseId = courseCodeField.getText();
+        String courseName = courseNameField.getText();
+        String courseType = courseTypeField.getSelectionModel().getSelectedItem();
+        String creditsRaw = creditsField.getText();
+        String lecturerID = courseLecturerCombo.getSelectionModel().getSelectedItem();
+        String department = courseDepartmentCombo.getSelectionModel().getSelectedItem();
+
+
+        if (courseId.isEmpty() || courseName.isEmpty() || creditsRaw.isEmpty() ||
+                courseType == null || lecturerID == null || department == null) {
+            statusField.setText("Please fill in all fields.");
+            return;
+        }
+
+        try {
+            int credits = Integer.parseInt(creditsRaw);
+            if (credits > 3 || credits < 0) {
+                statusField.setText("Please enter a valid credit amount (0-3).");
+                return;
+            }
+
+
+            if ("Practical".equals(courseType)) {
+                courseType = "P";
+            } else if ("Both".equals(courseType)) {
+                courseType = "Both";
+            } else if ("Theory".equals(courseType)) {
+                courseType = "T";
+            }
+
+
+            boolean success = c.addCourse(courseId, courseName, credits, courseType, lecturerID, department);
+            if (success) {
+                statusField.setText("Course added successfully!");
+                clearFields();
+
+                if (success) {
+                    statusField.setText("Course added successfully!");
+                    loadCoursesTable();
+                    clearFields();
+                }
+
+            } else {
+                statusField.setText("Database error. Check console.");
+            }
+
+        } catch (NumberFormatException e) {
+            statusField.setText("Credits must be a number.");
+        }
+    }
+
+    @FXML
+    public void deleteCourse(ActionEvent event) {
+
+        CourseOperations courseOperations = new CourseOperations();
+
+        courseOperations.deleteCourse(courseCodeField.getText());
+        if(courseOperations.deletestatus.equals("true")) {
+            statusField.setText("Course Deleted");
+            loadCoursesTable();
+
+            if(courseOperations.deletestatus.equals("true")) {
+                statusField.setText("Course Deleted");
+                loadCoursesTable();
+                clearFields();
+            }
+        }else if(courseOperations.deletestatus.equals("false")) {
+            statusField.setText("Cannot Delete Course ");
+        }else if(courseOperations.deletestatus.equals("empty")) {
+            statusField.setText("Course Id is Required to Delete Course ");
+        }
+
+
+    }
+
+
+
     @Override
     protected void initializeWithUserData(){
         userRegNo.setText(regNo);
@@ -101,6 +240,21 @@ public class AdminDashboardController extends CommonUserController {
             initializeNoticeSection();
             initializeUserSection();
             updateDashboardStatistics();
+
+            courseTypeField.setItems(courseTypeList);
+            courseDepartmentCombo.setItems(courseDepartmentList);
+            courseLecturerList.setAll(courseOperations.getLecturerNames());
+            courseLecturerCombo.setItems(courseLecturerList);
+
+
+            courseCodeColomn.setCellValueFactory(new PropertyValueFactory<>("courseId"));
+            CourseNameColomn.setCellValueFactory(new PropertyValueFactory<>("name"));
+            CreditsColomn.setCellValueFactory(new PropertyValueFactory<>("credit"));
+            CourseTypeColomn.setCellValueFactory(new PropertyValueFactory<>("type"));
+            DepartmentColomn.setCellValueFactory(new PropertyValueFactory<>("department"));
+
+
+            loadCoursesTable();
         }
 
         //  notice section
