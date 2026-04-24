@@ -30,6 +30,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
+<?import javafx.scene.control.SplitPane?>
 <BorderPane style="-fx-background-color: #f4f6f9;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="acadflow.contollers.users.tech_officer.TechOfficerDashboardController">
 
     <top>
@@ -234,10 +235,65 @@
                            </TableView>
                        </VBox>
                    </Tab>
-   
+
+                   <!--- NOTICE BAR -->
                    <Tab text="Notices">
-                       <VBox spacing="10" style="-fx-padding: 20;">
-                           <ListView style="-fx-pref-height: 400;" />
+                       <VBox spacing="15" style="-fx-padding: 20;">
+                           <Label text="University Notices">
+                               <font>
+                                   <Font name="Arial Bold" size="18" />
+                               </font>
+                           </Label>
+
+                           <!-- Search and Filter Bar -->
+                           <HBox spacing="15">
+                               <TextField fx:id="searchNoticeField" prefWidth="250" promptText="Search by title..." />
+                               <Button fx:id="searchNoticeButton" style="-fx-background-color: #3498db; -fx-text-fill: white; -fx-cursor: hand;" text="Search" />
+
+                               <Region HBox.hgrow="ALWAYS" />
+
+                               <Label text="Filter by Audience:" />
+                               <ComboBox fx:id="filterAudienceCombo" prefWidth="120" />
+
+                               <CheckBox fx:id="showImportantOnlyCheck" text="Show Important Only" />
+                           </HBox>
+
+                           <!-- Statistics Bar -->
+                           <HBox spacing="20">
+                               <VBox spacing="5" style="-fx-background-color: #ecf0f1; -fx-padding: 10; -fx-background-radius: 5;">
+                                   <Label text="Total Notices" style="-fx-font-size: 12px; -fx-text-fill: #7f8c8d;" />
+                                   <Label fx:id="totalNoticesLabel" text="0" style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #3498db;" />
+                               </VBox>
+
+                               <VBox spacing="5" style="-fx-background-color: #ecf0f1; -fx-padding: 10; -fx-background-radius: 5;">
+                                   <Label text="Important Notices" style="-fx-font-size: 12px; -fx-text-fill: #7f8c8d;" />
+                                   <Label fx:id="importantNoticesLabel" text="0" style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #e74c3c;" />
+                               </VBox>
+                           </HBox>
+
+                           <!-- Notices Table and Details Split View -->
+                           <SplitPane dividerPositions="0.6" VBox.vgrow="ALWAYS">
+                               <TableView fx:id="noticesTableView" prefHeight="400">
+                                   <columns>
+                                       <TableColumn prefWidth="60" text="ID" />
+                                       <TableColumn prefWidth="250" text="Title" />
+                                       <TableColumn prefWidth="100" text="Date" />
+                                       <TableColumn prefWidth="100" text="Audience" />
+                                       <TableColumn prefWidth="80" text="Important" />
+                                   </columns>
+                               </TableView>
+
+                               <VBox spacing="10" style="-fx-padding: 10;">
+                                   <Label fx:id="noticeTitleLabel" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;" text="Select a notice to view details" />
+                                   <Separator />
+                                   <TextArea fx:id="noticeDetailArea" editable="false" wrapText="true" style="-fx-font-size: 14px;" prefHeight="350" />
+                               </VBox>
+                           </SplitPane>
+
+                           <!-- Note for Lecturer -->
+                           <HBox alignment="CENTER_RIGHT">
+                               <Label text="📢 Notices are published by Admin. Contact Admin for any corrections." style="-fx-text-fill: #7f8c8d; -fx-font-size: 11px;" />
+                           </HBox>
                        </VBox>
                    </Tab>
                    <Tab text="My Profile">
