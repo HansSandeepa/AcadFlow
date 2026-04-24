@@ -1,4 +1,4 @@
-package acadflow;
+package acadflow.util;
 
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
