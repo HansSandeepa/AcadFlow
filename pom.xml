@@ -36,7 +36,7 @@
             <version>8.3.0</version>
         </dependency>
 
-        <!-- .env support -->
+        <!-- ..env support -->
         <dependency>
             <groupId>io.github.cdimascio</groupId>
             <artifactId>dotenv-java</artifactId>
