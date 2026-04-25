@@ -36,8 +36,6 @@ public abstract class CommonUserController {
     protected ImageView userMainImage;  //user Image on change self profile view
     @FXML
     protected ImageView userImg;    //user Image on top panel
-    @FXML
-    protected Button selfDetailsCancelBtn;
 
     public void setUserDetails(String regNo){
         this.regNo = regNo;
@@ -112,7 +110,4 @@ public abstract class CommonUserController {
     protected void onLogoutBtnClick() {
         new User().logout(logoutBtn);
     }
-
-    @FXML
-    abstract protected void cancelSelfFormDetails();
 }
