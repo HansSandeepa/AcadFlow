@@ -2,8 +2,7 @@ package acadflow.contollers.users.undergraduate;
 
 import acadflow.DAO.NoticeDAO;
 import acadflow.contollers.users.CommonUserController;
-import acadflow.models.Notice;
-import acadflow.models.users.Undergraduate;
+import acadflow.DAO.Notice;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;

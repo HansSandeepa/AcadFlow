@@ -1,4 +1,4 @@
-package acadflow.models;
+package acadflow.DAO;
 
 import java.time.LocalDate;
 
