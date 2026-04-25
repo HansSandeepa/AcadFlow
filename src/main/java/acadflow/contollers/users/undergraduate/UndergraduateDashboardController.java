@@ -22,8 +22,5 @@ public class UndergraduateDashboardController extends CommonUserController {
         userMainImage.setImage(userProfilePic);
     }
 
-    @FXML
-    private void onLogoutBtnClick(){
-        new Undergraduate().logout(logoutBtn);
-    }
+
 }
