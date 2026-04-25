@@ -26,6 +26,8 @@ public class UndergraduateDashboardController extends CommonUserController {
     private TextField emailField;
     @FXML
     private TextArea addressField;
+    @FXML
+    private Label genderField;
 
     @Override
     public void initializeWithUserData(){
@@ -57,6 +59,9 @@ public class UndergraduateDashboardController extends CommonUserController {
     private void setUsersDetails(){
         ArrayList<UndergraduateCurrentData> undergradDetails = new Undergraduate(regNo).getCurrentSelfDetails();
         if (undergradDetails != null && !undergradDetails.isEmpty()) {
+            String gender = (undergradDetails.get(0).getGender().equalsIgnoreCase("M")) ? "Male" : "Female";
+
+            genderField.setText(gender);
             fullName.setText(undergradDetails.get(0).getFullName());
             regNoLabel.setText(regNo);
             departmentNo.setText(undergradDetails.get(0).getDepartment());

@@ -75,27 +75,9 @@ public class Undergraduate extends User {
         }
     }
 
-//    private boolean checkEmailIsIdentical(String email){
-//        String query = "SELECT Email FROM user WHERE User_id = ?";
-//        try (
-//                Connection conn = DBConnection.getConnection();
-//                PreparedStatement stmt = conn.prepareStatement(query)
-//        ) {
-//            stmt.setString(1, getUserId());
-//            try (var rs = stmt.executeQuery()) {
-//                if (rs.next()) {
-//                    String currentEmail = rs.getString("Email");
-//                    return email.equals(currentEmail);
-//                }
-//            }
-//        }catch (SQLException e) {
-//            System.out.println("\u001B[31mSQL ERROR: Failed to check profile details! " + e.getMessage() + "\u001B[0m");
-//        }
-//        return false;
-//    }
     public ArrayList<UndergraduateCurrentData> getCurrentSelfDetails() {
 
-        String query = "SELECT Fullname,Department,Batch,Email,Address FROM user INNER JOIN undergraduate ON user.User_id = undergraduate.User_id WHERE undergraduate.User_id = ?";
+        String query = "SELECT Fullname,Department,Batch,Email,Address,Gender FROM user INNER JOIN undergraduate ON user.User_id = undergraduate.User_id WHERE undergraduate.User_id = ?";
         try (
                 Connection conn = DBConnection.getConnection();
                 PreparedStatement stmt = conn.prepareStatement(query)
@@ -109,8 +91,9 @@ public class Undergraduate extends User {
                     String batch = rs.getString("Batch");
                     String email = rs.getString("Email");
                     String address = rs.getString("Address");
+                    String gender = rs.getString("Gender");
 
-                    UndergraduateCurrentData currentData = new UndergraduateCurrentData(fullName, regNo, department, batch, email, address);
+                    UndergraduateCurrentData currentData = new UndergraduateCurrentData(fullName, regNo, department, batch, email, address,gender);
                     currentDataList.add(currentData);
                 }
                 return currentDataList;
