@@ -67,8 +67,9 @@ public class DisplayUserDAO {
     }
 
     public boolean addDisplayUser(DisplayUser user) {
-        String query = "INSERT INTO user (Fullname, Address, Dob, Gender, Password, Email, /*Profile_picture,*/ User_type) " +
-                "VALUES (?, ?, ?, ?, ?, ?/*, ?*/, ?)";
+        // Fixed: 7 placeholders, so parameters should be 1-7
+        String query = "INSERT INTO user (Fullname, Address, Dob, Gender, Password, Email, User_type) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?)";
 
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
@@ -79,8 +80,7 @@ public class DisplayUserDAO {
             pstmt.setString(4, user.getGender());
             pstmt.setString(5, user.getPassword());
             pstmt.setString(6, user.getEmail());
-           /* pstmt.setString(7, user.getProfilePicture());*/
-            pstmt.setString(8, user.getUserType());
+            pstmt.setString(7, user.getUserType());  // Fixed: Changed from index 8 to 7
 
             int affectedRows = pstmt.executeUpdate();
 
@@ -99,8 +99,9 @@ public class DisplayUserDAO {
     }
 
     public boolean updateDisplayUser(DisplayUser user) {
+        // Fixed: 8 placeholders, so parameters should be 1-8
         String query = "UPDATE user SET Fullname=?, Address=?, Dob=?, Gender=?, " +
-                "Password=?, Email=?, Profile_picture=?, User_type=? WHERE User_id=?";
+                "Password=?, Email=?, User_type=? WHERE User_id=?";
 
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(query)) {
@@ -111,9 +112,8 @@ public class DisplayUserDAO {
             pstmt.setString(4, user.getGender());
             pstmt.setString(5, user.getPassword());
             pstmt.setString(6, user.getEmail());
-            pstmt.setString(7, user.getProfilePicture());
-            pstmt.setString(8, user.getUserType());
-            pstmt.setInt(9, user.getUserId());
+            pstmt.setString(7, user.getUserType());  // Fixed: Changed from index 8 to 7
+            pstmt.setInt(8, user.getUserId());       // This is index 8, correct
 
             int affectedRows = pstmt.executeUpdate();
             return affectedRows > 0;
@@ -194,7 +194,6 @@ public class DisplayUserDAO {
                 rs.getString("Gender"),
                 rs.getString("Password"),
                 rs.getString("Email"),
-                rs.getString("Profile_picture") != null ? rs.getString("Profile_picture") : "/profile_pics/default_pic.jpg",
                 rs.getString("User_type")
         );
     }
