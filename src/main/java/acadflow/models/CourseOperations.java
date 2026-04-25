@@ -4,6 +4,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import acadflow.models.users.Lecturer;
 import acadflow.util.DBConnection;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -306,6 +307,10 @@ public class CourseOperations implements CourseOperationsInt {
 
         return lecturerNames;
     }
+
+
+
+
 }
 
 
