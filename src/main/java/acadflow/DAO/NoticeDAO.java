@@ -1,5 +1,6 @@
 package acadflow.DAO;
 
+import acadflow.models.Notice;
 import acadflow.util.DBConnection;
 
 import java.sql.*;

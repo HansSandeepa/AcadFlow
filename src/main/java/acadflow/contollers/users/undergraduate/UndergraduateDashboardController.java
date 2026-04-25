@@ -1,7 +1,15 @@
 package acadflow.contollers.users.undergraduate;
 
-import acadflow.DAO.NoticeDAO;
 import acadflow.contollers.users.CommonUserController;
+import acadflow.models.getterSetter.UndergraduateCurrentData;
+import acadflow.models.users.Undergraduate;
+import javafx.fxml.FXML;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+
+import java.util.ArrayList;
 import acadflow.DAO.Notice;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -26,6 +34,21 @@ public class UndergraduateDashboardController extends CommonUserController {
         userMainImage.setImage(userProfilePic);
     }
 
+    @FXML
+    @Override
+    protected void cancelSelfFormDetails(){
+        emailField.setText("");
+        addressField.setText("");
+    }
+
+    @FXML
+    private void saveProfileDetails(){
+        String email = emailField.getText();
+        String address = addressField.getText();
+
+        Undergraduate undergraduate = new Undergraduate(regNo);
+        undergraduate.updateProfile(email, address);    //update user details
+    }
     //notice
     @FXML private TableView<Notice> noticesTableView;
     @FXML private TextField searchNoticeField;

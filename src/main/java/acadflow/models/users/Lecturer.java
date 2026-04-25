@@ -18,11 +18,9 @@ public class Lecturer extends User implements SelfProfileUpdate{
 
     }
 
-
-public Lecturer(){
-
+    //mewidihata userId ganna puluwan
+    //remove this method anjana
+    public void showLecId(){
+        System.out.println("Test Lecturer ID: " + userId);
+    }
 }
-
-
-}
-

@@ -2,6 +2,9 @@ package acadflow.contollers.users.tech_officer;
 
 import acadflow.DAO.NoticeDAO;
 import acadflow.contollers.users.CommonUserController;
+import acadflow.models.Notice;
+import acadflow.models.getterSetter.TechnicalOfficerCurrentData;
+import acadflow.models.users.TechnicalOfficer;
 import acadflow.DAO.Notice;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -10,6 +13,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 
 import java.util.List;
 import java.util.Objects;
