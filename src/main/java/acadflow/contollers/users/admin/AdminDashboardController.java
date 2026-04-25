@@ -761,9 +761,6 @@ public class AdminDashboardController extends CommonUserController {
 //            typeCol.setCellValueFactory(new PropertyValueFactory<>("userType"));
 //            typeCol.setPrefWidth(100);
 
-//            TableColumn<DisplayUser, String> pictureCol = new TableColumn<>("Profile Picture");
-//            pictureCol.setCellValueFactory(new PropertyValueFactory<>("profilePicture"));
-//            pictureCol.setPrefWidth(120);
 
         usersTable.getColumns().addAll(idCol, nameCol, emailCol, addressCol,
                 dobCol, genderCol/*, typeCol*//*, pictureCol*/);
@@ -957,7 +954,6 @@ public class AdminDashboardController extends CommonUserController {
         ComboBox<String> genderCombo = new ComboBox<>(FXCollections.observableArrayList("M", "F"));
         PasswordField passwordField = new PasswordField();
         ComboBox<String> userTypeCombo = new ComboBox<>(FXCollections.observableArrayList("Student", "Teacher", "Staff", "Admin"));
-        TextField profilePictureField = new TextField("/profile_pics/default_pic.jpg");
 
         if (existingUser != null) {
             fullnameField.setText(existingUser.getFullname());
@@ -967,7 +963,6 @@ public class AdminDashboardController extends CommonUserController {
             genderCombo.setValue(existingUser.getGender());
             passwordField.setText(existingUser.getPassword());
             userTypeCombo.setValue(existingUser.getUserType());
-            profilePictureField.setText(existingUser.getProfilePicture());
         }
 
         grid.add(new Label("Full Name:"), 0, 0);
@@ -984,8 +979,6 @@ public class AdminDashboardController extends CommonUserController {
         grid.add(passwordField, 1, 5);
         grid.add(new Label("User Type:"), 0, 6);
         grid.add(userTypeCombo, 1, 6);
-//            grid.add(new Label("Profile Picture:"), 0, 7);
-//            grid.add(profilePictureField, 1, 7);
 
         dialog.getDialogPane().setContent(grid);
 
@@ -1001,7 +994,6 @@ public class AdminDashboardController extends CommonUserController {
                         genderCombo.getValue(),
                         passwordField.getText(),
                         emailField.getText(),
-                        profilePictureField.getText(),
                         userTypeCombo.getValue()
                 );
             }

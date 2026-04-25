@@ -10,11 +10,10 @@ public class DisplayUser {
     private String gender;
     private String password;
     private String email;
-    private String profilePicture;
     private String userType;
 
     public DisplayUser(int userId, String fullname, String address, LocalDate dob,
-                       String gender, String password, String email, String profilePicture, String userType) {
+                       String gender, String password, String email, String userType) {
         this.userId = userId;
         this.fullname = fullname;
         this.address = address;
@@ -22,7 +21,6 @@ public class DisplayUser {
         this.gender = gender;
         this.password = password;
         this.email = email;
-        this.profilePicture = profilePicture;
         this.userType = userType;
     }
 
@@ -33,7 +31,6 @@ public class DisplayUser {
     public String getGender() { return gender; }
     public String getPassword() { return password; }
     public String getEmail() { return email; }
-    public String getProfilePicture() { return profilePicture; }
     public String getUserType() { return userType; }
 
 
