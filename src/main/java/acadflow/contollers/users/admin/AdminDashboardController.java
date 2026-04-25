@@ -16,6 +16,8 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.GridPane;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.Image;
+import javafx.stage.Stage;
+
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
@@ -24,16 +26,6 @@ import java.util.Optional;
 
 
 public class AdminDashboardController extends CommonUserController {
-    @FXML
-    private Button logoutBtn;
-    @FXML
-    private Label userRegNo;
-    @FXML
-    private Label username;
-    @FXML
-    private ImageView userImg;  //user Image on top panel
-    @FXML
-    private ImageView userMainImage;    //user Image on change self profile view
 
 //        notice section
         @FXML private TextField noticeTitleField;

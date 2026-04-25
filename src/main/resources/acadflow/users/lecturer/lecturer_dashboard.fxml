@@ -26,7 +26,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane style="-fx-background-color: #f4f6f9;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="acadflow.contollers.users.lecturer.LecturerDashboardController">
+<BorderPane style="-fx-background-color: #f4f6f9;" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="acadflow.contollers.users.lecturer.LecturerDashboardController">
 
     <top>
         <VBox>
@@ -115,7 +115,7 @@
                        <HBox prefHeight="532.0" prefWidth="933.0" spacing="30" style="-fx-padding: 20;">
                            <VBox alignment="CENTER" prefHeight="598.0" prefWidth="250" spacing="15">
                                <ImageView fx:id="userMainImage" fitHeight="150" fitWidth="150" />
-                               <Button style="-fx-background-color: #3498db; -fx-text-fill: white;" text="Change Profile Picture" />
+                               <Button fx:id="updateProPicBtn" onAction="#handleUploadButton" style="-fx-background-color: #3498db; -fx-text-fill: white;" text="Change Profile Picture" />
                            </VBox>
    
                            <VBox prefHeight="527.0" prefWidth="400" spacing="15">

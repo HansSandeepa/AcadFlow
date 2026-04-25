@@ -116,6 +116,11 @@ public class User implements UserImplementations {
     }
 
     @Override
+    public String getUserId() {
+        return userId;
+    }
+
+    @Override
     public String loadUserImagePath() {
         String imagePath = null;
         String query = "SELECT Profile_picture FROM user WHERE User_id = ?";
@@ -137,6 +142,27 @@ public class User implements UserImplementations {
             throw new RuntimeException(e);
         }
         return imagePath;
+    }
+
+    public void updateUserImage(String filePath) {
+        String query = "UPDATE user SET Profile_picture = ? WHERE User_id = ?";
+
+        try (
+                Connection conn = DBConnection.getConnection();
+                PreparedStatement stmt = conn.prepareStatement(query)
+        ) {
+            stmt.setString(1, filePath);
+            stmt.setString(2, userId);
+            int rowsUpdated = stmt.executeUpdate();
+            if (rowsUpdated > 0) {
+                System.out.println("\u001B[32mSUCCESS: User image updated successfully!\u001B[0m");
+            } else {
+                System.out.println("\u001B[33mWARNING: No user found with regNo: " + regNo + "\u001B[0m");
+            }
+
+        } catch (SQLException e) {
+            System.out.println("\u001B[31mSQL ERROR: Failed to update User Image: " + e.getMessage() + "\u001B[0m");
+        }
     }
 
     @Override
