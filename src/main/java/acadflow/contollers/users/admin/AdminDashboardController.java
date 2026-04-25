@@ -12,6 +12,7 @@ import acadflow.DAO.NoticeDAO;
 import acadflow.DAO.DisplayUserDAO;
 import acadflow.models.Notice;
 import acadflow.models.DisplayUser;
+import acadflow.models.getterSetter.AdminCurrentData;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -30,6 +31,19 @@ import java.util.Optional;
 
 
 public class AdminDashboardController extends CommonUserController {
+
+    @FXML
+    private TextField fullNameField;
+    @FXML
+    private Label regNoField;
+    @FXML
+    private Label hiredDateField;
+    @FXML
+    private TextField emailField;
+    @FXML
+    private TextField genderField;
+    @FXML
+    private TextArea addressField;
 
     //        notice section
     @FXML
@@ -371,6 +385,37 @@ public class AdminDashboardController extends CommonUserController {
         Image userProfilePic = new Image(Objects.requireNonNull(getClass().getResourceAsStream(userImagePath)));
         userImg.setImage(userProfilePic);
         userMainImage.setImage(userProfilePic);
+        setUsersDetails();
+    }
+
+    private void setUsersDetails() {
+        Admin admin = new Admin(regNo);
+        List<AdminCurrentData> adminDataList = admin.getCurrentSelfDetails();
+
+        if (!adminDataList.isEmpty()) {
+            AdminCurrentData adminData = adminDataList.get(0);
+            String gender = (adminData.getGender().equalsIgnoreCase("m")) ? "Male" : "Female";
+
+            fullNameField.setText(adminData.getFullName());
+            regNoField.setText(adminData.getAdminId());
+            emailField.setText(adminData.getEmail());
+            addressField.setText(adminData.getAddress());
+            genderField.setText(gender);
+        }
+    }
+
+    @FXML
+    protected void saveProfileDetails() {
+        String fullName = fullNameField.getText();
+        String gender = genderField.getText();
+        String email = emailField.getText();
+        String address = addressField.getText();
+
+        Admin admin = new Admin(regNo);
+        admin.updateProfile(fullName, gender, email, address);
+
+        // Refresh the profile details after update
+        setUsersDetails();
     }
 
     private NoticeDAO noticeDAO = new NoticeDAO();
@@ -1003,7 +1048,10 @@ public class AdminDashboardController extends CommonUserController {
     @FXML
     @Override
     protected void cancelSelfFormDetails(){
-
+        fullNameField.setText("");
+        genderField.setText("");
+        emailField.setText("");
+        addressField.setText("");
     }
 }
 
