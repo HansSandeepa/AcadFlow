@@ -17,9 +17,6 @@ public class Undergraduate extends User {
 
     public void updateProfile(String email, String address) {
 
-        System.out.println("Email: " + email);
-        System.out.println("Address: " + address);
-
         Pattern emailPattern = Pattern.compile("^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$");
         boolean emailMatcher = emailPattern.matcher(email).matches();
 
