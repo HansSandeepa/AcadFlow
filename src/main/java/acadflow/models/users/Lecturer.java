@@ -2,14 +2,9 @@ package acadflow.models.users;
 
 import java.time.LocalDate;
 
-public class Lecturer extends User implements SelfProfileUpdate{
+public class Lecturer extends User{
     public Lecturer(String regNo) {
         super(regNo);
-    }
-
-    @Override
-    public void updateProfile(String address, LocalDate dob, Gender gender, String email) {
-
     }
 
     //mewidihata userId ganna puluwan
