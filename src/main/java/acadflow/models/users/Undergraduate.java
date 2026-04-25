@@ -2,11 +2,13 @@ package acadflow.models.users;
 
 import acadflow.models.getterSetter.UndergraduateCurrentData;
 import acadflow.util.DBConnection;
+import javafx.scene.control.Alert;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.regex.Pattern;
 
 public class Undergraduate extends User {
     public Undergraduate(String regNo) {
@@ -14,13 +16,86 @@ public class Undergraduate extends User {
     }
 
     public void updateProfile(String email, String address) {
-        // Implement the logic to update the undergraduate's profile in the database
-        // This is a placeholder implementation and should be replaced with actual database code
-        System.out.println("Updating profile for " + regNo);
+
         System.out.println("Email: " + email);
         System.out.println("Address: " + address);
+
+        Pattern emailPattern = Pattern.compile("^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$");
+        boolean emailMatcher = emailPattern.matcher(email).matches();
+
+        //email validate
+        if (email.isBlank()){
+            Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+            errorAlert.setTitle("Error");
+            errorAlert.setHeaderText("Update Failed");
+            errorAlert.setContentText("Email cannot be empty!");
+            errorAlert.showAndWait();
+            return;
+        }else if(!emailMatcher){
+            Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+            errorAlert.setTitle("Error");
+            errorAlert.setHeaderText("Update Failed");
+            errorAlert.setContentText("Enter valid Email Pattern!");
+            errorAlert.showAndWait();
+            return;
+        }
+
+        //Address validate
+        if (address.isBlank()){
+            Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+            errorAlert.setTitle("Error");
+            errorAlert.setHeaderText("Update Failed");
+            errorAlert.setContentText("Address cannot be empty!");
+            errorAlert.showAndWait();
+            return;
+        }
+
+        String query = "UPDATE user SET Email = ?, Address = ? WHERE User_id = ?";
+        try (
+                Connection conn = DBConnection.getConnection();
+                PreparedStatement stmt = conn.prepareStatement(query)
+        ) {
+            stmt.setString(1, email);
+            stmt.setString(2, address);
+            stmt.setString(3, getUserId());
+            stmt.executeUpdate();
+
+            // Show success alert
+            Alert successAlert = new Alert(Alert.AlertType.INFORMATION);
+            successAlert.setTitle("Success");
+            successAlert.setHeaderText("Profile Updated");
+            successAlert.setContentText("Your profile details have been updated successfully!");
+            successAlert.showAndWait();
+
+        } catch (SQLException e) {
+
+            // Show error alert
+            Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+            errorAlert.setTitle("Error");
+            errorAlert.setHeaderText("Update Failed");
+            errorAlert.setContentText("Unable to update profile details: " + e.getMessage());
+            errorAlert.showAndWait();
+        }
     }
 
+//    private boolean checkEmailIsIdentical(String email){
+//        String query = "SELECT Email FROM user WHERE User_id = ?";
+//        try (
+//                Connection conn = DBConnection.getConnection();
+//                PreparedStatement stmt = conn.prepareStatement(query)
+//        ) {
+//            stmt.setString(1, getUserId());
+//            try (var rs = stmt.executeQuery()) {
+//                if (rs.next()) {
+//                    String currentEmail = rs.getString("Email");
+//                    return email.equals(currentEmail);
+//                }
+//            }
+//        }catch (SQLException e) {
+//            System.out.println("\u001B[31mSQL ERROR: Failed to check profile details! " + e.getMessage() + "\u001B[0m");
+//        }
+//        return false;
+//    }
     public ArrayList<UndergraduateCurrentData> getCurrentSelfDetails() {
 
         String query = "SELECT Fullname,Department,Batch,Email,Address FROM user INNER JOIN undergraduate ON user.User_id = undergraduate.User_id WHERE undergraduate.User_id = ?";

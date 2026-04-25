@@ -51,7 +51,7 @@ public class UndergraduateDashboardController extends CommonUserController {
         String address = addressField.getText();
 
         Undergraduate undergraduate = new Undergraduate(regNo);
-        undergraduate.updateProfile(email, address);
+        undergraduate.updateProfile(email, address);    //update user details
     }
 
     private void setUsersDetails(){
