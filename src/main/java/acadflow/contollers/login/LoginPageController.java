@@ -182,7 +182,8 @@ public class LoginPageController {
                 currentStage.close();
 
             } catch (IOException e) {
-                System.out.println("\u001B[31mERROR: Failed to load user dashboard view! " + e.getMessage() + "\u001B[0m");
+                e.printStackTrace();
+                //System.out.println("\u001B[31mERROR: Failed to load user dashboard view! " + e.getMessage() + "\u001B[0m");
             }
         }
     }
