@@ -222,10 +222,11 @@ public class LecturerDashboardController extends CommonUserController {
     private void setUsersDetails(){
         ArrayList<LecturerCurrentData> lecturerDetails = new Lecturer(regNo).getCurrentSelfDetails();
         if (lecturerDetails != null && !lecturerDetails.isEmpty()) {
+            String gender = (lecturerDetails.get(0).getGender().equalsIgnoreCase("male")) ? "Male" : "Female";
             fullNameField.setText(lecturerDetails.get(0).getFullName());
             departmentSelect.setValue(lecturerDetails.get(0).getDepartment());
             officeRoomFiled.setText(lecturerDetails.get(0).getOfficeRoom());
-            genderField.setText(lecturerDetails.get(0).getGender());
+            genderField.setText(gender);
             emailField.setText(lecturerDetails.get(0).getEmail());
             addressField.setText(lecturerDetails.get(0).getAddress());
         } else {
