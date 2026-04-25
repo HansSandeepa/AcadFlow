@@ -48,6 +48,7 @@ public class UndergraduateDashboardController extends CommonUserController {
         Image userProfilePic = new Image(Objects.requireNonNull(getClass().getResourceAsStream(userImagePath)));
         userImg.setImage(userProfilePic);
         userMainImage.setImage(userProfilePic);
+        setUsersDetails();
     }
 
     @FXML
