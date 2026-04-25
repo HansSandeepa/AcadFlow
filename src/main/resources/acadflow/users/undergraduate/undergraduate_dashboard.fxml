@@ -299,8 +299,7 @@
                            </TableView>
                        </VBox>
                    </Tab>
-
-                         <!--- NOTICE BAR -->
+<!---   NOTICE BAR -->
                          <Tab text="Notices">
                              <VBox spacing="15" style="-fx-padding: 20;">
                                  <Label text="University Notices">
@@ -309,16 +308,11 @@
                                      </font>
                                  </Label>
 
-                                 <!-- Search and Filter Bar -->
+                                 <!-- Search Bar (No Audience Filter for Student - Simplified) -->
                                  <HBox spacing="15">
                                      <TextField fx:id="searchNoticeField" prefWidth="250" promptText="Search by title..." />
                                      <Button fx:id="searchNoticeButton" style="-fx-background-color: #3498db; -fx-text-fill: white; -fx-cursor: hand;" text="Search" />
-
                                      <Region HBox.hgrow="ALWAYS" />
-
-                                     <Label text="Filter by Audience:" />
-                                     <ComboBox fx:id="filterAudienceCombo" prefWidth="120" />
-
                                      <CheckBox fx:id="showImportantOnlyCheck" text="Show Important Only" />
                                  </HBox>
 
@@ -328,7 +322,6 @@
                                          <Label text="Total Notices" style="-fx-font-size: 12px; -fx-text-fill: #7f8c8d;" />
                                          <Label fx:id="totalNoticesLabel" text="0" style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #3498db;" />
                                      </VBox>
-
                                      <VBox spacing="5" style="-fx-background-color: #ecf0f1; -fx-padding: 10; -fx-background-radius: 5;">
                                          <Label text="Important Notices" style="-fx-font-size: 12px; -fx-text-fill: #7f8c8d;" />
                                          <Label fx:id="importantNoticesLabel" text="0" style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #e74c3c;" />
@@ -340,9 +333,8 @@
                                      <TableView fx:id="noticesTableView" prefHeight="400">
                                          <columns>
                                              <TableColumn prefWidth="60" text="ID" />
-                                             <TableColumn prefWidth="250" text="Title" />
+                                             <TableColumn prefWidth="280" text="Title" />
                                              <TableColumn prefWidth="100" text="Date" />
-                                             <TableColumn prefWidth="100" text="Audience" />
                                              <TableColumn prefWidth="80" text="Important" />
                                          </columns>
                                      </TableView>
@@ -354,9 +346,9 @@
                                      </VBox>
                                  </SplitPane>
 
-                                 <!-- Note for Lecturer -->
+                                 <!-- Footer Note -->
                                  <HBox alignment="CENTER_RIGHT">
-                                     <Label text="📢 Notices are published by Admin. Contact Admin for any corrections." style="-fx-text-fill: #7f8c8d; -fx-font-size: 11px;" />
+                                     <Label text="📢 Notices are published by Admin. For queries, contact the administration." style="-fx-text-fill: #7f8c8d; -fx-font-size: 11px;" />
                                  </HBox>
                              </VBox>
                          </Tab>
