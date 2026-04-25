@@ -1,37 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.String?>
-<?import javafx.collections.FXCollections?>
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.CheckBox?>
-<?import javafx.scene.control.ComboBox?>
-<?import javafx.scene.control.DatePicker?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ListView?>
-<?import javafx.scene.control.ProgressBar?>
-<?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.control.Separator?>
-<?import javafx.scene.control.Tab?>
-<?import javafx.scene.control.TabPane?>
-<?import javafx.scene.control.TableColumn?>
-<?import javafx.scene.control.TableView?>
-<?import javafx.scene.control.TextArea?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.control.TitledPane?>
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Region?>
-<?import javafx.scene.layout.RowConstraints?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
+<?import java.lang.*?>
+<?import javafx.collections.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-<?import javafx.scene.control.SplitPane?>
-<BorderPane style="-fx-background-color: #f4f6f9;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="acadflow.contollers.users.tech_officer.TechOfficerDashboardController">
+<BorderPane style="-fx-background-color: #f4f6f9;" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="acadflow.contollers.users.tech_officer.TechOfficerDashboardController">
 
     <top>
         <VBox>
@@ -261,13 +238,13 @@
                            <!-- Statistics Bar -->
                            <HBox spacing="20">
                                <VBox spacing="5" style="-fx-background-color: #ecf0f1; -fx-padding: 10; -fx-background-radius: 5;">
-                                   <Label text="Total Notices" style="-fx-font-size: 12px; -fx-text-fill: #7f8c8d;" />
-                                   <Label fx:id="totalNoticesLabel" text="0" style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #3498db;" />
+                                   <Label style="-fx-font-size: 12px; -fx-text-fill: #7f8c8d;" text="Total Notices" />
+                                   <Label fx:id="totalNoticesLabel" style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #3498db;" text="0" />
                                </VBox>
 
                                <VBox spacing="5" style="-fx-background-color: #ecf0f1; -fx-padding: 10; -fx-background-radius: 5;">
-                                   <Label text="Important Notices" style="-fx-font-size: 12px; -fx-text-fill: #7f8c8d;" />
-                                   <Label fx:id="importantNoticesLabel" text="0" style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #e74c3c;" />
+                                   <Label style="-fx-font-size: 12px; -fx-text-fill: #7f8c8d;" text="Important Notices" />
+                                   <Label fx:id="importantNoticesLabel" style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #e74c3c;" text="0" />
                                </VBox>
                            </HBox>
 
@@ -286,13 +263,13 @@
                                <VBox spacing="10" style="-fx-padding: 10;">
                                    <Label fx:id="noticeTitleLabel" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;" text="Select a notice to view details" />
                                    <Separator />
-                                   <TextArea fx:id="noticeDetailArea" editable="false" wrapText="true" style="-fx-font-size: 14px;" prefHeight="350" />
+                                   <TextArea fx:id="noticeDetailArea" editable="false" prefHeight="350" style="-fx-font-size: 14px;" wrapText="true" />
                                </VBox>
                            </SplitPane>
 
                            <!-- Note for Lecturer -->
                            <HBox alignment="CENTER_RIGHT">
-                               <Label text="📢 Notices are published by Admin. Contact Admin for any corrections." style="-fx-text-fill: #7f8c8d; -fx-font-size: 11px;" />
+                               <Label style="-fx-text-fill: #7f8c8d; -fx-font-size: 11px;" text="📢 Notices are published by Admin. Contact Admin for any corrections." />
                            </HBox>
                        </VBox>
                    </Tab>
@@ -338,7 +315,7 @@
                                                            <HBox spacing="10" GridPane.columnIndex="1" GridPane.rowIndex="5">
                                                                <children>
                                                                    <Button style="-fx-background-color: #27ae60; -fx-text-fill: white;" text="Update Profile" />
-                                                                   <Button style="-fx-background-color: #95a5a6; -fx-text-fill: white;" text="Cancel" />
+                                                                   <Button fx:id="selfDetailsCancelBtn" onAction="#cancelSelfFormDetails" style="-fx-background-color: #95a5a6; -fx-text-fill: white;" text="Cancel" />
                                                                </children>
                                                            </HBox>
                                                        </children>

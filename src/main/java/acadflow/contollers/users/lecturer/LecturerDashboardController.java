@@ -184,4 +184,10 @@ public class LecturerDashboardController extends CommonUserController {
             noticeDetailArea.setText(details.toString());
         }
     }
+
+    @FXML
+    @Override
+    protected void cancelSelfFormDetails(){
+
+    }
 }

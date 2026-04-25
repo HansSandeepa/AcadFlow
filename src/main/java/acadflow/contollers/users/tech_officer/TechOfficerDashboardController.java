@@ -182,4 +182,10 @@ public class TechOfficerDashboardController extends CommonUserController {
             noticeDetailArea.setText(details.toString());
         }
     }
+
+    @FXML
+    @Override
+    protected void cancelSelfFormDetails(){
+
+    }
 }
