@@ -1,8 +1,6 @@
 package acadflow.contollers.users.lecturer;
 
 import acadflow.contollers.users.CommonUserController;
-import acadflow.models.getterSetter.LecturerCurrentData;
-import acadflow.models.users.Lecturer;
 import acadflow.models.CourseMaterial;
 import acadflow.models.LectureCourse;
 import acadflow.util.FileStorageHandler;
@@ -13,8 +11,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import java.util.ArrayList;
 
 import java.awt.*;
 import java.io.File;
@@ -39,20 +35,6 @@ import java.util.Optional;
 
 public class LecturerDashboardController extends CommonUserController {
 
-    // Profile form fields
-    @FXML
-    private TextField fullNameField;
-    @FXML
-    private ComboBox<String> departmentSelect;
-    @FXML
-    private TextField officeRoomFiled;
-    @FXML
-    private TextField genderField;
-    @FXML
-    private TextField emailField;
-    @FXML
-    private TextArea addressField;
-
     @Override
     public void initializeWithUserData(){
         userRegNo.setText(regNo);
@@ -61,11 +43,6 @@ public class LecturerDashboardController extends CommonUserController {
         Image userProfilePic = new Image(Objects.requireNonNull(getClass().getResourceAsStream(userImagePath)));
         userImg.setImage(userProfilePic);
         userMainImage.setImage(userProfilePic);
-
-        //add combo box items
-        departmentSelect.getItems().addAll("ET","BST","ICT","MDS");
-        //setup user(self) details
-        setUsersDetails();
         loadLecturerCourses();
     }
 
@@ -547,43 +524,5 @@ public class LecturerDashboardController extends CommonUserController {
             details.append(notice.getContent());
             noticeDetailArea.setText(details.toString());
         }
-    }
-
-    @FXML
-    private void saveProfileDetails(){
-        String fullName = fullNameField.getText();
-        String department = departmentSelect.getValue().toString();
-        String officeRoom = officeRoomFiled.getText();
-        String gender = genderField.getText();
-        String email = emailField.getText();
-        String address = addressField.getText();
-
-        Lecturer lecturer = new Lecturer(regNo);
-        lecturer.updateProfile(fullName, department, officeRoom, gender, email, address);
-    }
-
-    private void setUsersDetails(){
-        ArrayList<LecturerCurrentData> lecturerDetails = new Lecturer(regNo).getCurrentSelfDetails();
-        if (lecturerDetails != null && !lecturerDetails.isEmpty()) {
-            String gender = (lecturerDetails.get(0).getGender().equalsIgnoreCase("male")) ? "Male" : "Female";
-            fullNameField.setText(lecturerDetails.get(0).getFullName());
-            departmentSelect.setValue(lecturerDetails.get(0).getDepartment());
-            officeRoomFiled.setText(lecturerDetails.get(0).getOfficeRoom());
-            genderField.setText(gender);
-            emailField.setText(lecturerDetails.get(0).getEmail());
-            addressField.setText(lecturerDetails.get(0).getAddress());
-        } else {
-            System.out.println("\u001B[31mERROR: No lecturer details found for registration number: " + regNo + "\u001B[0m");
-        }
-    }
-
-    @FXML
-    @Override
-    protected void cancelSelfFormDetails(){
-        fullNameField.setText("");
-        officeRoomFiled.setText("");
-        genderField.setText("");
-        emailField.setText("");
-        addressField.setText("");
     }
 }
