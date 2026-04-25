@@ -375,6 +375,30 @@
                            </HBox>
                        </VBox>
                    </Tab>
+                   <Tab text="My Courses">
+                        <VBox spacing="15" style="-fx-padding: 20;">
+                            <Label text="Course Materials Management">
+                                <font>
+                                    <Font name="Arial Bold" size="18.0" />
+                                </font>
+                            </Label>
+
+                            <HBox spacing="10">
+                                <Button fx:id="RefreshBtn" style="-fx-background-color: #3498db; -fx-text-fill: white; -fx-cursor: hand;" text="Refresh" />
+                                <Button fx:id="AddMaterialBtn" style="-fx-background-color: #27ae60; -fx-text-fill: white; -fx-cursor: hand;" text="Add Material" />
+                                <Button fx:id="ShowMaterialBtn" style="-fx-background-color: #f39c12; -fx-text-fill: white; -fx-cursor: hand;" text="Show Materials" />
+                                <Button fx:id="DeleteMaterialBtn" style="-fx-background-color: #e74c3c; -fx-text-fill: white; -fx-cursor: hand;" text="Delete Material" />
+                            </HBox>
+
+                            <TableView fx:id="courseTableview" prefHeight="400">
+                                <columns>
+                                    <TableColumn fx:id="CourseCodeColomn" prefWidth="150" text="Course Code" />
+                                    <TableColumn fx:id="CourseNameColomn" prefWidth="300" text="Course Name" />
+                                    <TableColumn fx:id="CreditsColomn" prefWidth="100" text="Credits" />
+                                </columns>
+                            </TableView>
+                        </VBox>
+                    </Tab>
                </TabPane>
          </content>
       </ScrollPane>
