@@ -1,6 +1,5 @@
 package acadflow.DAO;
 
-import acadflow.models.DisplayUser;
 import acadflow.util.DBConnection;
 
 import java.sql.*;
