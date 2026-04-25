@@ -20,4 +20,6 @@ public interface UserImplementations {
     void showNotices();
 
     void showTimetable();
+
+    String getUserId();
 }

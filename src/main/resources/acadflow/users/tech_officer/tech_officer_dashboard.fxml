@@ -305,7 +305,7 @@
                                            <VBox spacing="15" style="-fx-alignment: center; -fx-pref-width: 250;">
                                                <children>
                                                    <ImageView fx:id="userMainImage" fitHeight="150" fitWidth="150" style="-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 5);" />
-                                                   <Button style="-fx-background-color: #3498db; -fx-text-fill: white;" text="Change Profile Picture" />
+                                                   <Button fx:id="updateProPicBtn" onAction="#handleUploadButton" style="-fx-background-color: #3498db; -fx-text-fill: white;" text="Change Profile Picture" />
                                                </children>
                                            </VBox>
                                            <VBox prefHeight="522.0" prefWidth="771.0" spacing="15" style="-fx-pref-width: 400;">

@@ -1,12 +1,10 @@
-package acadflow;
+package acadflow.util;
 
 import acadflow.models.addCourseData;
 import acadflow.models.addDataForUserAndLecturer;
 import acadflow.models.addDataForUserAndOfficer;
 import acadflow.models.addDataForUserAndUndergraduate;
 import acadflow.models.users.addNoticeData;
-import acadflow.util.DBConnection;
-import acadflow.util.PasswordHash;
 
 import java.sql.*;
 

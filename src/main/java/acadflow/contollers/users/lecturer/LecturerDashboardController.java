@@ -19,16 +19,6 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import java.util.List;
 
 public class LecturerDashboardController extends CommonUserController {
-    @FXML
-    private Button logoutBtn;
-    @FXML
-    private Label userRegNo;
-    @FXML
-    private Label username;
-    @FXML
-    private ImageView userImg;  //user Image on top panel
-    @FXML
-    private ImageView userMainImage;    //user Image on change self profile view
 
     @Override
     public void initializeWithUserData(){
