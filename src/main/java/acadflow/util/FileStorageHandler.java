@@ -9,19 +9,43 @@ import java.util.UUID;
 
 public class FileStorageHandler {
 
-    private static final String UPLOAD_DIR = "/profile_pics/";
-    private static final long MAX_FILE_SIZE = 2 * 1024 * 1024; // 2MB in bytes
+    private static final String IMAGE_UPLOAD_DIR = "/profile_pics/";
+    private static final String FILE_UPLOAD_DIR = "/course_materials/";
+    private static final long MAX_IMAGE_FILE_SIZE = 2 * 1024 * 1024; // 2MB in bytes
+    private static final long MAX_MATERIAL_FILE_SIZE = 5 * 1024 * 1024; // 2MB in bytes
     private static final String[] ALLOWED_EXTENSIONS = {"jpg", "jpeg", "png"};
+    private static final String[] ALLOWED_MATERIAL_EXTENSIONS = {"pdf", "pptx", "docx"};
+
+    public static String addMaterial(File material) throws IOException {
+        if (isInValidFileType(material.getName(), ALLOWED_MATERIAL_EXTENSIONS)) {
+            showError("Invalid File Type",
+                    "Only pdf, pptx, and docx files are allowed.\n" +
+                            "Please select a valid file type.");
+            return null;
+        }
+
+        if (isInValidFileSize(material.length(), MAX_MATERIAL_FILE_SIZE)) {
+            double sizeInMB = (double) material.length() / 1024 / 1024;
+            String formattedSizeInMB = String.format("%.2f",sizeInMB);
+            showError("File Too Large",
+                    "The selected image is " + formattedSizeInMB + " MB.\n" +
+                            "Maximum allowed size is 5MB (5120 KB).\n" +
+                            "Please choose a smaller File.");
+            return null;
+        }
+
+        return saveToDirectory(material,FILE_UPLOAD_DIR);
+    }
 
     public static String saveProfileImage(File imageFile) throws IOException {
-        if (!isValidFileType(imageFile.getName())) {
+        if (isInValidFileType(imageFile.getName(), ALLOWED_EXTENSIONS)) {
             showError("Invalid File Type",
                     "Only JPG, JPEG, and PNG files are allowed.\n" +
                             "Please select a valid image file.");
             return null;
         }
 
-        if (!isValidFileSize(imageFile.length())) {
+        if (isInValidFileSize(imageFile.length(), MAX_IMAGE_FILE_SIZE)) {
             double sizeInMB = (double) imageFile.length() / 1024 / 1024;
             String formattedSizeInMB = String.format("%.2f",sizeInMB);
             showError("File Too Large",
@@ -31,19 +55,19 @@ public class FileStorageHandler {
             return null;
         }
 
-        return saveToDirectory(imageFile);
+        return saveToDirectory(imageFile,IMAGE_UPLOAD_DIR);
     }
 
-    private static boolean isValidFileType(String fileName) {
+    private static boolean isInValidFileType(String fileName, String[] extensions) {
         String ext = getFileExtension(fileName).toLowerCase();
-        for (String allowed : ALLOWED_EXTENSIONS) {
-            if (allowed.equals(ext)) return true;
+        for (String allowed : extensions) {
+            if (allowed.equals(ext)) return false;
         }
-        return false;
+        return true;
     }
 
-    private static boolean isValidFileSize(long fileSizeBytes) {
-        return fileSizeBytes <= MAX_FILE_SIZE;
+    private static boolean isInValidFileSize(long fileSizeBytes, long maxFileSizeBytes) {
+        return fileSizeBytes > maxFileSizeBytes;
     }
 
     private static String getFileExtension(String fileName) {
@@ -62,8 +86,8 @@ public class FileStorageHandler {
         );
     }
 
-    private static String saveToDirectory(File imageFile) throws IOException {
-        Path uploadPath = Paths.get(UPLOAD_DIR);
+    private static String saveToDirectory(File imageFile,String uploadDirectory) throws IOException {
+        Path uploadPath = Paths.get(uploadDirectory);
 
         //create upload directory if not exists
         if(!Files.exists(uploadPath)){
@@ -77,6 +101,6 @@ public class FileStorageHandler {
         Path destination = uploadPath.resolve(uniqueFileName);
         Files.copy(imageFile.toPath(), destination, StandardCopyOption.REPLACE_EXISTING);
 
-        return UPLOAD_DIR + uniqueFileName;
+        return uploadDirectory + uniqueFileName;
     }
 }
