@@ -184,9 +184,11 @@ public class Lecturer extends User {
         }
     }
 
-    //mewidihata userId ganna puluwan
-    //remove this method anjana
-    public void showLecId(){
-        System.out.println("Test Lecturer ID: " + userId);
-    }
+
+public Lecturer(){
+
 }
+
+
+}
+

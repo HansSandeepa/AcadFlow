@@ -1,4 +1,4 @@
-package acadflow.models;
+package acadflow.contollers.users.admin;
 
 import java.time.LocalDate;
 
