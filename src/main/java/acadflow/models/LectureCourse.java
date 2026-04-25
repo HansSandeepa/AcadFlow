@@ -11,6 +11,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+//lecture course model class
 public class LectureCourse {
     private final StringProperty cid;
     private final StringProperty cName;

@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
+//course material class
 public class CourseMaterial {
     private final SimpleIntegerProperty materialId;
     private final SimpleStringProperty materialPath;
