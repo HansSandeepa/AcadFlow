@@ -29,11 +29,6 @@ public class TechOfficerDashboardController extends CommonUserController {
 
     }
 
-    @FXML
-    private void onLogoutBtnClick(){
-        new TechnicalOfficer().logout(logoutBtn);
-    }
-
     // Notices tab elements (READ ONLY for Lecturer)
     @FXML private TableView<Notice> noticesTableView;
     @FXML private TextField searchNoticeField;

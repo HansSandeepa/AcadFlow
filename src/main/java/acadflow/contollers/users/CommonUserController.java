@@ -17,7 +17,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
-import java.sql.SQLException;
 
 public abstract class CommonUserController {
     protected String regNo;
@@ -105,5 +104,10 @@ public abstract class CommonUserController {
             error.showAndWait();
 
         }
+    }
+
+    @FXML
+    protected void onLogoutBtnClick() {
+        new User().logout(logoutBtn);
     }
 }

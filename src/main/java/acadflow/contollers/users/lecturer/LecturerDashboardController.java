@@ -30,10 +30,6 @@ public class LecturerDashboardController extends CommonUserController {
         userMainImage.setImage(userProfilePic);
     }
 
-    @FXML
-    private void onLogoutBtnClick(){
-        new Lecturer().logout(logoutBtn);
-    }
 
     // Notices tab elements (READ ONLY for Lecturer)
     @FXML private TableView<Notice> noticesTableView;

@@ -331,11 +331,6 @@ public class AdminDashboardController extends CommonUserController {
         userMainImage.setImage(userProfilePic);
     }
 
-    @FXML
-    private void onLogoutBtnClick() {
-        new Admin().logout(logoutBtn);
-    }
-
         private NoticeDAO noticeDAO = new NoticeDAO();
         private DisplayUserDAO displayUserDAO = new DisplayUserDAO();
 
