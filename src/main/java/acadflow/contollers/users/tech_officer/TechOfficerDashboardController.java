@@ -2,10 +2,9 @@ package acadflow.contollers.users.tech_officer;
 
 import acadflow.DAO.NoticeDAO;
 import acadflow.contollers.users.CommonUserController;
-import acadflow.models.Notice;
+import acadflow.DAO.Notice;
 import acadflow.models.getterSetter.TechnicalOfficerCurrentData;
 import acadflow.models.users.TechnicalOfficer;
-import acadflow.DAO.Notice;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -13,12 +12,27 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 public class TechOfficerDashboardController extends CommonUserController {
+
+    @FXML
+    private TextField fullNameField;
+    @FXML
+    private Label regNoField;
+    @FXML
+    private ComboBox<String> departmentSelect;
+    @FXML
+    private Label hiredDateField;
+    @FXML
+    private TextField emailField;
+    @FXML
+    private TextField genderField;
+    @FXML
+    private TextArea addressField;
 
     @Override
     public void initializeWithUserData(){
@@ -29,6 +43,9 @@ public class TechOfficerDashboardController extends CommonUserController {
         userImg.setImage(userProfilePic);
         userMainImage.setImage(userProfilePic);
 
+        //add combo box items
+        departmentSelect.getItems().addAll("ET","BST","ICT","MDS");
+        setUsersDetails();
     }
 
     // Notices tab elements (READ ONLY for Lecturer)
@@ -183,5 +200,45 @@ public class TechOfficerDashboardController extends CommonUserController {
             details.append(notice.getContent());
             noticeDetailArea.setText(details.toString());
         }
+    }
+
+    @FXML
+    private void saveProfileDetails(){
+        String fullName = fullNameField.getText();
+        String department = departmentSelect.getValue();
+        String gender = genderField.getText();
+        String email = emailField.getText();
+        String address = addressField.getText();
+
+        TechnicalOfficer technicalOfficer = new TechnicalOfficer(regNo);
+        technicalOfficer.updateProfile(fullName, department, gender, email, address);
+    }
+
+    private void setUsersDetails(){
+        ArrayList<TechnicalOfficerCurrentData> techOfficerDetails = new TechnicalOfficer(regNo).getCurrentSelfDetails();
+        if (techOfficerDetails != null && !techOfficerDetails.isEmpty()) {
+            String gender = (techOfficerDetails.get(0).getGender().equalsIgnoreCase("male")) ? "Male" : "Female";
+
+
+            fullNameField.setText(techOfficerDetails.get(0).getFullName());
+            regNoField.setText(techOfficerDetails.get(0).getTechOfficerId());
+            departmentSelect.setValue(techOfficerDetails.get(0).getDepartment());
+            hiredDateField.setText(techOfficerDetails.get(0).getHireDate());
+            genderField.setText(gender);
+            emailField.setText(techOfficerDetails.get(0).getEmail());
+            addressField.setText(techOfficerDetails.get(0).getAddress());
+        } else {
+            System.out.println("\u001B[31mERROR: No technical officer details found for registration number: " + regNo + "\u001B[0m");
+        }
+    }
+
+    @FXML
+    @Override
+    protected void cancelSelfFormDetails(){
+        fullNameField.setText("");
+        departmentSelect.setValue(null);
+        genderField.setText("");
+        emailField.setText("");
+        addressField.setText("");
     }
 }
