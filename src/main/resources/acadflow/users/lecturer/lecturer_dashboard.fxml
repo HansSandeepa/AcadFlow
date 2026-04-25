@@ -17,6 +17,7 @@
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.TitledPane?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
@@ -171,48 +172,48 @@
    
                    <Tab text="My Courses &amp; Grades">
                        <VBox spacing="15" style="-fx-padding: 20;">
-                     <HBox prefHeight="36.0" prefWidth="1175.0">
-                        <children>
-                           <Button fx:id="ShowMaterialBtn" mnemonicParsing="false" style="-fx-background-color: #3498db; -fx-text-fill: white;" text="Show Materials">
-                              <HBox.margin>
-                                 <Insets right="20.0" />
-                              </HBox.margin>
-                           </Button>
-                           <Button fx:id="AddMaterialBtn" mnemonicParsing="false" style="-fx-background-color: #27ae60; -fx-text-fill: white;" text="Add Material">
-                              <HBox.margin>
-                                 <Insets right="20.0" />
-                              </HBox.margin>
-                           </Button>
-                           <Button fx:id="DeleteMaterialBtn" mnemonicParsing="false" style="-fx-background-color: #e74c3c; -fx-text-fill: white;" text="Delete Material">
-                              <HBox.margin>
-                                 <Insets right="20.0" />
-                              </HBox.margin>
-                           </Button>
-                           <Button fx:id="RefreshBtn" mnemonicParsing="false" style="-fx-background-color: #3498db; -fx-text-fill: white;" text="Refresh">
-                              <HBox.margin>
-                                 <Insets right="20.0" />
-                              </HBox.margin>
-                           </Button>
-                        </children>
-                     </HBox>
-                           <Label text="My Courses">
+                           <Label text="Academic Performance">
                                <font>
                                    <Font name="Arial" size="18" />
                                </font>
-                        <VBox.margin>
-                           <Insets bottom="-25.0" />
-                        </VBox.margin>
                            </Label>
    
-                           <HBox spacing="20" />
+                           <HBox spacing="20">
+                               <VBox spacing="10" style="-fx-background-color: #ecf0f1; -fx-padding: 15; -fx-background-radius: 10;">
+                                   <Label style="-fx-font-size: 14px; -fx-text-fill: #7f8c8d;" text="Current GPA" />
+                                   <Label style="-fx-font-size: 36px; -fx-font-weight: bold; -fx-text-fill: #27ae60;" text="3.75" />
+                                   <Label text="Overall GPA: 3.65" />
+                               </VBox>
    
-                           <TableView fx:id="courseTableview" prefHeight="530.0" prefWidth="1062.0">
+                               <VBox spacing="10" style="-fx-background-color: #ecf0f1; -fx-padding: 15; -fx-background-radius: 10;">
+                                   <Label style="-fx-font-size: 14px; -fx-text-fill: #7f8c8d;" text="Credits Completed" />
+                                   <Label style="-fx-font-size: 36px; -fx-font-weight: bold; -fx-text-fill: #3498db;" text="45" />
+                                   <Label text="Total Credits: 90" />
+                               </VBox>
+                           </HBox>
+   
+                           <TableView prefHeight="350">
                                <columns>
-                                   <TableColumn fx:id="CourseCodeColomn" prefWidth="166.3999843597412" text="Course Code" />
-                                   <TableColumn fx:id="CourseNameColomn" prefWidth="557.6000518798828" text="Course Name" />
-                                   <TableColumn fx:id="CreditsColomn" prefWidth="118.39996337890625" text="Credits" />
+                                   <TableColumn prefWidth="100" text="Course Code" />
+                                   <TableColumn prefWidth="200" text="Course Name" />
+                                   <TableColumn prefWidth="80" text="Credits" />
+                                   <TableColumn prefWidth="100" text="CA Marks" />
+                                   <TableColumn prefWidth="100" text="Exam Marks" />
+                                   <TableColumn prefWidth="80" text="Total" />
+                                   <TableColumn prefWidth="80" text="Grade" />
+                                   <TableColumn prefWidth="100" text="Status" />
                                </columns>
                            </TableView>
+   
+                           <TitledPane text="Exam Eligibility">
+                               <VBox spacing="10" style="-fx-padding: 15;">
+                                   <Label text="CA Marks Requirement: ≥40% to sit for final exam" />
+                                   <Label style="-fx-text-fill: #27ae60;" text="OOP (ICT2132): CA = 78% - Eligible ✓" />
+                                   <Label style="-fx-text-fill: #27ae60;" text="Database (ICT2133): CA = 85% - Eligible ✓" />
+                                   <Label style="-fx-text-fill: #27ae60;" text="Web Dev (ICT2134): CA = 92% - Eligible ✓" />
+                                   <ProgressBar prefWidth="300" progress="0.85" />
+                               </VBox>
+                           </TitledPane>
                        </VBox>
                    </Tab>
    

@@ -5,7 +5,6 @@ import acadflow.contollers.users.CommonUserController;
 import acadflow.models.Notice;
 import acadflow.models.getterSetter.TechnicalOfficerCurrentData;
 import acadflow.models.users.TechnicalOfficer;
-import acadflow.DAO.Notice;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -13,6 +12,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 
 import java.util.ArrayList;
 import java.util.List;
