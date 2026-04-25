@@ -1,5 +1,6 @@
 package acadflow.contollers.users.undergraduate;
 
+import acadflow.DAO.NoticeDAO;
 import acadflow.contollers.users.CommonUserController;
 import acadflow.models.getterSetter.UndergraduateCurrentData;
 import acadflow.models.users.Undergraduate;
@@ -24,6 +25,21 @@ import java.util.Objects;
 
 public class UndergraduateDashboardController extends CommonUserController {
 
+    @FXML
+    private Label fullName;
+    @FXML
+    private Label regNoLabel;
+    @FXML
+    private Label departmentNo;
+    @FXML
+    private Label batchNo;
+    @FXML
+    private TextField emailField;
+    @FXML
+    private TextArea addressField;
+    @FXML
+    private Label genderField;
+
     @Override
     public void initializeWithUserData(){
         userRegNo.setText(regNo);
@@ -41,14 +57,6 @@ public class UndergraduateDashboardController extends CommonUserController {
         addressField.setText("");
     }
 
-    @FXML
-    private void saveProfileDetails(){
-        String email = emailField.getText();
-        String address = addressField.getText();
-
-        Undergraduate undergraduate = new Undergraduate(regNo);
-        undergraduate.updateProfile(email, address);    //update user details
-    }
     //notice
     @FXML private TableView<Notice> noticesTableView;
     @FXML private TextField searchNoticeField;
@@ -188,5 +196,28 @@ public class UndergraduateDashboardController extends CommonUserController {
     }
 
 
+    @FXML
+    private void saveProfileDetails(){
+        String email = emailField.getText();
+        String address = addressField.getText();
+        Undergraduate undergraduate = new Undergraduate(regNo);
+        undergraduate.updateProfile(email, address);    //update user details
+    }
 
+    private void setUsersDetails(){
+        ArrayList<UndergraduateCurrentData> undergradDetails = new Undergraduate(regNo).getCurrentSelfDetails();
+        if (undergradDetails != null && !undergradDetails.isEmpty()) {
+            String gender = (undergradDetails.get(0).getGender().equalsIgnoreCase("M")) ? "Male" : "Female";
+
+            genderField.setText(gender);
+            fullName.setText(undergradDetails.get(0).getFullName());
+            regNoLabel.setText(regNo);
+            departmentNo.setText(undergradDetails.get(0).getDepartment());
+            batchNo.setText(undergradDetails.get(0).getBatch());
+            emailField.setText(undergradDetails.get(0).getEmail());
+            addressField.setText(undergradDetails.get(0).getAddress());
+        } else {
+            System.out.println("\u001B[31mERROR: No undergraduate details found for registration number: " + regNo + "\u001B[0m");
+        }
+    }
 }

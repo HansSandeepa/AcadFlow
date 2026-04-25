@@ -8,10 +8,10 @@
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.ProgressBar?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.TableColumn?>
@@ -30,8 +30,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<?import javafx.scene.control.SplitPane?>
-<BorderPane style="-fx-background-color: #f4f6f9;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="acadflow.contollers.users.tech_officer.TechOfficerDashboardController">
+<BorderPane style="-fx-background-color: #f4f6f9;" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="acadflow.contollers.users.tech_officer.TechOfficerDashboardController">
 
     <top>
         <VBox>
@@ -261,13 +260,13 @@
                            <!-- Statistics Bar -->
                            <HBox spacing="20">
                                <VBox spacing="5" style="-fx-background-color: #ecf0f1; -fx-padding: 10; -fx-background-radius: 5;">
-                                   <Label text="Total Notices" style="-fx-font-size: 12px; -fx-text-fill: #7f8c8d;" />
-                                   <Label fx:id="totalNoticesLabel" text="0" style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #3498db;" />
+                                   <Label style="-fx-font-size: 12px; -fx-text-fill: #7f8c8d;" text="Total Notices" />
+                                   <Label fx:id="totalNoticesLabel" style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #3498db;" text="0" />
                                </VBox>
 
                                <VBox spacing="5" style="-fx-background-color: #ecf0f1; -fx-padding: 10; -fx-background-radius: 5;">
-                                   <Label text="Important Notices" style="-fx-font-size: 12px; -fx-text-fill: #7f8c8d;" />
-                                   <Label fx:id="importantNoticesLabel" text="0" style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #e74c3c;" />
+                                   <Label style="-fx-font-size: 12px; -fx-text-fill: #7f8c8d;" text="Important Notices" />
+                                   <Label fx:id="importantNoticesLabel" style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #e74c3c;" text="0" />
                                </VBox>
                            </HBox>
 
@@ -286,13 +285,13 @@
                                <VBox spacing="10" style="-fx-padding: 10;">
                                    <Label fx:id="noticeTitleLabel" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;" text="Select a notice to view details" />
                                    <Separator />
-                                   <TextArea fx:id="noticeDetailArea" editable="false" wrapText="true" style="-fx-font-size: 14px;" prefHeight="350" />
+                                   <TextArea fx:id="noticeDetailArea" editable="false" prefHeight="350" style="-fx-font-size: 14px;" wrapText="true" />
                                </VBox>
                            </SplitPane>
 
                            <!-- Note for Lecturer -->
                            <HBox alignment="CENTER_RIGHT">
-                               <Label text="📢 Notices are published by Admin. Contact Admin for any corrections." style="-fx-text-fill: #7f8c8d; -fx-font-size: 11px;" />
+                               <Label style="-fx-text-fill: #7f8c8d; -fx-font-size: 11px;" text="📢 Notices are published by Admin. Contact Admin for any corrections." />
                            </HBox>
                        </VBox>
                    </Tab>
@@ -311,38 +310,45 @@
                                            <VBox prefHeight="522.0" prefWidth="771.0" spacing="15" style="-fx-pref-width: 400;">
                                                <children>
                                                    <Label style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;" text="Personal Information" />
-                                                   <GridPane hgap="15" vgap="10">
-                                                       <columnConstraints>
-                                                           <ColumnConstraints />
-                                                           <ColumnConstraints />
-                                                       </columnConstraints>
-                                                       <rowConstraints>
-                                                           <RowConstraints />
-                                                           <RowConstraints />
-                                                           <RowConstraints />
-                                                           <RowConstraints />
-                                                           <RowConstraints />
-                                                           <RowConstraints />
-                                                       </rowConstraints>
-                                                       <children>
-                                                           <Label prefHeight="18.0" prefWidth="369.0" style="-fx-font-weight: bold;" text="Full Name:" GridPane.columnIndex="0" GridPane.rowIndex="0" />
-                                                           <Label text="John Michael Doe" GridPane.columnIndex="1" GridPane.rowIndex="0" />
-                                                           <Label style="-fx-font-weight: bold;" text="Student ID:" GridPane.columnIndex="0" GridPane.rowIndex="1" />
-                                                           <Label text="ICT21001" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                                                           <Label style="-fx-font-weight: bold;" text="Email:" GridPane.columnIndex="0" GridPane.rowIndex="2" />
-                                                           <TextField editable="true" text="john.doe@students.ruhuna.ac.lk" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                                                           <Label style="-fx-font-weight: bold;" text="Contact No:" GridPane.columnIndex="0" GridPane.rowIndex="3" />
-                                                           <TextField editable="true" text="0712345678" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-                                                           <Label style="-fx-font-weight: bold;" text="Address:" GridPane.columnIndex="0" GridPane.rowIndex="4" />
-                                                           <TextArea style="-fx-pref-height: 60;" text="No. 123, Main Street, Galle" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-                                                           <HBox spacing="10" GridPane.columnIndex="1" GridPane.rowIndex="5">
-                                                               <children>
-                                                                   <Button style="-fx-background-color: #27ae60; -fx-text-fill: white;" text="Update Profile" />
-                                                                   <Button style="-fx-background-color: #95a5a6; -fx-text-fill: white;" text="Cancel" />
-                                                               </children>
-                                                           </HBox>
-                                                       </children>
-                                                   </GridPane>
+                                       <GridPane hgap="15" vgap="10">
+                                          <columnConstraints>
+                                             <ColumnConstraints maxWidth="110.79996337890623" minWidth="93.19998779296873" prefWidth="97.99997558593748" />
+                                             <ColumnConstraints maxWidth="291.6000122070312" minWidth="274.0000366210937" prefWidth="286.8000244140625" />
+                                          </columnConstraints>
+                                          <rowConstraints>
+                                             <RowConstraints />
+                                             <RowConstraints />
+                                             <RowConstraints minHeight="10.0" prefHeight="30.0" />
+                                             <RowConstraints minHeight="10.0" prefHeight="30.0" />
+                                             <RowConstraints />
+                                             <RowConstraints minHeight="10.0" prefHeight="30.0" />
+                                             <RowConstraints />
+                                             <RowConstraints />
+                                             <RowConstraints />
+                                          </rowConstraints>
+                                          <children>
+                                             <Label prefHeight="18.0" prefWidth="270.0" style="-fx-font-weight: bold;" text="Full Name:" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+                                             <Label style="-fx-font-weight: bold;" text="To ID:" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+                                             <Label fx:id="regNoField" text="lecID" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                             <Label style="-fx-font-weight: bold;" text="Email:" GridPane.columnIndex="0" GridPane.rowIndex="4" />
+                                             <TextField fx:id="emailField" promptText="john.doe@students.ruhuna.ac.lk" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                                             <Label style="-fx-font-weight: bold;" text="Address:" GridPane.columnIndex="0" GridPane.rowIndex="7" />
+                                             <TextArea fx:id="addressField" prefHeight="60" promptText="No. 123, Main Street, Galle" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+                                             <HBox spacing="10" GridPane.columnIndex="1" GridPane.rowIndex="8">
+                                                <children>
+                                                   <Button onAction="#saveProfileDetails" style="-fx-background-color: #27ae60; -fx-text-fill: white; -fx-cursor: hand;" text="Update Profile" />
+                                                   <Button fx:id="selfDetailsCancelBtn" onAction="#cancelSelfFormDetails" style="-fx-background-color: #95a5a6; -fx-text-fill: white; -fx-cursor: hand;" text="Cancel" />
+                                                </children>
+                                             </HBox>
+                                             <TextField fx:id="fullNameField" promptText="Jhone Doe" GridPane.columnIndex="1" />
+                                             <Label layoutX="10.0" layoutY="78.0" style="-fx-font-weight: bold;" text="Gender:" GridPane.rowIndex="5" />
+                                             <TextField fx:id="genderField" layoutX="113.0" layoutY="74.0" promptText="Male / Female" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+                                             <Label layoutX="10.0" layoutY="46.0" style="-fx-font-weight: bold;" text="Department" GridPane.rowIndex="2" />
+                                             <Label layoutX="10.0" layoutY="80.0" prefHeight="18.0" prefWidth="107.0" style="-fx-font-weight: bold;" text="Hired Date:" GridPane.rowIndex="3" />
+                                             <ComboBox fx:id="departmentSelect" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                                             <Label fx:id="hiredDateField" text="1970/01/01" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                                          </children>
+                                       </GridPane>
                                                </children>
                                            </VBox>
                                        </children>
