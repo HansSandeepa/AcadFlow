@@ -1,5 +1,6 @@
 ### remove .env ###
 .env
+!.env.example
 
 ### ignore marven genarated source code ###
 target/

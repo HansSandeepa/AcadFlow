@@ -1,8 +1,12 @@
 package acadflow.contollers.users.admin;
 
 import acadflow.contollers.users.CommonUserController;
+import acadflow.models.Course;
+import acadflow.models.CourseOperations;
 import acadflow.models.users.Admin;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import acadflow.DAO.NoticeDAO;
 import acadflow.DAO.DisplayUserDAO;
@@ -64,6 +68,259 @@ public class AdminDashboardController extends CommonUserController {
         @FXML private Label totalUsersDashboardLabel;
         @FXML private Label importantNoticesLabel;
 
+
+        //Courses Section
+        @FXML private Button addCourseButton;
+        @FXML private Button deleteCourseButton;
+        @FXML private TextField courseCodeField;
+        @FXML private TextField courseNameField;
+        @FXML private TextField creditsField;
+        @FXML private Label statusField;
+
+    @FXML
+    private ComboBox<String> courseTypeField;
+    ObservableList<String> courseTypeList = FXCollections.observableArrayList("Theory","Practical","Both");
+
+
+    @FXML
+    private ComboBox<String> courseDepartmentCombo;
+    ObservableList<String> courseDepartmentList = FXCollections.observableArrayList("ICT","ET","BST","MDS");
+
+    @FXML
+    private ComboBox<String> courseLecturerCombo;
+    CourseOperations courseOperations = new CourseOperations();
+    ObservableList<String> courseLecturerList =  FXCollections.observableArrayList();
+
+
+
+    @FXML private TableView<Course> coursesTable;
+        @FXML private TableColumn<Course, String> CourseNameColomn;
+        @FXML private TableColumn<Course, String> CourseTypeColomn;
+        @FXML private TableColumn<Course, Integer> CreditsColomn;
+        @FXML private TableColumn<Course, String> DepartmentColomn;
+        @FXML private TableColumn<Course, String> courseCodeColomn;
+
+
+
+
+    private void loadCoursesTable() {
+        CourseOperations courseOps = new CourseOperations();
+        ObservableList<Course> courses = courseOps.getAllCourses();
+        coursesTable.setItems(courses);
+    }
+
+    @FXML
+    public void addCourse(ActionEvent event) {
+        CourseOperations c = new CourseOperations();
+
+
+        String courseId = courseCodeField.getText();
+        String courseName = courseNameField.getText();
+        String courseType = courseTypeField.getSelectionModel().getSelectedItem();
+        String creditsRaw = creditsField.getText();
+        String lecturerID = courseLecturerCombo.getSelectionModel().getSelectedItem();
+        String department = courseDepartmentCombo.getSelectionModel().getSelectedItem();
+
+
+        if (courseId.isEmpty() || courseName.isEmpty() || creditsRaw.isEmpty() ||
+                courseType == null || lecturerID == null || department == null) {
+            statusField.setText("Please fill in all fields.");
+            return;
+        }
+
+        try {
+            int credits = Integer.parseInt(creditsRaw);
+            if (credits > 3 || credits < 0) {
+                statusField.setText("Please enter a valid credit amount (0-3).");
+                return;
+            }
+
+
+            if ("Practical".equals(courseType)) {
+                courseType = "P";
+            } else if ("Both".equals(courseType)) {
+                courseType = "Both";
+            } else if ("Theory".equals(courseType)) {
+                courseType = "T";
+            }
+
+
+            boolean success = c.addCourse(courseId, courseName, credits, courseType, lecturerID, department);
+            if (success) {
+                statusField.setText("Course added successfully!");
+                clearCourseFields();
+
+                if (success) {
+                    statusField.setText("Course added successfully!");
+                    loadCoursesTable();
+                    clearCourseFields();
+                }
+
+            } else {
+                statusField.setText("Database error. Check console.");
+            }
+
+        } catch (NumberFormatException e) {
+            statusField.setText("Credits must be a number.");
+        }
+    }
+
+    @FXML
+    public void deleteCourse(ActionEvent event) {
+
+        CourseOperations courseOperations = new CourseOperations();
+
+        courseOperations.deleteCourse(courseCodeField.getText());
+        if(courseOperations.deletestatus.equals("true")) {
+            statusField.setText("Course Deleted");
+            loadCoursesTable();
+
+            if(courseOperations.deletestatus.equals("true")) {
+                statusField.setText("Course Deleted");
+                loadCoursesTable();
+                clearCourseFields();
+            }
+        }else if(courseOperations.deletestatus.equals("false")) {
+            statusField.setText("Cannot Delete Course ");
+        }else if(courseOperations.deletestatus.equals("empty")) {
+            statusField.setText("Course Id is Required to Delete Course ");
+        }
+
+
+    }
+
+    @FXML
+    public void updateDialog(ActionEvent event) {
+        // Get selected course from table
+        Course selectedCourse = coursesTable.getSelectionModel().getSelectedItem();
+
+        if (selectedCourse == null) {
+            statusField.setText("Please select a course to update from the table.");
+            return;
+        }
+
+        // Create dialog
+        Dialog<Course> dialog = new Dialog<>();
+        dialog.setTitle("Update Course");
+        dialog.setHeaderText("Update Course: " + selectedCourse.getCourseId());
+
+        // Add buttons
+        ButtonType saveButtonType = new ButtonType("Update", ButtonBar.ButtonData.OK_DONE);
+        dialog.getDialogPane().getButtonTypes().addAll(saveButtonType, ButtonType.CANCEL);
+
+        // Create form fields
+        GridPane grid = new GridPane();
+        grid.setHgap(10);
+        grid.setVgap(10);
+        grid.setPadding(new javafx.geometry.Insets(20, 150, 10, 10));
+
+        TextField courseIdField = new TextField();
+        TextField courseNameField = new TextField();
+        TextField creditsField = new TextField();
+        ComboBox<String> courseTypeCombo = new ComboBox<>(courseTypeList);
+        ComboBox<String> departmentCombo = new ComboBox<>(courseDepartmentList);
+
+        // Pre-fill with current course data
+        courseIdField.setText(selectedCourse.getCourseId());
+        courseNameField.setText(selectedCourse.getName());
+        creditsField.setText(String.valueOf(selectedCourse.getCredit()));
+        courseTypeCombo.setValue(getFullCourseType(selectedCourse.getType()));
+        departmentCombo.setValue(selectedCourse.getDepartment());
+
+        grid.add(new Label("Course ID:"), 0, 0);
+        grid.add(courseIdField, 1, 0);
+        grid.add(new Label("Course Name:"), 0, 1);
+        grid.add(courseNameField, 1, 1);
+        grid.add(new Label("Credits:"), 0, 2);
+        grid.add(creditsField, 1, 2);
+        grid.add(new Label("Course Type:"), 0, 3);
+        grid.add(courseTypeCombo, 1, 3);
+        grid.add(new Label("Department:"), 0, 4);
+        grid.add(departmentCombo, 1, 4);
+
+        dialog.getDialogPane().setContent(grid);
+
+        // Convert result when Update button is clicked
+        dialog.setResultConverter(dialogButton -> {
+            if (dialogButton == saveButtonType) {
+                // Validate fields
+                if (courseIdField.getText().isEmpty() ||
+                        courseNameField.getText().isEmpty() ||
+                        creditsField.getText().isEmpty() ||
+                        courseTypeCombo.getValue() == null) {
+
+                    showAlert(Alert.AlertType.WARNING, "Validation Error",
+                            "Please fill in all required fields.");
+                    return null;
+                }
+
+                try {
+                    int credits = Integer.parseInt(creditsField.getText());
+                    String newCourseId = courseIdField.getText();
+                    String courseName = courseNameField.getText();
+                    String courseType = courseTypeCombo.getValue();
+
+                    // Convert course type
+                    if ("Practical".equals(courseType)) {
+                        courseType = "P";
+                    } else if ("Theory".equals(courseType)) {
+                        courseType = "T";
+                    } else {
+                        courseType = "Both";
+                    }
+
+                    // Return updated course
+                    return new Course(newCourseId, courseName, credits, courseType,
+                            departmentCombo.getValue());
+
+                } catch (NumberFormatException e) {
+                    showAlert(Alert.AlertType.ERROR, "Error", "Credits must be a valid number.");
+                    return null;
+                }
+            }
+
+            return null;
+        });
+
+        // Show dialog and process result
+        Optional<Course> result = dialog.showAndWait();
+
+        result.ifPresent(updatedCourse -> {
+            CourseOperations courseOps = new CourseOperations();
+
+            // Call updateCourse with old course ID and new values
+            courseOps.updateCourse(
+                    selectedCourse.getCourseId(),     // old course ID
+                    updatedCourse.getName(),          // new name
+                    updatedCourse.getCredit(),        // new credits
+                    updatedCourse.getType(),          // new type
+                    updatedCourse.getCourseId()       // new course ID
+            );
+
+            // Refresh table
+            loadCoursesTable();
+            statusField.setText("Course updated successfully!");
+
+            // Clear status after 4 seconds
+            javafx.animation.PauseTransition delay = new javafx.animation.PauseTransition(
+                    javafx.util.Duration.seconds(4));
+            delay.setOnFinished(e -> statusField.setText(""));
+            delay.play();
+        });
+    }
+
+    // Helper method to convert course type codes to full names
+    private String getFullCourseType(String type) {
+        if (type == null) return null;
+        switch (type.toUpperCase()) {
+            case "T": return "Theory";
+            case "P": return "Practical";
+            default: return "Both";
+        }
+    }
+
+
+
     @Override
     protected void initializeWithUserData(){
         userRegNo.setText(regNo);
@@ -93,6 +350,21 @@ public class AdminDashboardController extends CommonUserController {
             initializeNoticeSection();
             initializeUserSection();
             updateDashboardStatistics();
+
+            courseTypeField.setItems(courseTypeList);
+            courseDepartmentCombo.setItems(courseDepartmentList);
+            courseLecturerList.setAll(courseOperations.getLecturerNames());
+            courseLecturerCombo.setItems(courseLecturerList);
+
+
+            courseCodeColomn.setCellValueFactory(new PropertyValueFactory<>("courseId"));
+            CourseNameColomn.setCellValueFactory(new PropertyValueFactory<>("name"));
+            CreditsColomn.setCellValueFactory(new PropertyValueFactory<>("credit"));
+            CourseTypeColomn.setCellValueFactory(new PropertyValueFactory<>("type"));
+            DepartmentColomn.setCellValueFactory(new PropertyValueFactory<>("department"));
+
+
+            loadCoursesTable();
         }
 
         //  notice section
@@ -675,6 +947,21 @@ public class AdminDashboardController extends CommonUserController {
                 alert.showAndWait();
             });
         }
+
+    private void clearCourseFields() {
+
+        courseCodeField.clear();
+        courseNameField.clear();
+        creditsField.clear();
+
+        javafx.animation.PauseTransition delay = new javafx.animation.PauseTransition(javafx.util.Duration.seconds(4));
+        delay.setOnFinished(e -> statusField.setText(""));
+        delay.play();
+
+        courseCodeField.requestFocus();
+
+
+    }
 
     }
 

@@ -1,56 +1,58 @@
 package acadflow.models;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
+
 import acadflow.util.DBConnection;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 public class CourseOperations implements CourseOperationsInt {
 
 
-
+    public String deletestatus="";
 
 
     //Add Course
-    public void addCourse(String cid,String cname,int credits,String type) {
+    public boolean addCourse(String cid,String cname,int credits,String type,String lecturerID,String department) {
 
-       String  query="INSERT INTO course VALUES (?,?,?,?)";
+        String  query="INSERT INTO course VALUES (?,?,?,?,?)";
+        String query2="INSERT INTO conducted_courses VALUES(?,?)";
         try {
 
 
+            DBConnection db = new DBConnection();
+            Connection connection = db.getConnection();
 
-            if(cid.isEmpty()){
-                System.out.println("Course id Cannot be empty");
-            }
-            if(cname.isEmpty()){
-                System.out.println("Course name cannot be empty");
-            }
-            if(!(type.equals("T") || type.equals("P"))){
-                System.out.println("Please enter a valid course type");
-            }
+            PreparedStatement ps = connection.prepareStatement(query);
+            ps.setString(1,cid);
+            ps.setString(2,cname);
+            ps.setInt(3,credits);
+            ps.setString(4,type.toUpperCase());
+            ps.setString(5,department);
+            ps.executeUpdate();
+            System.out.println("Course added successfully");
 
-            else{
+            PreparedStatement ps2 = connection.prepareStatement(query2);
+            ps2.setString(1,lecturerID);
+            ps2.setString(2,cid);
+            ps2.executeUpdate();
+            System.out.println("Updated conducted course successfully");
+            ps.close();
 
-
-                DBConnection db = new DBConnection();
-                Connection connection = db.getConnection();
-
-                PreparedStatement ps = connection.prepareStatement(query);
-                ps.setString(1,cid);
-                ps.setString(2,cname);
-                ps.setInt(3,credits);
-                ps.setString(4,type.toUpperCase());
-                ps.executeUpdate();
-                System.out.println("Course added successfully");
-                ps.close();
+            return true;
 
 
-
-            }
 
         } catch (SQLException e) {
             System.out.println(e.getMessage());
+            return false;
         } catch (Exception e) {
             System.out.println(e.getMessage());
+            return false;
         }
+
 
 
     }
@@ -63,6 +65,7 @@ public class CourseOperations implements CourseOperationsInt {
 
         if(cid.isEmpty()){
             System.out.println("Course id cannot be empty");
+            deletestatus="empty";
         }else {
 
 
@@ -72,14 +75,25 @@ public class CourseOperations implements CourseOperationsInt {
                 PreparedStatement ps = connection.prepareStatement(query);
                 ps.setString(1, cid);
 
-                ps.executeUpdate();
-                System.out.println("Course deleted successfully");
+
+                int affectedRows = ps.executeUpdate();
+
+                if(affectedRows>0){
+                    System.out.println("Course deleted successfully");
+                    deletestatus = "true";
+                }else{
+                    deletestatus="false";
+                }
+
 
                 ps.close();
             } catch (SQLException e) {
                 System.out.println(e.getMessage());
+                deletestatus = "false";
             } catch (Exception e) {
-                System.out.println(e.getMessage());                }
+                System.out.println(e.getMessage());
+                deletestatus = "false";
+            }
         }
 
     }
@@ -159,9 +173,8 @@ public class CourseOperations implements CourseOperationsInt {
 
     }
 
-    //View All course list
-    public void viewCourseList() {
-
+    public ObservableList<Course> getAllCourses() {
+        ObservableList<Course> courseList = FXCollections.observableArrayList();
 
         try {
             DBConnection db = new DBConnection();
@@ -171,22 +184,26 @@ public class CourseOperations implements CourseOperationsInt {
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
-                System.out.println("---------------------------");
-                System.out.println("Course ID : " + rs.getString("Course_id"));
-                System.out.println("Name      : " + rs.getString("Name"));
-                System.out.println("Credits   : " + rs.getInt("Credit"));
-                System.out.println("Type      : " + rs.getString("Type"));
+                Course course = new Course(
+                        rs.getString("Course_id"),
+                        rs.getString("Name"),
+                        rs.getInt("Credit"),
+                        rs.getString("Type"),
+                        rs.getString("department")
+                );
+                courseList.add(course);
             }
-            System.out.println("---------------------------");
 
+            ps.close();
+            connection.close();
 
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.out.println("Error fetching courses: " + e.getMessage());
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
 
-
+        return courseList;
     }
 
     //View Course list of an individual undergraduate
@@ -262,6 +279,34 @@ public class CourseOperations implements CourseOperationsInt {
         }
     }
 
+    public List<String> getLecturerNames() {
+        List<String> lecturerNames = new ArrayList<>();
 
+        try {
+            DBConnection db = new DBConnection();
+            Connection connection = db.getConnection();
 
+            String sql = "SELECT Lecturer_Id from lecturer";
+
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                lecturerNames.add(rs.getString("Lecturer_Id"));
+            }
+
+            ps.close();
+            connection.close();
+
+        } catch (SQLException e) {
+            System.out.println("Error fetching lecturer names: " + e.getMessage());
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+
+        return lecturerNames;
+    }
 }
+
+
+
