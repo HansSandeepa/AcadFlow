@@ -6,28 +6,9 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Data Access Object for the `attendance` table.
- *
- * Provides CRUD operations used by the Technical Officer to:
- *   - Add a new attendance record for an undergraduate
- *   - Update an existing attendance record
- *   - Delete an attendance record
- *   - Query records by student, course, session type, or date
- *
- * Also supplies helper queries for populating combo-boxes in the UI
- * (list of undergraduates, list of courses, list of distinct sessions).
- */
 public class AttendanceDAO {
 
-    // ──────────────────────────────────────────────────────────────────────────
-    // Inner helper: row data for Undergraduate combo-box
-    // ──────────────────────────────────────────────────────────────────────────
 
-    /**
-     * Simple value holder used to populate the "Select Student" combo-box.
-     * Displays "Stu_id – Full Name" and exposes individual fields.
-     */
     public static class StudentEntry {
         private final String stuId;
         private final String fullName;
@@ -40,14 +21,10 @@ public class AttendanceDAO {
         public String getStuId()    { return stuId; }
         public String getFullName() { return fullName; }
 
-        /** Used by JavaFX ComboBox to render each item as text. */
         @Override
         public String toString() { return stuId + " – " + fullName; }
     }
 
-    /**
-     * Simple value holder for the "Select Course" combo-box.
-     */
     public static class CourseEntry {
         private final String courseId;
         private final String name;
@@ -67,17 +44,7 @@ public class AttendanceDAO {
         public String toString() { return courseId + " – " + name; }
     }
 
-    // ──────────────────────────────────────────────────────────────────────────
     // Helper queries for populating combo-boxes
-    // ──────────────────────────────────────────────────────────────────────────
-
-    /**
-     * Returns undergraduates whose Department matches the given department.
-     * Used to populate student combo-boxes so a Technical Officer only sees
-     * students from their own department.
-     *
-     * @param department  e.g. "ICT", "ET", "BST", "MDS"
-     */
     public List<StudentEntry> getStudentsByDepartment(String department) {
         List<StudentEntry> list = new ArrayList<>();
         String sql = "SELECT u.Stu_id, usr.Fullname " +
@@ -105,8 +72,6 @@ public class AttendanceDAO {
      * Returns courses whose department matches the given department.
      * Used to populate the course combo-box so a Technical Officer can only
      * assign attendance for courses belonging to their department.
-     *
-     * @param department  e.g. "ICT", "ET", "BST", "MDS"
      */
     public List<CourseEntry> getCoursesByDepartment(String department) {
         List<CourseEntry> list = new ArrayList<>();
@@ -183,9 +148,6 @@ public class AttendanceDAO {
 
     /**
      * Inserts a new attendance row into the database.
-     *
-     * @param record  An AttendanceRecord with all fields except attendanceId filled.
-     * @return true if the insert succeeded, false otherwise.
      */
     public boolean addAttendance(AttendanceRecord record) {
         String sql = "INSERT INTO attendance (Session, Session_type, Status, Date, Course_id, Stu_id) " +
@@ -220,9 +182,6 @@ public class AttendanceDAO {
      * Updates an existing attendance record (identified by its Attendance_id).
      * All editable fields (Session, Session_type, Status, Date, Course_id, Stu_id)
      * are updated.
-     *
-     * @param record  AttendanceRecord whose attendanceId already exists in the DB.
-     * @return true if at least one row was changed.
      */
     public boolean updateAttendance(AttendanceRecord record) {
         String sql = "UPDATE attendance " +
@@ -253,9 +212,6 @@ public class AttendanceDAO {
      * Deletes an attendance record by its primary key.
      * Note: any linked medical records referencing this Attendance_id will be
      * cascade-deleted automatically (FK constraint in the schema).
-     *
-     * @param attendanceId  Primary key of the row to delete.
-     * @return true if the row was deleted.
      */
     public boolean deleteAttendance(int attendanceId) {
         String sql = "DELETE FROM attendance WHERE Attendance_id = ?";
@@ -280,8 +236,6 @@ public class AttendanceDAO {
     /**
      * Returns all attendance records for a specific undergraduate,
      * joined with course name and student full name for display.
-     *
-     * @param stuId  The Stu_id of the undergraduate.
      */
     public List<AttendanceRecord> getAttendanceByStudent(String stuId) {
         return queryRecords(
@@ -302,8 +256,6 @@ public class AttendanceDAO {
      * Returns all attendance records whose student AND course both belong to the
      * given department. This is the main table-load query for a Technical Officer —
      * they only see records they are responsible for.
-     *
-     * @param department  e.g. "ICT", "ET", "BST", "MDS"
      */
     public List<AttendanceRecord> getAttendanceByDepartment(String department) {
         List<AttendanceRecord> list = new ArrayList<>();
@@ -337,9 +289,6 @@ public class AttendanceDAO {
      * Returns attendance records for one specific student, scoped to the
      * department the Technical Officer belongs to (filters on course.department
      * so cross-department records are never surfaced).
-     *
-     * @param stuId       The Stu_id of the undergraduate.
-     * @param department  The TO's department.
      */
     public List<AttendanceRecord> getAttendanceByStudentInDepartment(String stuId, String department) {
         List<AttendanceRecord> list = new ArrayList<>();
@@ -481,6 +430,134 @@ public class AttendanceDAO {
             System.err.println("[AttendanceDAO] recordExistsExcluding error: " + e.getMessage());
         }
         return false;
+    }
+
+    // ──────────────────────────────────────────────────────────────────────────
+    // Undergraduate self-view queries
+    // ──────────────────────────────────────────────────────────────────────────
+
+    /**
+     * Returns all attendance rows for the given student, enriched with any
+     * linked medical record data (joined via medical.Attendance_id).
+     */
+    public List<AttendanceViewRecord> getAttendanceViewRecords(String stuId,
+                                                               String courseId,
+                                                               String sessionTypeFilter) {
+        List<AttendanceViewRecord> list = new ArrayList<>();
+
+        StringBuilder sql = new StringBuilder(
+                "SELECT a.Session, a.Session_type, a.Status, a.Date, " +
+                        "       a.Course_id, c.Name AS CourseName, " +
+                        "       CASE WHEN m.Medical_id IS NOT NULL THEN 1 ELSE 0 END AS HasMedical, " +
+                        "       COALESCE(m.Approval, '-') AS MedicalApproval " +
+                        "FROM attendance a " +
+                        "JOIN course c ON a.Course_id = c.Course_id " +
+                        "LEFT JOIN medical m ON m.Attendance_id = a.Attendance_id " +
+                        "WHERE a.Stu_id = ? "
+        );
+
+        if (courseId != null && !courseId.isEmpty()) {
+            sql.append("AND a.Course_id = ? ");
+        }
+        if (sessionTypeFilter != null && !sessionTypeFilter.isEmpty()) {
+            sql.append("AND a.Session_type = ? ");
+        }
+        sql.append("ORDER BY a.Date DESC, a.Session");
+
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql.toString())) {
+
+            int idx = 1;
+            ps.setString(idx++, stuId);
+            if (courseId != null && !courseId.isEmpty())       ps.setString(idx++, courseId);
+            if (sessionTypeFilter != null && !sessionTypeFilter.isEmpty()) ps.setString(idx++, sessionTypeFilter);
+
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                list.add(new AttendanceViewRecord(
+                        rs.getString("Course_id"),
+                        rs.getString("CourseName"),
+                        rs.getString("Session"),
+                        rs.getString("Session_type"),
+                        rs.getDate("Date").toString(),
+                        rs.getString("Status"),
+                        rs.getInt("HasMedical") == 1,
+                        rs.getString("MedicalApproval")
+                ));
+            }
+        } catch (SQLException e) {
+            System.err.println("[AttendanceDAO] getAttendanceViewRecords error: " + e.getMessage());
+        }
+        return list;
+    }
+
+    /**
+     * Returns every course that the given student has at least one
+     * attendance record for. Used to populate the Course filter combo-box.
+     */
+    public List<CourseEntry> getCoursesForStudent(String stuId) {
+        List<CourseEntry> list = new ArrayList<>();
+        String sql =
+                "SELECT DISTINCT c.Course_id, c.Name, c.Type " +
+                        "FROM attendance a " +
+                        "JOIN course c ON a.Course_id = c.Course_id " +
+                        "WHERE a.Stu_id = ? " +
+                        "ORDER BY c.Course_id";
+
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setString(1, stuId);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                list.add(new CourseEntry(
+                        rs.getString("Course_id"),
+                        rs.getString("Name"),
+                        rs.getString("Type")));
+            }
+        } catch (SQLException e) {
+            System.err.println("[AttendanceDAO] getCoursesForStudent error: " + e.getMessage());
+        }
+        return list;
+    }
+
+    /**
+     * Attendance summary for one student in one course.
+     */
+    public int[] getAttendanceSummary(String stuId, String courseId, String sessionTypeFilter) {
+        StringBuilder sql = new StringBuilder(
+                "SELECT COUNT(*) AS total, " +
+                        "       SUM(CASE WHEN a.Status = 'present' THEN 1 ELSE 0 END) AS present_count, " +
+                        "       SUM(CASE WHEN m.Medical_id IS NOT NULL THEN 1 ELSE 0 END) AS medical_count " +
+                        "FROM attendance a " +
+                        "LEFT JOIN medical m ON m.Attendance_id = a.Attendance_id " +
+                        "WHERE a.Stu_id = ? AND a.Course_id = ? "
+        );
+        if (sessionTypeFilter != null && !sessionTypeFilter.isEmpty()) {
+            sql.append("AND a.Session_type = ?");
+        }
+
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql.toString())) {
+
+            ps.setString(1, stuId);
+            ps.setString(2, courseId);
+            if (sessionTypeFilter != null && !sessionTypeFilter.isEmpty()) {
+                ps.setString(3, sessionTypeFilter);
+            }
+
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return new int[]{
+                        rs.getInt("present_count"),
+                        rs.getInt("total"),
+                        rs.getInt("medical_count")
+                };
+            }
+        } catch (SQLException e) {
+            System.err.println("[AttendanceDAO] getAttendanceSummary error: " + e.getMessage());
+        }
+        return new int[]{0, 0, 0};
     }
 
     // ──────────────────────────────────────────────────────────────────────────
