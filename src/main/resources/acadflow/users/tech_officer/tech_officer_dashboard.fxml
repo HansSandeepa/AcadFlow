@@ -261,45 +261,50 @@
                             <Label style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;" text="Medical Records" />
 
                             <HBox spacing="15">
-                                <TextField promptText="Student ID or Name" style="-fx-pref-width: 200;" />
-                                <Button style="-fx-background-color: #3498db; -fx-text-fill: white;" text="Search" />
-                                <Button style="-fx-background-color: #27ae60; -fx-text-fill: white;" text="Add Medical Record" />
+                                <TextField fx:id="medSearchField" promptText="Student ID or Name" style="-fx-pref-width: 200;" />
+                                <Button fx:id="medSearchBtn" onAction="#handleMedSearch" style="-fx-background-color: #3498db; -fx-text-fill: white;" text="Search" />
+                                <Button fx:id="medRefreshBtn" onAction="#handleMedRefresh" style="-fx-background-color: #27ae60; -fx-text-fill: white;" text="Refresh" />
                             </HBox>
 
                             <!-- Medical Records Table -->
-                            <TableView style="-fx-pref-height: 300;">
+                            <TableView fx:id="medicalTableView" style="-fx-pref-height: 300;">
                                 <columns>
-                                    <TableColumn prefWidth="100" text="Student ID" />
-                                    <TableColumn prefWidth="150" text="Name" />
-                                    <TableColumn prefWidth="100" text="Date" />
-                                    <TableColumn prefWidth="150" text="Reason" />
-                                    <TableColumn prefWidth="100" text="Status">
-                                        <!-- ComboBox for Approved/Not Approved -->
-                                    </TableColumn>
-                                    <TableColumn prefWidth="100" text="Actions" />
+                                    <TableColumn fx:id="medStuIdCol" prefWidth="100" text="Student ID" />
+                                    <TableColumn fx:id="medStuNameCol" prefWidth="150" text="Name" />
+                                    <TableColumn fx:id="medDateCol" prefWidth="100" text="Date" />
+                                    <TableColumn fx:id="medCourseCol" prefWidth="150" text="Course" />
+                                    <TableColumn fx:id="medSessionCol" prefWidth="100" text="Session" />
+                                    <TableColumn fx:id="medStatusCol" prefWidth="100" text="Status" />
+                                    <TableColumn fx:id="medActionCol" prefWidth="150" text="Actions" />
                                 </columns>
                             </TableView>
 
                             <!-- Add Medical Form -->
-                            <TitledPane expanded="false" text="Add New Medical Record">
+                            <TitledPane fx:id="medDetailPane" expanded="false" text="Medical Record Details">
                                 <VBox spacing="10" style="-fx-padding: 15;">
                                     <HBox spacing="15">
-                                        <Label style="-fx-pref-width: 100;" text="Student ID:" />
-                                        <TextField promptText="Enter Student ID" />
+                                        <Label style="-fx-font-weight: bold; -fx-pref-width: 100;" text="Student:" />
+                                        <Label fx:id="medDetailStudent" text="—" />
                                     </HBox>
                                     <HBox spacing="15">
-                                        <Label style="-fx-pref-width: 100;" text="Date:" />
-                                        <DatePicker />
+                                        <Label style="-fx-font-weight: bold; -fx-pref-width: 100;" text="Date:" />
+                                        <Label fx:id="medDetailDate" text="—" />
                                     </HBox>
                                     <HBox spacing="15">
-                                        <Label style="-fx-pref-width: 100;" text="Reason:" />
-                                        <TextArea promptText="Medical reason" style="-fx-pref-width: 300; -fx-pref-height: 80;" />
+                                        <Label style="-fx-font-weight: bold; -fx-pref-width: 100;" text="Course:" />
+                                        <Label fx:id="medDetailCourse" text="—" />
                                     </HBox>
                                     <HBox spacing="15">
-                                        <Label style="-fx-pref-width: 100;" text="Approved:" />
-                                        <CheckBox text="Approve" />
+                                        <Label style="-fx-font-weight: bold; -fx-pref-width: 100;" text="Session:" />
+                                        <Label fx:id="medDetailSession" text="—" />
                                     </HBox>
-                                    <Button style="-fx-background-color: #27ae60; -fx-text-fill: white;" text="Submit Medical" />
+                                    <Separator />
+                                    <HBox spacing="15">
+                                        <Button fx:id="medApproveBtn" onAction="#handleMedApprove"
+                                                style="-fx-background-color: #27ae60; -fx-text-fill: white; -fx-cursor: hand; -fx-background-radius: 5;"
+                                                text="✓  Approve" />
+
+                                    </HBox>
                                 </VBox>
                             </TitledPane>
                         </VBox>
