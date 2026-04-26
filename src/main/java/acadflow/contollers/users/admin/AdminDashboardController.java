@@ -3,9 +3,11 @@ package acadflow.contollers.users.admin;
 import acadflow.contollers.users.CommonUserController;
 import acadflow.models.Course;
 import acadflow.models.CourseOperations;
+import acadflow.models.DisplayTimeTable;
 import acadflow.models.users.Admin;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import acadflow.DAO.NoticeDAO;
 import acadflow.DAO.Notice;
@@ -151,6 +153,15 @@ public class AdminDashboardController extends CommonUserController {
     @FXML
     private TableColumn<Course, String> courseCodeColomn;
 
+    // TIMETABLE SECTION
+    @FXML private ComboBox<String> timetableDepartmentCombo;
+    @FXML private ComboBox<String> timetableSemesterCombo;
+    @FXML private Button generateTimetableButton;
+    @FXML private Button deleteTimetableButton;
+    @FXML private TableView<DisplayTimeTable> timetableTable;
+
+    private ObservableList<DisplayTimeTable> tableList = FXCollections.observableArrayList();
+    private DisplayTimeTable selectedDisplayTimeTable;
 
     private void loadCoursesTable() {
         CourseOperations courseOps = new CourseOperations();
@@ -381,6 +392,9 @@ public class AdminDashboardController extends CommonUserController {
         userImg.setImage(userProfilePic);
         userMainImage.setImage(userProfilePic);
         setUsersDetails();
+        initializerTimeTableSection();
+        filterDisplayTimeTable();
+
     }
 
     private void setUsersDetails() {
@@ -1040,5 +1054,222 @@ public class AdminDashboardController extends CommonUserController {
         emailField.setText("");
         addressField.setText("");
     }
+
+    /***************************************************************************************************/
+
+    //FILTER TIME TABLE BY DEPARTMENT
+    private void filterDisplayTimeTable() {
+        String dept = timetableDepartmentCombo.getValue();
+        String sem = timetableSemesterCombo.getValue();
+        List<DisplayTimeTable> tables;
+
+        if ((dept == null || dept.equals("ALL")) &&
+                (sem == null || sem.isEmpty())) {
+
+            tables = displayUserDAO.getAllDisplayTimeTable();
+
+        } else if (dept != null && !dept.equals("ALL") &&
+                sem != null && !sem.isEmpty()) {
+
+            tables = displayUserDAO.getDisplayTablesByDept(dept, sem);
+
+        } else if (dept != null && !dept.equals("ALL")) {
+
+            tables = displayUserDAO.getDisplayTablesByDept(dept, sem);
+
+        } else {
+            tables = displayUserDAO.getAllDisplayTimeTable();
+        }
+
+        tableList.setAll(tables);
+    }
+
+    //ADD TIMETABLE
+    @FXML
+    private void addTimeTable() {
+        Dialog<DisplayTimeTable> dialog = createTimetableDialog("Add New Time Table", null);
+        Optional<DisplayTimeTable> result = dialog.showAndWait();
+        result.ifPresent(time_table -> {
+            if (displayUserDAO.addDisplayTimeTable(time_table)) {
+                showAlert(Alert.AlertType.INFORMATION, "Success", "Time table added successfully!");
+                filterDisplayTimeTable();
+            } else {
+                showAlert(Alert.AlertType.ERROR, "Error", "Failed to add Time Table!(Please enter the validate data)");
+            }
+        });
+    }
+
+    //TIMETABLE FORM
+    private Dialog<DisplayTimeTable> createTimetableDialog(String title, DisplayTimeTable existingTable) {
+        Dialog<DisplayTimeTable> dialog = new Dialog<>();
+        dialog.setTitle(title);
+        dialog.setHeaderText(null);
+
+        ButtonType saveButtonType = new ButtonType("Save", ButtonBar.ButtonData.OK_DONE);
+        dialog.getDialogPane().getButtonTypes().addAll(saveButtonType, ButtonType.CANCEL);
+
+        GridPane grid = new GridPane();
+        grid.setHgap(10);
+        grid.setVgap(10);
+        grid.setPadding(new Insets(20, 150, 10, 10));
+
+        TextField timetableidField = new TextField();
+        ComboBox<String> dayCombo = new ComboBox<>(FXCollections.observableArrayList("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"));
+        TextField timeField = new TextField();
+        ComboBox<String> levelSemCol = new ComboBox<>(FXCollections.observableArrayList("Level 1 Semester 1", "Level 1 Semester 2", "Level 2 Semester 1", "Level 2 Semester 2", "Level 3 Semester 1", "Level 3 Semester 2", "Level 4 Semester 1", "Level 4 Semester 2"));
+        ComboBox<String> SessionCombo = new ComboBox<>(FXCollections.observableArrayList("T", "P", "Both"));
+        ComboBox<String> deptCombo = new ComboBox<>(FXCollections.observableArrayList("ICT", "ET", "BST"));
+        TextField courseldField = new TextField();
+        TextField adminidField = new TextField();
+
+
+        if (existingTable != null) {
+            timetableidField.setText(String.valueOf(existingTable.getTimetableId()));
+            dayCombo.setValue(existingTable.getDay());
+            timeField.setText(String.valueOf(existingTable.getTime()));
+            levelSemCol.setValue(existingTable.getLevelAndSem());
+            SessionCombo.setValue(existingTable.getSessionType());
+            deptCombo.setValue(existingTable.getDept());
+            courseldField.setText(existingTable.getCourseId());
+            adminidField.setText(existingTable.getAdminId());
+        }
+
+        grid.add(new Label("Timetable_ Id:"), 0, 0);
+        grid.add(timetableidField, 1, 0);
+        grid.add(new Label("Day:"), 0, 1);
+        grid.add(dayCombo, 1, 1);
+        grid.add(new Label("Time:"), 0, 2);
+        grid.add(timeField, 1, 2);
+        grid.add(new Label("Level_and_Semester:"), 0, 3);
+        grid.add(levelSemCol, 1, 3);
+        grid.add(new Label("Session_Type:"), 0, 4);
+        grid.add(SessionCombo, 1, 4);
+        grid.add(new Label("Department:"), 0, 5);
+        grid.add(deptCombo, 1, 5);
+        grid.add(new Label("Course_id:"), 0, 6);
+        grid.add(courseldField, 1, 6);
+        grid.add(new Label("Admin_id:"), 0, 7);
+        grid.add(adminidField, 1, 7);
+
+        dialog.getDialogPane().setContent(grid);
+
+        Platform.runLater(() -> timetableidField.requestFocus());
+
+        dialog.setResultConverter(dialogButton -> {
+            if (dialogButton == saveButtonType) {
+                return new DisplayTimeTable(
+                        timetableidField.getText(),
+                        dayCombo.getValue(),
+                        timeField.getText(),
+                        levelSemCol.getValue(),
+                        SessionCombo.getValue(),
+                        deptCombo.getValue(),
+                        courseldField.getText(),
+                        adminidField.getText()
+                );
+            }
+            return null;
+        });
+
+        return dialog;
+    }
+
+    //DEPARTMENT SECTION, LEVEL, AND SEMESTER FOR TIME TABLE
+    private void initializerTimeTableSection() {
+        if (timetableDepartmentCombo == null) return;
+        timetableDepartmentCombo.setItems(FXCollections.observableArrayList("ALL", "ICT", "ET", "BST"));
+        timetableDepartmentCombo.setValue("ALL");
+
+        if (timetableSemesterCombo == null) return;
+        timetableSemesterCombo.setItems(FXCollections.observableArrayList("Level 1 Semester 1", "Level 1 Semester 2", "Level 2 Semester 1", "Level 2 Semester 2", "Level 3 Semester 1", "Level 3 Semester 2", "Level 4 Semester 1", "Level 4 Semester 2"));
+        timetableSemesterCombo.setValue("Level 1 Semester I");
+
+        setupTimeTableColumns();
+
+        if (timetableTable != null) {
+            timetableTable.getSelectionModel().selectedItemProperty().addListener(
+                    (obs, oldSelection, newSelection) -> {
+                        selectedDisplayTimeTable = newSelection;
+                        boolean isSelected = newSelection != null;
+                        // if (deleteUserButton != null) deleteUserButton.setDisable(!isSelected); //create delete button to time table
+                    }
+            );
+        }
+
+        if (timetableDepartmentCombo != null) {
+            timetableDepartmentCombo.setOnAction(e -> filterDisplayTimeTable());
+        }
+
+        if (timetableSemesterCombo != null) {
+            timetableSemesterCombo.setOnAction(e -> filterDisplayTimeTable());
+        }
+    }
+
+    //SETUP TIME TABLE COLUMNS
+    private void setupTimeTableColumns() {
+        if (timetableTable == null) return;
+        timetableTable.getColumns().clear();
+
+        TableColumn<DisplayTimeTable, String> tableidCol = new TableColumn<>("Timetable_id");
+        tableidCol.setCellValueFactory(new PropertyValueFactory<>("timetableId"));
+        tableidCol.setPrefWidth(200);
+
+        TableColumn<DisplayTimeTable, String> dayCol = new TableColumn<>("Day");
+        dayCol.setCellValueFactory(new PropertyValueFactory<>("day"));
+        dayCol.setPrefWidth(180);
+
+        TableColumn<DisplayTimeTable, String> timeCol = new TableColumn<>("Time");
+        timeCol.setCellValueFactory(new PropertyValueFactory<>("time"));
+        timeCol.setPrefWidth(200);
+
+        TableColumn<DisplayTimeTable, String> levelSemCol = new TableColumn<>("Level_and_Semester");
+        levelSemCol.setCellValueFactory(new PropertyValueFactory<>("levelAndSem"));
+        levelSemCol.setPrefWidth(200);
+
+        TableColumn<DisplayTimeTable, String> sessionTypeCol = new TableColumn<>("Session_type");
+        sessionTypeCol.setCellValueFactory(new PropertyValueFactory<>("sessionType"));
+        sessionTypeCol.setPrefWidth(150);
+
+        TableColumn<DisplayTimeTable, String> deptCol = new TableColumn<>("Department");
+        deptCol.setCellValueFactory(new PropertyValueFactory<>("dept"));
+        deptCol.setPrefWidth(100);
+
+        TableColumn<DisplayTimeTable, String> courseIdCol = new TableColumn<>("Course_id");
+        courseIdCol.setCellValueFactory(new PropertyValueFactory<>("courseId"));
+        courseIdCol.setPrefWidth(70);
+
+        TableColumn<DisplayTimeTable, String> adminIdCol = new TableColumn<>("Admin_id");
+        adminIdCol.setCellValueFactory(new PropertyValueFactory<>("adminId"));
+        adminIdCol.setPrefWidth(70);
+
+        timetableTable.getColumns().addAll(tableidCol, dayCol, timeCol, levelSemCol, sessionTypeCol, deptCol, courseIdCol, adminIdCol);
+        timetableTable.setItems(tableList);
+    }
+
+    //TABLE DELETE FUNCTION
+    @FXML
+    private void deleteTable() {
+        if (selectedDisplayTimeTable == null) {
+            showAlert(Alert.AlertType.WARNING, "Warning", "Please Select a Timetable To Delete.");
+            return;
+        }
+
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Confirm Delete");
+        alert.setHeaderText("Delete Table");
+        alert.setContentText("Are you sure you want to delete Table: \"" + selectedDisplayTimeTable.getTimetableId() + "\"?");
+
+        if (alert.showAndWait().get() == ButtonType.OK) {
+            if (displayUserDAO.deleteDisplayTable(selectedDisplayTimeTable.getTimetableId())) {
+                showAlert(Alert.AlertType.INFORMATION, "Success", "Table Row Deleted Successfully!");
+                filterDisplayTimeTable();
+                selectedDisplayTimeTable = null;
+
+            } else {
+                showAlert(Alert.AlertType.ERROR, "Error", "Failed To Delete Table Raw!");
+            }
+        }
+    }
+
 }
 

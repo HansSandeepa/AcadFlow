@@ -1,10 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.image.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ProgressBar?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.TitledPane?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
 <BorderPane style="-fx-background-color: #f4f6f9;" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="acadflow.contollers.users.undergraduate.UndergraduateDashboardController">
 
@@ -265,12 +285,10 @@
 
                     <Tab text="Medical">
                         <VBox spacing="15" style="-fx-padding: 20;">
-                            <HBox spacing="15" alignment="CENTER_LEFT">
+                            <HBox alignment="CENTER_LEFT" spacing="15">
                                 <Label style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;" text="Medical Records" />
                                 <Region HBox.hgrow="ALWAYS" />
-                                <Button fx:id="refreshMedicalBtn" onAction="#refreshMedicalRecords"
-                                        style="-fx-background-color: #3498db; -fx-text-fill: white; -fx-cursor: hand; -fx-background-radius: 4;"
-                                        text="Refresh" />
+                                <Button fx:id="refreshMedicalBtn" onAction="#refreshMedicalRecords" style="-fx-background-color: #3498db; -fx-text-fill: white; -fx-cursor: hand; -fx-background-radius: 4;" text="Refresh" />
                             </HBox>
 
                             <TableView fx:id="medicalTableView" style="-fx-pref-height: 300;">
@@ -291,17 +309,14 @@
                             <Label style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;" text="Weekly Timetable" />
 
                             <ComboBox promptText="Select Week" style="-fx-pref-width: 150;" />
-
-                            <TableView style="-fx-pref-height: 450;">
-                                <columns>
-                                    <TableColumn prefWidth="100" text="Time" />
-                                    <TableColumn prefWidth="150" text="Monday" />
-                                    <TableColumn prefWidth="150" text="Tuesday" />
-                                    <TableColumn prefWidth="150" text="Wednesday" />
-                                    <TableColumn prefWidth="150" text="Thursday" />
-                                    <TableColumn prefWidth="150" text="Friday" />
-                                </columns>
-                            </TableView>
+                     <TableView fx:id="timetableTable" style="-fx-pref-height: 450;">
+                        <columns>
+                           <TableColumn fx:id="dayCol" prefWidth="100" text="Day" />
+                           <TableColumn fx:id="timeCol" prefWidth="150" text="Time" />
+                           <TableColumn fx:id="courseCol" prefWidth="150" text="Course" />
+                           <TableColumn fx:id="sessionCol" prefWidth="100" text="Session Type" />
+                        </columns>
+                     </TableView>
                         </VBox>
                     </Tab>
 

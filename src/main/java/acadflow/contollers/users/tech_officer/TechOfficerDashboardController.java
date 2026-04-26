@@ -1,14 +1,13 @@
 package acadflow.contollers.users.tech_officer;
 
-import acadflow.DAO.AttendanceDAO;
+import acadflow.DAO.*;
 import acadflow.DAO.AttendanceDAO.CourseEntry;
 import acadflow.DAO.AttendanceDAO.StudentEntry;
-import acadflow.DAO.AttendanceRecord;
-import acadflow.DAO.Notice;
-import acadflow.DAO.NoticeDAO;
 import acadflow.contollers.users.CommonUserController;
+import acadflow.models.DisplayTimeTable;
 import acadflow.models.getterSetter.TechnicalOfficerCurrentData;
 import acadflow.models.users.TechnicalOfficer;
+import acadflow.util.DBConnection;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -17,13 +16,16 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
-import acadflow.DAO.MedicalDAO;
 import acadflow.models.getterSetter.MedicalRecord;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
@@ -106,6 +108,13 @@ public class TechOfficerDashboardController extends CommonUserController {
     @FXML private Button                 attCancelEditBtn;
     @FXML private Label                  attFormModeLabel;
 
+    @FXML private TableColumn<DisplayTimeTable, String> dayCol;
+    @FXML private TableColumn<DisplayTimeTable, String> timeCol;
+    @FXML private TableColumn<DisplayTimeTable, String> courseCol;
+    @FXML private TableColumn<DisplayTimeTable, String> sessionCol;
+
+    @FXML
+    private TableView<DisplayTimeTable> timetableTable;
 
 
     // ── DAOs & state ──────────────────────────────────────────────────────────
@@ -136,6 +145,12 @@ public class TechOfficerDashboardController extends CommonUserController {
         initializeNoticesTab();
         initializeAttendanceTab();
         initializeMedicalTab();
+
+        // Setup timetable columns only if they are properly injected from FXML
+        if (dayCol != null) dayCol.setCellValueFactory(new PropertyValueFactory<>("day"));
+        if (timeCol != null) timeCol.setCellValueFactory(new PropertyValueFactory<>("time"));
+        if (courseCol != null) courseCol.setCellValueFactory(new PropertyValueFactory<>("courseId"));
+        if (sessionCol != null) sessionCol.setCellValueFactory(new PropertyValueFactory<>("sessionType"));
     }
 
     @Override
@@ -158,6 +173,32 @@ public class TechOfficerDashboardController extends CommonUserController {
         // (no DB calls were made yet for combos), so we repopulate them here once
         // the department is known.
         reloadDepartmentScopedAttendanceData();
+
+        super.initializeWithUserData();
+
+        // Load timetable for the tech officer's department
+        String department = getTechOfficerDepartment();
+
+        if (department != null) {
+            System.out.println("DEBUG: Loading timetable for Tech Officer - Dept: " + department);
+
+            DisplayTimeTableDAO dao = new DisplayTimeTableDAO();
+            List<DisplayTimeTable> timetable = dao.getTimetableForDepartment(department);
+
+            if (timetable == null || timetable.isEmpty()) {
+                System.out.println("WARNING: No timetable data found for department: " + department);
+            } else {
+                System.out.println("DEBUG: Timetable loaded with " + timetable.size() + " entries");
+            }
+
+            if (timetableTable != null) {
+                timetableTable.setItems(FXCollections.observableArrayList(timetable));
+            } else {
+                System.out.println("ERROR: timetableTable is null - FXML injection failed!");
+            }
+        } else {
+            System.out.println("ERROR: Could not determine tech officer's department");
+        }
     }
 
     // ══════════════════════════════════════════════════════════════════════════
@@ -866,5 +907,29 @@ public class TechOfficerDashboardController extends CommonUserController {
         a.setHeaderText(header);
         a.setContentText(content);
         a.showAndWait();
+    }
+
+
+    private String getTechOfficerDepartment() {
+        // Fetch the tech officer's department from database using the logged-in user's registration number (regNo)
+        String query = "SELECT Department FROM tec_officer WHERE T_officer_id = ?";
+
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+
+            stmt.setString(1, regNo);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                return rs.getString("Department");
+            } else {
+                System.out.println("WARNING: Tech officer record not found for T_officer_id: " + regNo);
+                return null;
+            }
+        } catch (SQLException e) {
+            System.out.println("ERROR: Failed to fetch tech officer department: " + e.getMessage());
+            e.printStackTrace();
+            return null;
+        }
     }
 }
