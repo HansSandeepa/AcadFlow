@@ -6,9 +6,28 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Data Access Object for the `attendance` table.
+ *
+ * Provides CRUD operations used by the Technical Officer to:
+ *   - Add a new attendance record for an undergraduate
+ *   - Update an existing attendance record
+ *   - Delete an attendance record
+ *   - Query records by student, course, session type, or date
+ *
+ * Also supplies helper queries for populating combo-boxes in the UI
+ * (list of undergraduates, list of courses, list of distinct sessions).
+ */
 public class AttendanceDAO {
 
+    // ──────────────────────────────────────────────────────────────────────────
+    // Inner helper: row data for Undergraduate combo-box
+    // ──────────────────────────────────────────────────────────────────────────
 
+    /**
+     * Simple value holder used to populate the "Select Student" combo-box.
+     * Displays "Stu_id – Full Name" and exposes individual fields.
+     */
     public static class StudentEntry {
         private final String stuId;
         private final String fullName;
@@ -21,10 +40,14 @@ public class AttendanceDAO {
         public String getStuId()    { return stuId; }
         public String getFullName() { return fullName; }
 
+        /** Used by JavaFX ComboBox to render each item as text. */
         @Override
         public String toString() { return stuId + " – " + fullName; }
     }
 
+    /**
+     * Simple value holder for the "Select Course" combo-box.
+     */
     public static class CourseEntry {
         private final String courseId;
         private final String name;
@@ -44,7 +67,17 @@ public class AttendanceDAO {
         public String toString() { return courseId + " – " + name; }
     }
 
+    // ──────────────────────────────────────────────────────────────────────────
     // Helper queries for populating combo-boxes
+    // ──────────────────────────────────────────────────────────────────────────
+
+    /**
+     * Returns undergraduates whose Department matches the given department.
+     * Used to populate student combo-boxes so a Technical Officer only sees
+     * students from their own department.
+     *
+     * @param department  e.g. "ICT", "ET", "BST", "MDS"
+     */
     public List<StudentEntry> getStudentsByDepartment(String department) {
         List<StudentEntry> list = new ArrayList<>();
         String sql = "SELECT u.Stu_id, usr.Fullname " +

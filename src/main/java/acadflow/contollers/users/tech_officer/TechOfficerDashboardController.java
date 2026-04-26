@@ -86,6 +86,13 @@ public class TechOfficerDashboardController extends CommonUserController {
     /** Holds the record being edited; null when the form is in Add mode. */
     private AttendanceRecord editingRecord = null;
 
+    /**
+     * The department this Technical Officer belongs to (e.g. "ICT").
+     * Set once in initializeWithUserData() after the profile is fetched from DB,
+     * then used to scope all student/course/attendance queries.
+     */
+    private String officerDepartment = null;
+
     private Notice selectedNotice;
 
     // ══════════════════════════════════════════════════════════════════════════
@@ -109,7 +116,15 @@ public class TechOfficerDashboardController extends CommonUserController {
         userMainImage.setImage(userProfilePic);
 
         departmentSelect.getItems().addAll("ET", "BST", "ICT", "MDS");
+
+        // Load profile details first — this populates officerDepartment
         setUsersDetails();
+
+        // Now reload attendance combo-boxes scoped to the officer's department.
+        // initializeAttendanceTab() already ran in initialize() with officerDepartment=null
+        // (no DB calls were made yet for combos), so we repopulate them here once
+        // the department is known.
+        reloadDepartmentScopedAttendanceData();
     }
 
     // ══════════════════════════════════════════════════════════════════════════
@@ -117,18 +132,13 @@ public class TechOfficerDashboardController extends CommonUserController {
     // ══════════════════════════════════════════════════════════════════════════
 
     /**
-     * Wires up the attendance TableView columns, populates combo-boxes, and
-     * loads the initial full record list.
+     * Sets up the attendance TableView columns and listener wiring only.
+     * Combo-box population and initial data load are deferred to
+     * reloadDepartmentScopedAttendanceData(), called once officerDepartment is known.
      */
     private void initializeAttendanceTab() {
         setupAttendanceTableColumns();
-        loadStudentsIntoFilterCombo();
-        loadStudentsIntoFormCombo();
-        loadCoursesIntoFormCombo();
-        populateSessionCombo();
-
         attendanceTableView.setItems(attendanceList);
-        loadAllAttendanceRecords();
 
         // When a row is selected in the table, enable Edit / Delete buttons
         attendanceTableView.getSelectionModel().selectedItemProperty().addListener(
@@ -138,9 +148,25 @@ public class TechOfficerDashboardController extends CommonUserController {
                     attDeleteBtn.setDisable(!hasSelection);
                 });
 
-        // Start with Edit/Delete disabled until a row is selected
         attEditBtn.setDisable(true);
         attDeleteBtn.setDisable(true);
+    }
+
+    /**
+     * Populates every attendance combo-box and the main table using the officer's
+     * department. Called from initializeWithUserData() after the profile fetch has
+     * set officerDepartment.
+     */
+    private void reloadDepartmentScopedAttendanceData() {
+        if (officerDepartment == null || officerDepartment.isBlank()) {
+            System.err.println("[TechOfficer] officerDepartment not set — attendance combos will be empty.");
+            return;
+        }
+        loadStudentsIntoFilterCombo();
+        loadStudentsIntoFormCombo();
+        loadCoursesIntoFormCombo();
+        populateSessionCombo();
+        loadAllAttendanceRecords();
     }
 
     /** Binds each TableColumn to the matching JavaFX property on AttendanceRecord. */
@@ -187,28 +213,28 @@ public class TechOfficerDashboardController extends CommonUserController {
         });
     }
 
-    /** Populates the filter combo-box with "All Students" + every undergraduate. */
+    /** Populates the filter combo-box with undergraduates from the officer's department only. */
     private void loadStudentsIntoFilterCombo() {
-        ObservableList<StudentEntry> items = FXCollections.observableArrayList();
-        items.addAll(attendanceDAO.getAllStudents());
+        ObservableList<StudentEntry> items = FXCollections.observableArrayList(
+                attendanceDAO.getStudentsByDepartment(officerDepartment));
         attStudentFilterCombo.setItems(items);
-        attStudentFilterCombo.setPromptText("— All Students —");
+        attStudentFilterCombo.setPromptText("— All " + officerDepartment + " Students —");
 
         // Re-filter the table whenever the selection changes
         attStudentFilterCombo.setOnAction(e -> applyStudentFilter());
     }
 
-    /** Populates the form's student combo-box with all undergraduates. */
+    /** Populates the form's student combo-box with undergraduates from the officer's department only. */
     private void loadStudentsIntoFormCombo() {
-        ObservableList<StudentEntry> items =
-                FXCollections.observableArrayList(attendanceDAO.getAllStudents());
+        ObservableList<StudentEntry> items = FXCollections.observableArrayList(
+                attendanceDAO.getStudentsByDepartment(officerDepartment));
         attFormStudentCombo.setItems(items);
     }
 
-    /** Populates the form's course combo-box with all courses. */
+    /** Populates the form's course combo-box with courses from the officer's department only. */
     private void loadCoursesIntoFormCombo() {
-        ObservableList<CourseEntry> items =
-                FXCollections.observableArrayList(attendanceDAO.getAllCourses());
+        ObservableList<CourseEntry> items = FXCollections.observableArrayList(
+                attendanceDAO.getCoursesByDepartment(officerDepartment));
         attFormCourseCombo.setItems(items);
     }
 
@@ -228,23 +254,25 @@ public class TechOfficerDashboardController extends CommonUserController {
     // Attendance Tab — Data loading
     // ══════════════════════════════════════════════════════════════════════════
 
-    /** Loads (or reloads) all attendance records into the table. */
+    /** Loads attendance records scoped to the officer's department into the table. */
     private void loadAllAttendanceRecords() {
-        List<AttendanceRecord> records = attendanceDAO.getAllAttendanceRecords();
+        List<AttendanceRecord> records = attendanceDAO.getAttendanceByDepartment(officerDepartment);
         Platform.runLater(() -> {
             attendanceList.setAll(records);
             updateRecordCount();
         });
     }
 
-    /** Filters the table by the student selected in the filter combo-box. */
+    /** Filters the table by the student selected in the filter combo-box,
+     *  still scoped to the officer's department (courses must also match). */
     private void applyStudentFilter() {
         StudentEntry selected = attStudentFilterCombo.getValue();
         if (selected == null) {
             loadAllAttendanceRecords();
             return;
         }
-        List<AttendanceRecord> records = attendanceDAO.getAttendanceByStudent(selected.getStuId());
+        List<AttendanceRecord> records =
+                attendanceDAO.getAttendanceByStudentInDepartment(selected.getStuId(), officerDepartment);
         Platform.runLater(() -> {
             attendanceList.setAll(records);
             updateRecordCount();
@@ -568,7 +596,10 @@ public class TechOfficerDashboardController extends CommonUserController {
         }
     }
 
+    // ══════════════════════════════════════════════════════════════════════════
     // Profile Tab
+    // ══════════════════════════════════════════════════════════════════════════
+
     @FXML
     private void saveProfileDetails() {
         new TechnicalOfficer(regNo).updateProfile(
@@ -593,6 +624,9 @@ public class TechOfficerDashboardController extends CommonUserController {
             genderField.setText(gender);
             emailField.setText(d.getEmail());
             addressField.setText(d.getAddress());
+
+            // Store department for scoping attendance queries
+            officerDepartment = d.getDepartment();
         } else {
             System.out.println("\u001B[31mERROR: No technical officer details found for: " + regNo + "\u001B[0m");
         }
@@ -608,7 +642,10 @@ public class TechOfficerDashboardController extends CommonUserController {
         addressField.setText("");
     }
 
+    // ══════════════════════════════════════════════════════════════════════════
     // Alert helpers
+    // ══════════════════════════════════════════════════════════════════════════
+
     private void showInfo(String header, String content) {
         Alert a = new Alert(Alert.AlertType.INFORMATION);
         a.setTitle("AcadFlow");
