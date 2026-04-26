@@ -13,6 +13,13 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 
+import acadflow.DAO.MedicalDAO;
+import acadflow.models.getterSetter.MedicalRecord;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.scene.control.cell.PropertyValueFactory;
+import java.util.Optional;
+
 import java.util.ArrayList;
 import acadflow.DAO.Notice;
 import javafx.application.Platform;
@@ -61,6 +68,12 @@ public class UndergraduateDashboardController extends CommonUserController {
         emailField.setText("");
         addressField.setText("");
     }
+
+    @FXML private TableView<MedicalRecord> medicalTableView;
+    @FXML private Button SubmitMedicalBtn;
+    @FXML private Button refreshMedicalBtn;
+    private MedicalDAO medicalDAO = new MedicalDAO();
+    private ObservableList<MedicalRecord> medicalList = FXCollections.observableArrayList();
 
     //notice
     @FXML private TableView<Notice> noticesTableView;
@@ -113,6 +126,7 @@ public class UndergraduateDashboardController extends CommonUserController {
     @FXML
     public void initialize() {
         initializeNoticesTab();
+        initializeMedicalTab();
     }
 
     private void initializeNoticesTab() {
@@ -397,5 +411,138 @@ public class UndergraduateDashboardController extends CommonUserController {
         bar.setStyle(pct >= 0.8 ? "-fx-accent: #27ae60;"
                 : pct >= 0.6 ? "-fx-accent: #f39c12;"
                 : "-fx-accent: #e74c3c;");
+    }
+
+    private void initializeMedicalTab() {
+        if (medicalTableView == null) return;
+
+        setupMedicalTableColumns();
+        loadMedicalRecords();
+
+        if (SubmitMedicalBtn != null) {
+            SubmitMedicalBtn.setOnAction(e -> handleSubmitMedical());
+        }
+    }
+
+    private void setupMedicalTableColumns() {
+        medicalTableView.getColumns().clear();
+
+        TableColumn<MedicalRecord, String> dateCol = new TableColumn<>("Date");
+        dateCol.setCellValueFactory(new PropertyValueFactory<>("date"));
+        dateCol.setPrefWidth(120);
+
+        TableColumn<MedicalRecord, String> sessionCol = new TableColumn<>("Session Type");
+        sessionCol.setCellValueFactory(new PropertyValueFactory<>("sessionType"));
+        sessionCol.setPrefWidth(100);
+
+        TableColumn<MedicalRecord, String> courseCol = new TableColumn<>("Course");
+        courseCol.setCellValueFactory(new PropertyValueFactory<>("courseName"));
+        courseCol.setPrefWidth(150);
+
+        TableColumn<MedicalRecord, String> statusCol = new TableColumn<>("Status");
+        statusCol.setCellValueFactory(new PropertyValueFactory<>("status"));
+        statusCol.setPrefWidth(100);
+
+        medicalTableView.getColumns().addAll(dateCol, sessionCol, courseCol, statusCol);
+        medicalTableView.setItems(medicalList);
+    }
+
+    private void loadMedicalRecords() {
+        List<MedicalRecord> records = medicalDAO.getStudentMedicalRecords(regNo);
+        medicalList.clear();
+        medicalList.addAll(records);
+    }
+
+    @FXML
+    private void refreshMedicalRecords() {
+        loadMedicalRecords();
+        showAlert(Alert.AlertType.INFORMATION, "Refreshed", "Medical records have been refreshed.");
+    }
+
+    @FXML
+    private void handleSubmitMedical() {
+        // Get list of absent records that don't have medical submissions yet
+        List<MedicalRecord> absentRecords = medicalDAO.getStudentAbsentRecords(regNo);
+
+        if (absentRecords.isEmpty()) {
+            showAlert(Alert.AlertType.INFORMATION,
+                    "No Records Available",
+                    "You don't have any absent sessions that require medical submission.");
+            return;
+        }
+
+        // Create a choice dialog for session selection
+        ChoiceDialog<String> dialog = new ChoiceDialog<>();
+        dialog.setTitle("Submit Medical Record");
+        dialog.setHeaderText("Select the absent session to submit medical for:");
+        dialog.setContentText("Available Sessions:");
+
+        // Create a list of formatted strings for display
+        List<String> sessionChoices = new ArrayList<>();
+        for (MedicalRecord record : absentRecords) {
+            String choice = String.format("%s - %s (%s)",
+                    record.getDate(),
+                    record.getCourseName(),
+                    record.getSessionType());
+            sessionChoices.add(choice);
+        }
+
+        dialog.getItems().addAll(sessionChoices);
+
+        // Show dialog and process selection
+        Optional<String> result = dialog.showAndWait();
+
+        result.ifPresent(selectedChoice -> {
+            // Find the corresponding MedicalRecord
+            MedicalRecord selectedRecord = null;
+            for (int i = 0; i < sessionChoices.size(); i++) {
+                if (sessionChoices.get(i).equals(selectedChoice)) {
+                    selectedRecord = absentRecords.get(i);
+                    break;
+                }
+            }
+
+            if (selectedRecord != null) {
+                // Confirm the submission
+                Alert confirmAlert = new Alert(Alert.AlertType.CONFIRMATION);
+                confirmAlert.setTitle("Confirm Medical Submission");
+                confirmAlert.setHeaderText("Submit medical record for this session?");
+                confirmAlert.setContentText(String.format(
+                        "Date: %s\nCourse: %s\nSession Type: %s\n\nNote: This submission will be pending approval.",
+                        selectedRecord.getDate(),
+                        selectedRecord.getCourseName(),
+                        selectedRecord.getSessionType()
+                ));
+
+                Optional<ButtonType> confirmResult = confirmAlert.showAndWait();
+                if (confirmResult.isPresent() && confirmResult.get() == ButtonType.OK) {
+                    // Submit the medical record
+                    boolean success = medicalDAO.submitMedical(
+                            selectedRecord.getAttendanceId(),
+                            selectedRecord.getSessionType(),
+                            selectedRecord.getDate()
+                    );
+
+                    if (success) {
+                        showAlert(Alert.AlertType.INFORMATION,
+                                "Success",
+                                "Medical record submitted successfully!\nIt is now pending approval from your lecturer.");
+                        loadMedicalRecords(); // Refresh the table
+                    } else {
+                        showAlert(Alert.AlertType.ERROR,
+                                "Submission Failed",
+                                "Failed to submit medical record. Please try again or contact support.");
+                    }
+                }
+            }
+        });
+    }
+
+    private void showAlert(Alert.AlertType type, String title, String content) {
+        Alert alert = new Alert(type);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(content);
+        alert.showAndWait();
     }
 }

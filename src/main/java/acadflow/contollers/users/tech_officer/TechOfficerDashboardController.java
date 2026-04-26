@@ -23,7 +23,37 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
+import acadflow.DAO.MedicalDAO;
+import acadflow.models.getterSetter.MedicalRecord;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.HBox;
+
 public class TechOfficerDashboardController extends CommonUserController {
+
+    // ── Medical Tab ───────────────────────────────────────────────────────────
+    @FXML private TableView<MedicalRecord> medicalTableView;
+    @FXML private TableColumn<MedicalRecord, String> medStuIdCol;
+    @FXML private TableColumn<MedicalRecord, String> medStuNameCol;
+    @FXML private TableColumn<MedicalRecord, String> medDateCol;
+    @FXML private TableColumn<MedicalRecord, String> medCourseCol;
+    @FXML private TableColumn<MedicalRecord, String> medSessionCol;
+    @FXML private TableColumn<MedicalRecord, String> medStatusCol;
+    @FXML private TableColumn<MedicalRecord, String> medActionCol;
+
+    @FXML private TextField medSearchField;
+    @FXML private Button medSearchBtn;
+    @FXML private Button medRefreshBtn;
+    @FXML private TitledPane medDetailPane;
+    @FXML private Label medDetailStudent;
+    @FXML private Label medDetailDate;
+    @FXML private Label medDetailCourse;
+    @FXML private Label medDetailSession;
+    @FXML private Button medApproveBtn;
+    @FXML private Button medDenyBtn;
+
+    private final MedicalDAO medicalDAO = new MedicalDAO();
+    private final ObservableList<MedicalRecord> medicalList = FXCollections.observableArrayList();
+
 
     // ── Profile Tab ────────────────────────────────────────────────────────────
     @FXML private TextField fullNameField;
@@ -76,6 +106,8 @@ public class TechOfficerDashboardController extends CommonUserController {
     @FXML private Button                 attCancelEditBtn;
     @FXML private Label                  attFormModeLabel;
 
+
+
     // ── DAOs & state ──────────────────────────────────────────────────────────
     private final AttendanceDAO attendanceDAO = new AttendanceDAO();
     private final NoticeDAO noticeDAO = new NoticeDAO();
@@ -103,6 +135,7 @@ public class TechOfficerDashboardController extends CommonUserController {
     public void initialize() {
         initializeNoticesTab();
         initializeAttendanceTab();
+        initializeMedicalTab();
     }
 
     @Override
@@ -595,6 +628,171 @@ public class TechOfficerDashboardController extends CommonUserController {
                     + notice.getContent());
         }
     }
+
+
+    private void initializeMedicalTab() {
+        if (medicalTableView == null) return;
+
+        setupMedicalTableColumns();
+        loadAllMedicalRecords();
+
+        // Add Approve/Deny buttons inside the Actions column
+        medActionCol.setCellFactory(col -> new TableCell<>() {
+            private final Button approveBtn = new Button("Approve");
+
+            private final HBox pane = new HBox(5, approveBtn);
+
+            {
+                approveBtn.setStyle("-fx-background-color: #27ae60; -fx-text-fill: white; -fx-cursor: hand; -fx-font-size: 11;");
+
+            }
+
+            @Override
+            protected void updateItem(String item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || getTableRow() == null || getTableRow().getItem() == null) {
+                    setGraphic(null);
+                    return;
+                }
+
+                MedicalRecord record = (MedicalRecord) getTableRow().getItem();
+
+                // Only show buttons for pending records
+                if ("Pending".equals(record.getStatus())) {
+                    approveBtn.setOnAction(e -> {
+                        handleMedicalDecision(record, true);
+                    });
+
+                    setGraphic(pane);
+                } else {
+                    setGraphic(null);
+                    setText(record.getStatus());
+                }
+            }
+        });
+
+        // Double-click to see details
+        medicalTableView.setOnMouseClicked(event -> {
+            if (event.getClickCount() == 2) {
+                MedicalRecord selected = medicalTableView.getSelectionModel().getSelectedItem();
+                if (selected != null) {
+                    showMedicalDetails(selected);
+                }
+            }
+        });
+    }
+
+    private void setupMedicalTableColumns() {
+        medicalTableView.getColumns().clear();
+
+        medStuIdCol.setCellValueFactory(new PropertyValueFactory<>("studentId"));
+        medStuNameCol.setCellValueFactory(new PropertyValueFactory<>("studentName"));
+        medDateCol.setCellValueFactory(new PropertyValueFactory<>("date"));
+        medCourseCol.setCellValueFactory(new PropertyValueFactory<>("courseName"));
+        medSessionCol.setCellValueFactory(new PropertyValueFactory<>("sessionType"));
+        medStatusCol.setCellValueFactory(new PropertyValueFactory<>("status"));
+
+        // Status color coding
+        medStatusCol.setCellFactory(col -> new TableCell<>() {
+            @Override
+            protected void updateItem(String item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) { setText(null); setStyle(""); return; }
+                setText(item);
+                switch (item) {
+                    case "Approved" -> setStyle("-fx-text-fill: #27ae60; -fx-font-weight: bold;");
+                    case "Pending"  -> setStyle("-fx-text-fill: #f39c12; -fx-font-weight: bold;");
+                    case "Denied"   -> setStyle("-fx-text-fill: #e74c3c; -fx-font-weight: bold;");
+                    default         -> setStyle("");
+                }
+            }
+        });
+
+        medicalTableView.getColumns().addAll(medStuIdCol, medStuNameCol, medDateCol,
+                medCourseCol, medSessionCol, medStatusCol, medActionCol);
+        medicalTableView.setItems(medicalList);
+    }
+
+    private void loadAllMedicalRecords() {
+        // Load medical records for students in officer's department
+        List<MedicalRecord> records = medicalDAO.getMedicalRecordsByDepartment(officerDepartment);
+        Platform.runLater(() -> {
+            medicalList.setAll(records);
+        });
+    }
+
+    @FXML
+    private void handleMedSearch() {
+        String keyword = medSearchField.getText().trim();
+        if (keyword.isEmpty()) {
+            loadAllMedicalRecords();
+            return;
+        }
+        List<MedicalRecord> results = medicalDAO.searchMedicalRecords(keyword, officerDepartment);
+        Platform.runLater(() -> {
+            medicalList.setAll(results);
+        });
+    }
+
+    @FXML
+    private void handleMedRefresh() {
+        medSearchField.clear();
+        loadAllMedicalRecords();
+    }
+
+    private void handleMedicalDecision(MedicalRecord record, boolean approve) {
+        String action = approve ? "approve" : "deny";
+
+        Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
+        confirm.setTitle("Confirm " + (approve ? "Approval" : "Denial"));
+        confirm.setHeaderText((approve ? "Approve" : "Deny") + " this medical record?");
+        confirm.setContentText(
+                "Student: " + record.getCourseName() + "\n" +  // Will need proper student name
+                        "Date: " + record.getDate() + "\n" +
+                        "Course: " + record.getCourseName() + "\n" +
+                        "Session: " + record.getSessionType()
+        );
+
+        Optional<ButtonType> result = confirm.showAndWait();
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            boolean success = medicalDAO.updateMedicalApproval(record.getMedicalId(), approve);
+            if (success) {
+                showInfo("Success", "Medical record " + (approve ? "approved" : "denied") + " successfully.");
+                loadAllMedicalRecords();
+            } else {
+                showError("Error", "Failed to update medical record. Please try again.");
+            }
+        }
+    }
+
+    private void showMedicalDetails(MedicalRecord record) {
+        medDetailStudent.setText(record.getStudentId());
+        medDetailDate.setText(record.getDate());
+        medDetailCourse.setText(record.getCourseName());
+        medDetailSession.setText(record.getSessionType());
+        medDetailPane.setExpanded(true);
+    }
+
+    @FXML
+    private void handleMedApprove() {
+        MedicalRecord selected = medicalTableView.getSelectionModel().getSelectedItem();
+        if (selected == null) {
+            showWarning("No Selection", "Please select a medical record first.");
+            return;
+        }
+        handleMedicalDecision(selected, true);
+    }
+
+    @FXML
+    private void handleMedDeny() {
+        MedicalRecord selected = medicalTableView.getSelectionModel().getSelectedItem();
+        if (selected == null) {
+            showWarning("No Selection", "Please select a medical record first.");
+            return;
+        }
+        handleMedicalDecision(selected, false);
+    }
+
 
     // ══════════════════════════════════════════════════════════════════════════
     // Profile Tab
