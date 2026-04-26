@@ -3,8 +3,8 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 22, 2026 at 12:09 PM
--- Server version: 8.0.30
+-- Generation Time: Apr 26, 2026 at 07:01 PM
+-- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
@@ -28,8 +28,8 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE `admin` (
-                         `Admin_id` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
-                         `User_id` int NOT NULL
+                         `Admin_id` varchar(100) NOT NULL,
+                         `User_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -39,13 +39,13 @@ CREATE TABLE `admin` (
 --
 
 CREATE TABLE `attendance` (
-                              `Attendance_id` int NOT NULL,
-                              `Session` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
-                              `Session_type` enum('T','P') COLLATE utf8mb4_general_ci NOT NULL,
-                              `Status` enum('present','absent') COLLATE utf8mb4_general_ci NOT NULL COMMENT 'present or absent',
+                              `Attendance_id` int(11) NOT NULL,
+                              `Session` varchar(100) NOT NULL,
+                              `Session_type` enum('T','P') NOT NULL,
+                              `Status` enum('present','absent') NOT NULL COMMENT 'present or absent',
                               `Date` date NOT NULL,
-                              `Course_id` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
-                              `Stu_id` varchar(100) COLLATE utf8mb4_general_ci NOT NULL
+                              `Course_id` varchar(100) NOT NULL,
+                              `Stu_id` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -55,8 +55,8 @@ CREATE TABLE `attendance` (
 --
 
 CREATE TABLE `conducted_courses` (
-                                     `Lecturer_Id` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
-                                     `Course_id` varchar(100) COLLATE utf8mb4_general_ci NOT NULL
+                                     `Lecturer_Id` varchar(100) NOT NULL,
+                                     `Course_id` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -66,11 +66,11 @@ CREATE TABLE `conducted_courses` (
 --
 
 CREATE TABLE `course` (
-                          `Course_id` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
-                          `Name` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
-                          `Credit` int NOT NULL,
-                          `Type` enum('T','P','Both') CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-                          `department` enum('ICT','ET','BST','MDS') CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL
+                          `Course_id` varchar(100) NOT NULL,
+                          `Name` varchar(100) NOT NULL,
+                          `Credit` int(11) NOT NULL,
+                          `Type` enum('T','P','Both') NOT NULL,
+                          `department` enum('ICT','ET','BST','MDS') NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -80,9 +80,9 @@ CREATE TABLE `course` (
 --
 
 CREATE TABLE `course_material` (
-                                   `Material_id` int NOT NULL,
-                                   `Material_path` varchar(200) COLLATE utf8mb4_general_ci NOT NULL,
-                                   `Course_id` varchar(100) COLLATE utf8mb4_general_ci NOT NULL
+                                   `Material_id` int(11) NOT NULL,
+                                   `Material_path` varchar(200) NOT NULL,
+                                   `Course_id` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -92,7 +92,7 @@ CREATE TABLE `course_material` (
 --
 
 CREATE TABLE `department` (
-                              `department_id` enum('ICT','ET','BST','MDS') CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL PRIMARY KEY
+                              `department_id` enum('ICT','ET','BST','MDS') NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -112,14 +112,14 @@ INSERT INTO `department` (`department_id`) VALUES
 --
 
 CREATE TABLE `exam_marks` (
-                              `Exam_id` int NOT NULL,
-                              `Grade` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
-                              `Session_type` enum('T','P') COLLATE utf8mb4_general_ci NOT NULL,
-                              `Assessment_type` enum('T','P') COLLATE utf8mb4_general_ci NOT NULL,
-                              `Mark` int NOT NULL,
-                              `Stu_id` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
-                              `Lecturer_id` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
-                              `Course_id` varchar(100) COLLATE utf8mb4_general_ci NOT NULL
+                              `Exam_id` int(11) NOT NULL,
+                              `Grade` varchar(100) NOT NULL,
+                              `Session_type` enum('T','P') NOT NULL,
+                              `Assessment_type` enum('T','P') NOT NULL,
+                              `Mark` int(11) NOT NULL,
+                              `Stu_id` varchar(100) NOT NULL,
+                              `Lecturer_id` varchar(100) NOT NULL,
+                              `Course_id` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -129,8 +129,8 @@ CREATE TABLE `exam_marks` (
 --
 
 CREATE TABLE `exam_medical` (
-                                `Emed_id` int NOT NULL,
-                                `Exam_id` int NOT NULL
+                                `Emed_id` int(11) NOT NULL,
+                                `Exam_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -140,10 +140,10 @@ CREATE TABLE `exam_medical` (
 --
 
 CREATE TABLE `lecturer` (
-                            `Lecturer_Id` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
-                            `Department` enum('ET','BST','ICT','MDS') CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-                            `Office_room` int NOT NULL,
-                            `User_id` int NOT NULL
+                            `Lecturer_Id` varchar(100) NOT NULL,
+                            `Department` enum('ET','BST','ICT','MDS') NOT NULL,
+                            `Office_room` int(11) NOT NULL,
+                            `User_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -153,11 +153,11 @@ CREATE TABLE `lecturer` (
 --
 
 CREATE TABLE `medical` (
-                           `Medical_id` int NOT NULL,
-                           `Session` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+                           `Medical_id` int(11) NOT NULL,
+                           `Session` varchar(100) NOT NULL,
                            `Date` date NOT NULL,
-                           `Approval` enum('yes','no') COLLATE utf8mb4_general_ci NOT NULL COMMENT 'yes or no',
-                           `Attendance_id` int NOT NULL
+                           `Approval` enum('yes','no') NOT NULL COMMENT 'yes or no',
+                           `Attendance_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -167,13 +167,13 @@ CREATE TABLE `medical` (
 --
 
 CREATE TABLE `notice` (
-                          `Notice_id` int NOT NULL,
-                          `Title` varchar(200) COLLATE utf8mb4_unicode_ci NOT NULL,
-                          `Content` text COLLATE utf8mb4_unicode_ci NOT NULL,
+                          `Notice_id` int(11) NOT NULL,
+                          `Title` varchar(200) NOT NULL,
+                          `Content` text NOT NULL,
                           `Date` date NOT NULL,
-                          `Admin_id` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
-                          `Audience` varchar(50) COLLATE utf8mb4_unicode_ci DEFAULT 'All',
-                          `IsImportant` tinyint(1) DEFAULT '0'
+                          `Admin_id` varchar(100) NOT NULL,
+                          `Audience` varchar(50) DEFAULT 'All',
+                          `IsImportant` tinyint(1) DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -183,8 +183,8 @@ CREATE TABLE `notice` (
 --
 
 CREATE TABLE `student_courses` (
-                                   `Stu_id` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
-                                   `Course_id` varchar(100) COLLATE utf8mb4_general_ci NOT NULL
+                                   `Stu_id` varchar(100) NOT NULL,
+                                   `Course_id` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -194,10 +194,10 @@ CREATE TABLE `student_courses` (
 --
 
 CREATE TABLE `tec_officer` (
-                               `T_officer_id` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
-                               `Hire_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-                               `User_id` int NOT NULL,
-                               `Department` enum('ET','BST','ICT','MDS') CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL
+                               `T_officer_id` varchar(100) NOT NULL,
+                               `Hire_date` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+                               `User_id` int(11) NOT NULL,
+                               `Department` enum('ET','BST','ICT','MDS') NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -207,13 +207,14 @@ CREATE TABLE `tec_officer` (
 --
 
 CREATE TABLE `time_table` (
-                              `Timetable_id` int NOT NULL,
-                              `Day` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
-                              `Time` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
-                              `Session_type` enum('T','P') COLLATE utf8mb4_general_ci NOT NULL,
-                              `Department` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
-                              `Course_id` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
-                              `Admin_id` varchar(100) COLLATE utf8mb4_general_ci NOT NULL
+                              `Timetable_id` varchar(100) NOT NULL,
+                              `Day` varchar(100) NOT NULL,
+                              `Time` varchar(100) NOT NULL,
+                              `Level_and_Semester` enum('Level 1 Semester 1','Level 1 Semester 2','Level 2 Semester 1','Level 2 Semester 2','Level 3 Semester 1','Level 3 Semester 2','Level 4 Semester 1','Level 4 Semester 2') NOT NULL,
+                              `Session_type` enum('T','P','Both') NOT NULL,
+                              `Department` enum('ICT','ET','BST') NOT NULL,
+                              `Course_id` varchar(100) NOT NULL,
+                              `Admin_id` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -223,12 +224,12 @@ CREATE TABLE `time_table` (
 --
 
 CREATE TABLE `undergraduate` (
-                                 `Stu_id` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
-                                 `Batch` int NOT NULL,
-                                 `Level` int NOT NULL,
-                                 `Semester` int NOT NULL,
-                                 `Department` enum('ET','BST','ICT') CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-                                 `User_id` int NOT NULL
+                                 `Stu_id` varchar(100) NOT NULL,
+                                 `Batch` int(11) NOT NULL,
+                                 `Level` int(11) NOT NULL,
+                                 `Semester` int(11) NOT NULL,
+                                 `Department` enum('ET','BST','ICT') NOT NULL,
+                                 `User_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -238,14 +239,14 @@ CREATE TABLE `undergraduate` (
 --
 
 CREATE TABLE `user` (
-                        `User_id` int NOT NULL,
-                        `Fullname` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
-                        `Address` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+                        `User_id` int(11) NOT NULL,
+                        `Fullname` varchar(100) NOT NULL,
+                        `Address` varchar(100) NOT NULL,
                         `Dob` date NOT NULL,
-                        `Gender` enum('M','F') COLLATE utf8mb4_general_ci NOT NULL,
-                        `Password` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
-                        `Email` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
-                        `Profile_picture` varchar(100) COLLATE utf8mb4_general_ci NOT NULL DEFAULT '/profile_pics/default_pic.jpg',
+                        `Gender` enum('M','F') NOT NULL,
+                        `Password` varchar(100) NOT NULL,
+                        `Email` varchar(100) NOT NULL,
+                        `Profile_picture` varchar(100) NOT NULL DEFAULT '/profile_pics/default_pic.jpg',
                         `User_type` varchar(50) NOT NULL DEFAULT 'Student'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -288,6 +289,12 @@ ALTER TABLE `course`
 ALTER TABLE `course_material`
     ADD PRIMARY KEY (`Material_id`),
   ADD KEY `Course_id` (`Course_id`);
+
+--
+-- Indexes for table `department`
+--
+ALTER TABLE `department`
+    ADD PRIMARY KEY (`department_id`);
 
 --
 -- Indexes for table `exam_marks`
@@ -376,49 +383,43 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT for table `attendance`
 --
 ALTER TABLE `attendance`
-    MODIFY `Attendance_id` int NOT NULL AUTO_INCREMENT;
+    MODIFY `Attendance_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `course_material`
 --
 ALTER TABLE `course_material`
-    MODIFY `Material_id` int NOT NULL AUTO_INCREMENT;
+    MODIFY `Material_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `exam_marks`
 --
 ALTER TABLE `exam_marks`
-    MODIFY `Exam_id` int NOT NULL AUTO_INCREMENT;
+    MODIFY `Exam_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `exam_medical`
 --
 ALTER TABLE `exam_medical`
-    MODIFY `Emed_id` int NOT NULL AUTO_INCREMENT;
+    MODIFY `Emed_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `medical`
 --
 ALTER TABLE `medical`
-    MODIFY `Medical_id` int NOT NULL AUTO_INCREMENT;
+    MODIFY `Medical_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `notice`
 --
 ALTER TABLE `notice`
-    MODIFY `Notice_id` int NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `time_table`
---
-ALTER TABLE `time_table`
-    MODIFY `Timetable_id` int NOT NULL AUTO_INCREMENT;
+    MODIFY `Notice_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-    MODIFY `User_id` int NOT NULL AUTO_INCREMENT;
+    MODIFY `User_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- Constraints for dumped tables
@@ -448,7 +449,7 @@ ALTER TABLE `conducted_courses`
 -- Constraints for table `course`
 --
 ALTER TABLE `course`
-    ADD CONSTRAINT `course_ibfk_1` FOREIGN KEY (`department`) REFERENCES `department` (`department_id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+    ADD CONSTRAINT `course_ibfk_1` FOREIGN KEY (`department`) REFERENCES `department` (`department_id`);
 
 --
 -- Constraints for table `course_material`
@@ -475,7 +476,7 @@ ALTER TABLE `exam_medical`
 --
 ALTER TABLE `lecturer`
     ADD CONSTRAINT `lecturer_ibfk_1` FOREIGN KEY (`User_id`) REFERENCES `user` (`User_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `lecturer_ibfk_2` FOREIGN KEY (`Department`) REFERENCES `department` (`department_id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+  ADD CONSTRAINT `lecturer_ibfk_2` FOREIGN KEY (`Department`) REFERENCES `department` (`department_id`);
 
 --
 -- Constraints for table `medical`
@@ -495,7 +496,7 @@ ALTER TABLE `student_courses`
 --
 ALTER TABLE `tec_officer`
     ADD CONSTRAINT `tec_officer_ibfk_1` FOREIGN KEY (`User_id`) REFERENCES `user` (`User_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `tec_officer_ibfk_2` FOREIGN KEY (`Department`) REFERENCES `department` (`department_id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+  ADD CONSTRAINT `tec_officer_ibfk_2` FOREIGN KEY (`Department`) REFERENCES `department` (`department_id`);
 
 --
 -- Constraints for table `time_table`
@@ -509,7 +510,7 @@ ALTER TABLE `time_table`
 --
 ALTER TABLE `undergraduate`
     ADD CONSTRAINT `undergraduate_ibfk_1` FOREIGN KEY (`User_id`) REFERENCES `user` (`User_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `undergraduate_ibfk_2` FOREIGN KEY (`Department`) REFERENCES `department` (`department_id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+  ADD CONSTRAINT `undergraduate_ibfk_2` FOREIGN KEY (`Department`) REFERENCES `department` (`department_id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
