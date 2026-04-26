@@ -1,41 +1,49 @@
 package acadflow.contollers.users.lecturer;
 
-import acadflow.contollers.users.CommonUserController;
-import acadflow.models.getterSetter.LecturerCurrentData;
-import acadflow.models.users.Lecturer;
-import acadflow.models.CourseMaterial;
-import acadflow.models.LectureCourse;
-import acadflow.util.FileStorageHandler;
-import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.Dialog;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
-import javafx.scene.image.Image;
-
-import java.awt.*;
+import java.awt.Desktop;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-
+import java.util.List;
 import java.util.Objects;
-import acadflow.DAO.NoticeDAO;
+import java.util.Optional;
+
+import acadflow.DAO.ExamMarkDAO;
 import acadflow.DAO.Notice;
+import acadflow.DAO.NoticeDAO;
+import acadflow.contollers.users.CommonUserController;
+import acadflow.models.CourseMaterial;
+import acadflow.models.ExamMark;
+import acadflow.models.LectureCourse;
+import acadflow.models.getterSetter.LecturerCurrentData;
+import acadflow.models.users.Lecturer;
+import acadflow.util.FileStorageHandler;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.scene.control.*;
+import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.ButtonBar;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.Dialog;
+import javafx.scene.control.Label;
+import javafx.scene.control.ListCell;
+import javafx.scene.control.ListView;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
 import javafx.scene.layout.HBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-
-import java.util.List;
-import java.util.Optional;
 
 public class LecturerDashboardController extends CommonUserController {
 
@@ -67,6 +75,10 @@ public class LecturerDashboardController extends CommonUserController {
         //setup user(self) details
         setUsersDetails();
         loadLecturerCourses();
+        // Resolve lecturerId from userId for marks operations
+        resolveLecturerId();
+        // Populate the marks course combo with this lecturer's courses
+        populateMarksCourseCombo();
     }
 
 
@@ -98,11 +110,51 @@ public class LecturerDashboardController extends CommonUserController {
 
     private ObservableList<LectureCourse> courseList = FXCollections.observableArrayList();
 
+    // ── Marks Management tab fields ───────────────────────────────────────────
+    // fx:id="marksCourseCombo"         — ComboBox populated with lecturer's courses
+    @FXML private ComboBox<String>              marksCourseCombo;
+    // fx:id="loadMarksBtn"             — loads marks for selected course
+    @FXML private Button                        loadMarksBtn;
+    // fx:id="lecMarksTableView"        — shows all marks for selected course
+    @FXML private TableView<ExamMark>           lecMarksTableView;
+    // Column bindings for lecMarksTableView
+    @FXML private TableColumn<ExamMark, String>  marksStuIdCol;
+    @FXML private TableColumn<ExamMark, String>  marksAssessmentCol;
+    @FXML private TableColumn<ExamMark, String>  marksSessionCol;
+    @FXML private TableColumn<ExamMark, Integer> marksMarkCol;
+    @FXML private TableColumn<ExamMark, String>  marksGradeCol;
+    // Upload / edit form fields
+    @FXML private TextField                     marksStuIdField;
+    @FXML private TextField                     marksMarkField;
+    @FXML private ComboBox<String>              marksAssessmentTypeCombo;
+    @FXML private ComboBox<String>              marksSessionTypeCombo;
+    @FXML private Label                         marksGradePreviewLabel;
+    @FXML private Button                        saveMarkBtn;
+    @FXML private Button                        updateMarkBtn;
+    @FXML private Button                        deleteMarkBtn;
+    @FXML private Button                        clearMarkFormBtn;
+    @FXML private Label                         marksStatusLabel;
+    // Undergraduate details table (enrolled students + their marks)
+    @FXML private TableView<ExamMark>           undergradDetailsTableView;
+    @FXML private TableColumn<ExamMark, String>  udStuIdCol;
+    @FXML private TableColumn<ExamMark, String>  udNameCol;
+    @FXML private TableColumn<ExamMark, Integer> udMarkCol;
+    @FXML private TableColumn<ExamMark, String>  udGradeCol;
+    @FXML private TableColumn<ExamMark, String>  udEligibleCol;
+
+    // Private state for marks tab (ENCAPSULATION)
+    private final ExamMarkDAO examMarkDAO = new ExamMarkDAO();
+    private final ObservableList<ExamMark> lecMarkList = FXCollections.observableArrayList();
+    private ExamMark selectedMark = null;
+    // lecturerId resolved from userId after login
+    private String lecturerId = null;
+
 
     @FXML
     public void initialize() {
         initializeCourseTable();
         initializeNoticesTab();
+        initializeMarksTab();
     }
     private void initializeCourseTable() {
         CourseCodeColomn.setCellValueFactory(cellData -> cellData.getValue().cidProperty());
@@ -329,6 +381,276 @@ public class LecturerDashboardController extends CommonUserController {
         }
     }
 
+
+    // ── Marks Management tab ─────────────────────────────────────────────────
+
+    /**
+     * Wires up the marks tab: column bindings, combo items, button handlers,
+     * and the live grade-preview listener on the mark input field.
+     *
+     * ABSTRACTION: callers just call initializeMarksTab() — all wiring is hidden.
+     * ENCAPSULATION: lecMarkList and selectedMark are private.
+     */
+    private void initializeMarksTab() {
+        if (lecMarksTableView == null) return;
+
+        // Bind columns to ExamMark JavaFX properties
+        // ENCAPSULATION: ExamMark fields are private; PropertyValueFactory uses property accessors
+        marksStuIdCol.setCellValueFactory(new PropertyValueFactory<>("stuId"));
+        marksAssessmentCol.setCellValueFactory(new PropertyValueFactory<>("assessmentType"));
+        marksSessionCol.setCellValueFactory(new PropertyValueFactory<>("sessionType"));
+        marksMarkCol.setCellValueFactory(new PropertyValueFactory<>("mark"));
+        marksGradeCol.setCellValueFactory(new PropertyValueFactory<>("grade"));
+        lecMarksTableView.setItems(lecMarkList);
+
+        // Undergraduate details table columns
+        if (undergradDetailsTableView != null) {
+            udStuIdCol.setCellValueFactory(new PropertyValueFactory<>("stuId"));
+            udMarkCol.setCellValueFactory(new PropertyValueFactory<>("mark"));
+            udGradeCol.setCellValueFactory(new PropertyValueFactory<>("grade"));
+            // Eligibility column — shows Yes/No based on isEligible()
+            // Eligibility column — computed from isEligible() on each row
+            // ABSTRACTION: isEligible() hides the CA >= 40 rule
+            udEligibleCol.setCellValueFactory(cellData -> {
+                boolean eligible = cellData.getValue().isEligible();
+                return new javafx.beans.property.SimpleStringProperty(eligible ? "✓ Yes" : "✗ No");
+            });        }
+
+        // Populate type combos
+        if (marksAssessmentTypeCombo != null)
+            marksAssessmentTypeCombo.setItems(FXCollections.observableArrayList("T", "P"));
+        if (marksSessionTypeCombo != null)
+            marksSessionTypeCombo.setItems(FXCollections.observableArrayList("T", "P"));
+
+        // Live grade preview as lecturer types the mark
+        if (marksMarkField != null) {
+            marksMarkField.textProperty().addListener((obs, oldVal, newVal) -> {
+                if (marksGradePreviewLabel == null) return;
+                try {
+                    int m = Integer.parseInt(newVal.trim());
+                    // ABSTRACTION: calculateGrade() hides the grading logic
+                    marksGradePreviewLabel.setText(ExamMark.calculateGrade(m));
+                } catch (NumberFormatException e) {
+                    marksGradePreviewLabel.setText("—");
+                }
+            });
+        }
+
+        // Button handlers
+        if (loadMarksBtn != null)     loadMarksBtn.setOnAction(e -> loadMarksForSelectedCourse());
+        if (saveMarkBtn != null)      saveMarkBtn.setOnAction(e -> saveMark());
+        if (updateMarkBtn != null)    updateMarkBtn.setOnAction(e -> updateMark());
+        if (deleteMarkBtn != null)    deleteMarkBtn.setOnAction(e -> deleteMark());
+        if (clearMarkFormBtn != null) clearMarkFormBtn.setOnAction(e -> clearMarksForm());
+
+        // Populate form when a row is selected in the table
+        if (lecMarksTableView != null) {
+            lecMarksTableView.getSelectionModel().selectedItemProperty().addListener(
+                    (obs, oldSel, newSel) -> {
+                        selectedMark = newSel;
+                        if (newSel != null) populateMarksForm(newSel);
+                    });
+        }
+    }
+
+    /**
+     * Resolves the Lecturer_Id from the user table using userId.
+     * Stored in lecturerId for use in all mark operations.
+     *
+     * ENCAPSULATION: lecturerId is private; only set here.
+     */
+    private void resolveLecturerId() {
+        String query = "SELECT Lecturer_Id FROM lecturer WHERE User_id = ?";
+        try (java.sql.Connection conn = acadflow.util.DBConnection.getConnection();
+             java.sql.PreparedStatement ps = conn.prepareStatement(query)) {
+            ps.setString(1, userId);
+            java.sql.ResultSet rs = ps.executeQuery();
+            if (rs.next()) lecturerId = rs.getString("Lecturer_Id");
+        } catch (java.sql.SQLException e) {
+            System.err.println("LecturerDashboardController.resolveLecturerId: " + e.getMessage());
+        }
+    }
+
+    /**
+     * Populates marksCourseCombo with the courses this lecturer teaches.
+     * Uses the already-loaded courseList from loadLecturerCourses().
+     */
+    private void populateMarksCourseCombo() {
+        if (marksCourseCombo == null) return;
+        Platform.runLater(() -> {
+            ObservableList<String> courseIds = FXCollections.observableArrayList();
+            for (LectureCourse lc : courseList) courseIds.add(lc.getCid());
+            marksCourseCombo.setItems(courseIds);
+        });
+    }
+
+    /**
+     * Loads all marks for the course selected in marksCourseCombo.
+     * Populates both lecMarksTableView and undergradDetailsTableView.
+     *
+     * ABSTRACTION: ExamMarkDAO.getMarksByCourseAndLecturer() hides the SQL.
+     */
+    private void loadMarksForSelectedCourse() {
+        String courseId = marksCourseCombo.getValue();
+        if (courseId == null || courseId.isEmpty()) {
+            setMarksStatus("Please select a course first.", "#e74c3c");
+            return;
+        }
+        if (lecturerId == null) {
+            setMarksStatus("Lecturer ID not resolved. Please re-login.", "#e74c3c");
+            return;
+        }
+
+        new Thread(() -> {
+            // ABSTRACTION: DAO hides the SQL JOIN
+            List<ExamMark> marks = examMarkDAO.getMarksByCourseAndLecturer(courseId, lecturerId);
+            Platform.runLater(() -> {
+                lecMarkList.setAll(marks);
+                lecMarksTableView.refresh();
+                if (undergradDetailsTableView != null) {
+                    undergradDetailsTableView.setItems(lecMarkList);
+                    undergradDetailsTableView.refresh();
+                }
+                setMarksStatus("Loaded " + marks.size() + " records for " + courseId, "#27ae60");
+            });
+        }).start();
+    }
+
+    /**
+     * Saves a new mark record entered in the upload form.
+     * Grade is auto-calculated by ExamMarkDAO.addMark().
+     *
+     * ABSTRACTION: addMark() hides INSERT SQL and grade calculation.
+     * ENCAPSULATION: ExamMark fields set through setters (they are private).
+     */
+    private void saveMark() {
+        if (!validateMarksForm()) return;
+        String courseId = marksCourseCombo.getValue();
+
+        ExamMark em = new ExamMark();
+        em.setStuId(marksStuIdField.getText().trim());           // ENCAPSULATION: setter
+        em.setCourseId(courseId);                                // ENCAPSULATION: setter
+        em.setLecturerId(lecturerId);                            // ENCAPSULATION: setter
+        em.setMark(Integer.parseInt(marksMarkField.getText().trim())); // ENCAPSULATION: setter
+        em.setAssessmentType(marksAssessmentTypeCombo.getValue()); // ENCAPSULATION: setter
+        em.setSessionType(marksSessionTypeCombo.getValue());       // ENCAPSULATION: setter
+
+        // Check for duplicate before inserting
+        if (examMarkDAO.markExists(em.getStuId(), courseId, em.getAssessmentType())) {
+            setMarksStatus("Mark already exists for this student + assessment type. Use Update.", "#e74c3c");
+            return;
+        }
+
+        if (examMarkDAO.addMark(em)) {
+            setMarksStatus("Mark saved successfully! Grade: " + em.getGrade(), "#27ae60");
+            clearMarksForm();
+            loadMarksForSelectedCourse();
+        } else {
+            setMarksStatus("Failed to save mark. Check student ID and try again.", "#e74c3c");
+        }
+    }
+
+    /**
+     * Updates the currently selected mark record.
+     * ABSTRACTION: updateMark() hides UPDATE SQL and grade recalculation.
+     */
+    private void updateMark() {
+        if (selectedMark == null) {
+            setMarksStatus("Select a row in the table to update.", "#e74c3c");
+            return;
+        }
+        if (!validateMarksForm()) return;
+
+        selectedMark.setMark(Integer.parseInt(marksMarkField.getText().trim())); // ENCAPSULATION: setter
+        selectedMark.setAssessmentType(marksAssessmentTypeCombo.getValue());     // ENCAPSULATION: setter
+        selectedMark.setSessionType(marksSessionTypeCombo.getValue());           // ENCAPSULATION: setter
+
+        if (examMarkDAO.updateMark(selectedMark)) {
+            setMarksStatus("Mark updated. New grade: " + selectedMark.getGrade(), "#27ae60");
+            clearMarksForm();
+            loadMarksForSelectedCourse();
+        } else {
+            setMarksStatus("Update failed.", "#e74c3c");
+        }
+    }
+
+    /**
+     * Deletes the currently selected mark record after confirmation.
+     */
+    private void deleteMark() {
+        if (selectedMark == null) {
+            setMarksStatus("Select a row in the table to delete.", "#e74c3c");
+            return;
+        }
+        Alert confirm = new Alert(Alert.AlertType.CONFIRMATION);
+        confirm.setTitle("Confirm Delete");
+        confirm.setHeaderText("Delete mark for " + selectedMark.getStuId() + "?");
+        confirm.setContentText("This cannot be undone.");
+        confirm.showAndWait().ifPresent(btn -> {
+            if (btn == ButtonType.OK) {
+                if (examMarkDAO.deleteMark(selectedMark.getExamId())) {
+                    setMarksStatus("Mark deleted.", "#27ae60");
+                    clearMarksForm();
+                    loadMarksForSelectedCourse();
+                } else {
+                    setMarksStatus("Delete failed.", "#e74c3c");
+                }
+            }
+        });
+    }
+
+    /** Populates the upload form from a selected table row. */
+    private void populateMarksForm(ExamMark em) {
+        if (marksStuIdField != null)          marksStuIdField.setText(em.getStuId());
+        if (marksMarkField != null)           marksMarkField.setText(String.valueOf(em.getMark()));
+        if (marksAssessmentTypeCombo != null) marksAssessmentTypeCombo.setValue(em.getAssessmentType());
+        if (marksSessionTypeCombo != null)    marksSessionTypeCombo.setValue(em.getSessionType());
+        if (marksGradePreviewLabel != null)   marksGradePreviewLabel.setText(em.getGrade());
+    }
+
+    /** Clears all form fields and deselects the table row. */
+    private void clearMarksForm() {
+        if (marksStuIdField != null)          marksStuIdField.clear();
+        if (marksMarkField != null)           marksMarkField.clear();
+        if (marksAssessmentTypeCombo != null) marksAssessmentTypeCombo.setValue(null);
+        if (marksSessionTypeCombo != null)    marksSessionTypeCombo.setValue(null);
+        if (marksGradePreviewLabel != null)   marksGradePreviewLabel.setText("—");
+        if (lecMarksTableView != null)        lecMarksTableView.getSelectionModel().clearSelection();
+        selectedMark = null;
+    }
+
+    /** Validates the upload form before save/update. */
+    private boolean validateMarksForm() {
+        if (marksCourseCombo.getValue() == null) {
+            setMarksStatus("Select a course first.", "#e74c3c"); return false;
+        }
+        if (marksStuIdField.getText().trim().isEmpty()) {
+            setMarksStatus("Student ID is required.", "#e74c3c"); return false;
+        }
+        try {
+            int m = Integer.parseInt(marksMarkField.getText().trim());
+            if (m < 0 || m > 100) {
+                setMarksStatus("Mark must be between 0 and 100.", "#e74c3c"); return false;
+            }
+        } catch (NumberFormatException e) {
+            setMarksStatus("Mark must be a number.", "#e74c3c"); return false;
+        }
+        if (marksAssessmentTypeCombo.getValue() == null) {
+            setMarksStatus("Select an assessment type.", "#e74c3c"); return false;
+        }
+        if (marksSessionTypeCombo.getValue() == null) {
+            setMarksStatus("Select a session type.", "#e74c3c"); return false;
+        }
+        return true;
+    }
+
+    /** Updates the status label with a message and colour. */
+    private void setMarksStatus(String msg, String colour) {
+        if (marksStatusLabel != null)
+            marksStatusLabel.setStyle("-fx-text-fill: " + colour + "; -fx-font-size: 12px;");
+        if (marksStatusLabel != null)
+            marksStatusLabel.setText(msg);
+    }
 
     // Helper method to show alerts
     private void showAlert(Alert.AlertType type, String title, String content) {

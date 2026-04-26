@@ -399,6 +399,152 @@
                             </TableView>
                         </VBox>
                     </Tab>
+
+                    <!-- ═══════════════════════════════════════════════════════════
+                         MARKS MANAGEMENT TAB  (lecturer only)
+                         Lecturer can:
+                           • Select one of their courses from a ComboBox
+                           • View all uploaded marks for that course
+                           • Upload a new mark for a student (stuId + mark + type)
+                           • Edit or delete an existing mark record
+                         All fx:id fields are bound in LecturerDashboardController.
+                         ═══════════════════════════════════════════════════════════ -->
+                    <Tab text="Marks Management">
+                        <VBox spacing="15" style="-fx-padding: 20;">
+                            <Label style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;"
+                                   text="Marks Management" />
+
+                            <!-- Course selector row -->
+                            <!-- fx:id="marksCourseCombo" — populated with lecturer's courses -->
+                            <HBox spacing="10" style="-fx-alignment: center-left;">
+                                <Label style="-fx-font-weight: bold;" text="Select Course:" />
+                                <ComboBox fx:id="marksCourseCombo" prefWidth="280"
+                                          promptText="Choose a course..." />
+                                <!-- Loads marks for the selected course into marksTableView -->
+                                <Button fx:id="loadMarksBtn"
+                                        style="-fx-background-color: #3498db; -fx-text-fill: white; -fx-cursor: hand;"
+                                        text="Load Marks" />
+                            </HBox>
+
+                            <!-- Marks table — shows all marks for the selected course -->
+                            <!-- fx:id="marksTableView" — bound in initializeMarksTab() -->
+                            <TableView fx:id="lecMarksTableView" prefHeight="280">
+                                <columns>
+                                    <!-- Student registration number -->
+                                    <TableColumn fx:id="marksStuIdCol"      prefWidth="130" text="Student ID" />
+                                    <!-- Assessment type: T=Theory CA, P=Practical CA -->
+                                    <TableColumn fx:id="marksAssessmentCol" prefWidth="110" text="Assessment" />
+                                    <!-- Session type: T=Theory, P=Practical -->
+                                    <TableColumn fx:id="marksSessionCol"    prefWidth="90"  text="Session" />
+                                    <!-- Numeric mark (0-100) -->
+                                    <TableColumn fx:id="marksMarkCol"       prefWidth="70"  text="Mark" />
+                                    <!-- Letter grade auto-calculated -->
+                                    <TableColumn fx:id="marksGradeCol"      prefWidth="65"  text="Grade" />
+                                </columns>
+                            </TableView>
+
+                            <!-- Upload / Edit form -->
+                            <!-- All fields cleared after successful save via clearMarksForm() -->
+                            <TitledPane expanded="true" text="Upload / Edit Mark">
+                                <VBox spacing="10" style="-fx-padding: 12;">
+                                    <GridPane hgap="15" vgap="10">
+                                        <!-- Student ID input -->
+                                        <Label style="-fx-font-weight: bold;" text="Student ID:"
+                                               GridPane.columnIndex="0" GridPane.rowIndex="0" />
+                                        <!-- fx:id="marksStuIdField" -->
+                                        <TextField fx:id="marksStuIdField" prefWidth="200"
+                                                   promptText="e.g. tg0001"
+                                                   GridPane.columnIndex="1" GridPane.rowIndex="0" />
+
+                                        <!-- Mark input (0-100) -->
+                                        <Label style="-fx-font-weight: bold;" text="Mark (0–100):"
+                                               GridPane.columnIndex="0" GridPane.rowIndex="1" />
+                                        <!-- fx:id="marksMarkField" -->
+                                        <TextField fx:id="marksMarkField" prefWidth="100"
+                                                   promptText="0 – 100"
+                                                   GridPane.columnIndex="1" GridPane.rowIndex="1" />
+
+                                        <!-- Assessment type selector -->
+                                        <Label style="-fx-font-weight: bold;" text="Assessment Type:"
+                                               GridPane.columnIndex="0" GridPane.rowIndex="2" />
+                                        <!-- fx:id="marksAssessmentTypeCombo" — items: T, P -->
+                                        <ComboBox fx:id="marksAssessmentTypeCombo" prefWidth="120"
+                                                  GridPane.columnIndex="1" GridPane.rowIndex="2" />
+
+                                        <!-- Session type selector -->
+                                        <Label style="-fx-font-weight: bold;" text="Session Type:"
+                                               GridPane.columnIndex="0" GridPane.rowIndex="3" />
+                                        <!-- fx:id="marksSessionTypeCombo" — items: T, P -->
+                                        <ComboBox fx:id="marksSessionTypeCombo" prefWidth="120"
+                                                  GridPane.columnIndex="1" GridPane.rowIndex="3" />
+
+                                        <!-- Grade preview — auto-updated as mark is typed -->
+                                        <Label style="-fx-font-weight: bold;" text="Grade Preview:"
+                                               GridPane.columnIndex="0" GridPane.rowIndex="4" />
+                                        <!-- fx:id="marksGradePreviewLabel" — updated on mark input -->
+                                        <Label fx:id="marksGradePreviewLabel"
+                                               style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #27ae60;"
+                                               text="—"
+                                               GridPane.columnIndex="1" GridPane.rowIndex="4" />
+
+                                        <columnConstraints>
+                                            <ColumnConstraints prefWidth="130" />
+                                            <ColumnConstraints prefWidth="250" />
+                                        </columnConstraints>
+                                        <rowConstraints>
+                                            <RowConstraints minHeight="30" />
+                                            <RowConstraints minHeight="30" />
+                                            <RowConstraints minHeight="30" />
+                                            <RowConstraints minHeight="30" />
+                                            <RowConstraints minHeight="30" />
+                                        </rowConstraints>
+                                    </GridPane>
+
+                                    <!-- Action buttons -->
+                                    <HBox spacing="10">
+                                        <!-- Saves a new mark record -->
+                                        <Button fx:id="saveMarkBtn"
+                                                style="-fx-background-color: #27ae60; -fx-text-fill: white; -fx-cursor: hand;"
+                                                text="Save Mark" />
+                                        <!-- Updates the selected mark record -->
+                                        <Button fx:id="updateMarkBtn"
+                                                style="-fx-background-color: #f39c12; -fx-text-fill: white; -fx-cursor: hand;"
+                                                text="Update Mark" />
+                                        <!-- Deletes the selected mark record -->
+                                        <Button fx:id="deleteMarkBtn"
+                                                style="-fx-background-color: #e74c3c; -fx-text-fill: white; -fx-cursor: hand;"
+                                                text="Delete Mark" />
+                                        <!-- Clears the form fields -->
+                                        <Button fx:id="clearMarkFormBtn"
+                                                style="-fx-background-color: #95a5a6; -fx-text-fill: white; -fx-cursor: hand;"
+                                                text="Clear" />
+                                    </HBox>
+
+                                    <!-- Status message shown after save/update/delete -->
+                                    <!-- fx:id="marksStatusLabel" -->
+                                    <Label fx:id="marksStatusLabel"
+                                           style="-fx-text-fill: #27ae60; -fx-font-size: 12px;" text="" />
+                                </VBox>
+                            </TitledPane>
+
+                            <!-- Undergraduate details section -->
+                            <!-- Shows all students enrolled in the selected course -->
+                            <TitledPane expanded="false" text="Undergraduate Details  (enrolled in selected course)">
+                                <VBox spacing="8" style="-fx-padding: 12;">
+                                    <!-- fx:id="undergradDetailsTableView" -->
+                                    <TableView fx:id="undergradDetailsTableView" prefHeight="220">
+                                        <columns>
+                                            <TableColumn fx:id="udStuIdCol"    prefWidth="120" text="Student ID" />
+                                            <TableColumn fx:id="udNameCol"     prefWidth="200" text="Full Name" />
+                                            <TableColumn fx:id="udMarkCol"     prefWidth="80"  text="Mark" />
+                                            <TableColumn fx:id="udGradeCol"    prefWidth="70"  text="Grade" />
+                                            <TableColumn fx:id="udEligibleCol" prefWidth="100" text="Eligible?" />
+                                        </columns>
+                                    </TableView>
+                                </VBox>
+                            </TitledPane>
+                        </VBox>
+                    </Tab>
                </TabPane>
          </content>
       </ScrollPane>

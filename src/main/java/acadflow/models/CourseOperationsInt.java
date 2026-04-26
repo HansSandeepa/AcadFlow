@@ -1,8 +1,8 @@
 package acadflow.models;
 
-import javafx.collections.ObservableList;
-
 import java.util.List;
+
+import javafx.collections.ObservableList;
 
 public interface CourseOperationsInt {
 

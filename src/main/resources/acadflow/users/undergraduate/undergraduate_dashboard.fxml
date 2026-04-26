@@ -169,51 +169,63 @@
                        </HBox>
                    </Tab>
 
+                         <!-- ═══════════════════════════════════════════════════════
+                              MY COURSES & GRADES TAB  (undergraduate — read only)
+                              All data is loaded from exam_marks table via ExamMarkDAO.
+                              fx:id fields are bound in UndergraduateDashboardController.
+                              ═══════════════════════════════════════════════════════ -->
                          <Tab text="My Courses &amp; Grades">
-                       <VBox spacing="15" style="-fx-padding: 20;">
-                           <Label style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;" text="Academic Performance" />
+                           <VBox spacing="15" style="-fx-padding: 20;">
+                               <Label style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;" text="Academic Performance" />
 
-                                 <!-- GPA Card -->
-                           <HBox spacing="20">
-                               <VBox spacing="10" style="-fx-background-color: #ecf0f1; -fx-padding: 15; -fx-border-radius: 10; -fx-background-radius: 10;">
-                                   <Label style="-fx-font-size: 14px; -fx-text-fill: #7f8c8d;" text="Current GPA" />
-                                   <Label style="-fx-font-size: 36px; -fx-font-weight: bold; -fx-text-fill: #27ae60;" text="3.75" />
-                                   <Label text="Overall GPA: 3.65" />
-                               </VBox>
+                               <!-- GPA summary cards — values set by controller -->
+                               <HBox spacing="20">
+                                   <VBox spacing="5" style="-fx-background-color: #ecf0f1; -fx-padding: 15; -fx-border-radius: 10; -fx-background-radius: 10; -fx-min-width: 160;">
+                                       <Label style="-fx-font-size: 13px; -fx-text-fill: #7f8c8d;" text="Overall GPA" />
+                                       <!-- fx:id="gpaLabel" — updated by loadGradesForStudent() -->
+                                       <Label fx:id="gpaLabel" style="-fx-font-size: 36px; -fx-font-weight: bold; -fx-text-fill: #27ae60;" text="—" />
+                                       <Label style="-fx-font-size: 11px; -fx-text-fill: #95a5a6;" text="Weighted GPA (4.0 scale)" />
+                                   </VBox>
+                                   <VBox spacing="5" style="-fx-background-color: #ecf0f1; -fx-padding: 15; -fx-border-radius: 10; -fx-background-radius: 10; -fx-min-width: 160;">
+                                       <Label style="-fx-font-size: 13px; -fx-text-fill: #7f8c8d;" text="Total Marks Records" />
+                                       <!-- fx:id="totalMarksLabel" — updated by loadGradesForStudent() -->
+                                       <Label fx:id="totalMarksLabel" style="-fx-font-size: 36px; -fx-font-weight: bold; -fx-text-fill: #3498db;" text="0" />
+                                       <Label style="-fx-font-size: 11px; -fx-text-fill: #95a5a6;" text="Across all courses" />
+                                   </VBox>
+                               </HBox>
 
-                                     <VBox spacing="10" style="-fx-background-color: #ecf0f1; -fx-padding: 15; -fx-border-radius: 10; -fx-background-radius: 10;">
-                                   <Label style="-fx-font-size: 14px; -fx-text-fill: #7f8c8d;" text="Credits Completed" />
-                                   <Label style="-fx-font-size: 36px; -fx-font-weight: bold; -fx-text-fill: #3498db;" text="45" />
-                                   <Label text="Total Credits: 90" />
-                               </VBox>
-                           </HBox>
+                               <!-- Marks table — columns bound in controller via PropertyValueFactory -->
+                               <!-- fx:id="marksTableView" -->
+                               <TableView fx:id="marksTableView" style="-fx-pref-height: 320;">
+                                   <columns>
+                                       <!-- Course Code — bound to courseId property -->
+                                       <TableColumn fx:id="gradesCourseCodeCol" prefWidth="110" text="Course Code" />
+                                       <!-- Course Name — bound to courseName property (joined) -->
+                                       <TableColumn fx:id="gradesCourseNameCol" prefWidth="200" text="Course Name" />
+                                       <!-- Credits — bound to credits property (joined) -->
+                                       <TableColumn fx:id="gradesCreditsCol" prefWidth="65" text="Credits" />
+                                       <!-- Assessment type: T=Theory CA, P=Practical CA -->
+                                       <TableColumn fx:id="gradesAssessmentCol" prefWidth="110" text="Assessment" />
+                                       <!-- Session type: T=Theory, P=Practical -->
+                                       <TableColumn fx:id="gradesSessionCol" prefWidth="90" text="Session" />
+                                       <!-- Numeric mark (0-100) -->
+                                       <TableColumn fx:id="gradesMarkCol" prefWidth="70" text="Mark" />
+                                       <!-- Letter grade auto-calculated from mark -->
+                                       <TableColumn fx:id="gradesGradeCol" prefWidth="65" text="Grade" />
+                                   </columns>
+                               </TableView>
 
-                                 <!-- Courses Table -->
-                           <TableView style="-fx-pref-height: 350;">
-                               <columns>
-                                   <TableColumn prefWidth="100" text="Course Code" />
-                                   <TableColumn prefWidth="200" text="Course Name" />
-                                   <TableColumn prefWidth="80" text="Credits" />
-                                   <TableColumn prefWidth="100" text="CA Marks" />
-                                   <TableColumn prefWidth="100" text="Exam Marks" />
-                                   <TableColumn prefWidth="80" text="Total" />
-                                   <TableColumn prefWidth="80" text="Grade" />
-                                   <TableColumn prefWidth="100" text="Status" />
-                               </columns>
-                           </TableView>
-
-                                 <!-- Eligibility Status -->
-                           <TitledPane text="Exam Eligibility">
-                               <VBox spacing="10" style="-fx-padding: 15;">
-                                   <Label text="CA Marks Requirement: ≥40% to sit for final exam" />
-                                   <Label style="-fx-text-fill: #27ae60;" text="OOP (ICT2132): CA = 78% - Eligible ✓" />
-                                   <Label style="-fx-text-fill: #27ae60;" text="Database (ICT2133): CA = 85% - Eligible ✓" />
-                                   <Label style="-fx-text-fill: #27ae60;" text="Web Dev (ICT2134): CA = 92% - Eligible ✓" />
-                                   <ProgressBar progress="0.85" style="-fx-pref-width: 300;" />
-                               </VBox>
-                           </TitledPane>
-                       </VBox>
-                   </Tab>
+                               <!-- Eligibility section — populated dynamically by controller -->
+                               <!-- fx:id="eligibilityBox" — VBox children added at runtime -->
+                               <TitledPane expanded="true" text="Exam Eligibility  (CA ≥ 40 required)">
+                                   <VBox fx:id="eligibilityBox" spacing="8" style="-fx-padding: 12;">
+                                       <!-- Rows added programmatically by buildEligibilityRows() -->
+                                       <Label style="-fx-text-fill: #7f8c8d; -fx-font-size: 12px;"
+                                              text="Loading eligibility data..." />
+                                   </VBox>
+                               </TitledPane>
+                           </VBox>
+                         </Tab>
 
                          <Tab text="Attendance">
                        <VBox spacing="15" style="-fx-padding: 20;">
