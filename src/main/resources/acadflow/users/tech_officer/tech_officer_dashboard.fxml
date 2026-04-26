@@ -221,17 +221,14 @@
                            <Label style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;" text="Department Timetable" />
    
                            <ComboBox promptText="Select Week" style="-fx-pref-width: 150;" />
-   
-                           <TableView style="-fx-pref-height: 400;">
-                               <columns>
-                                   <TableColumn prefWidth="100" text="Time" />
-                                   <TableColumn prefWidth="150" text="Monday" />
-                                   <TableColumn prefWidth="150" text="Tuesday" />
-                                   <TableColumn prefWidth="150" text="Wednesday" />
-                                   <TableColumn prefWidth="150" text="Thursday" />
-                                   <TableColumn prefWidth="150" text="Friday" />
-                               </columns>
-                           </TableView>
+                     <TableView fx:id="timetableTable" style="-fx-pref-height: 450;">
+                        <columns>
+                           <TableColumn fx:id="dayCol" prefWidth="100" text="Day" />
+                           <TableColumn fx:id="timeCol" prefWidth="150" text="Time" />
+                           <TableColumn fx:id="courseCol" prefWidth="150" text="Course" />
+                           <TableColumn fx:id="sessionCol" prefWidth="100" text="Session Type" />
+                        </columns>
+                     </TableView>
                        </VBox>
                    </Tab>
    

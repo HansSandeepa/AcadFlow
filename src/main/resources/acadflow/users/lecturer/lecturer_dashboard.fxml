@@ -285,29 +285,6 @@
                        </VBox>
                    </Tab>
    
-                   <Tab text="Timetable">
-                       <VBox spacing="10" style="-fx-padding: 20;">
-                           <Label text="Weekly Timetable">
-                               <font>
-                                   <Font name="Arial" size="18" />
-                               </font>
-                           </Label>
-   
-                           <ComboBox prefWidth="150" promptText="Select Week" />
-   
-                           <TableView prefHeight="450">
-                               <columns>
-                                   <TableColumn prefWidth="100" text="Time" />
-                                   <TableColumn prefWidth="150" text="Monday" />
-                                   <TableColumn prefWidth="150" text="Tuesday" />
-                                   <TableColumn prefWidth="150" text="Wednesday" />
-                                   <TableColumn prefWidth="150" text="Thursday" />
-                                   <TableColumn prefWidth="150" text="Friday" />
-                               </columns>
-                           </TableView>
-                       </VBox>
-                   </Tab>
-   
                    <Tab text="Notices">
                        <VBox spacing="10" style="-fx-padding: 20;">
                            <ListView prefHeight="450" />
