@@ -110,255 +110,344 @@
             </HBox>
         </VBox>
     </top>
-   <center>
-      <ScrollPane BorderPane.alignment="CENTER">
-         <content>
-   
-               <TabPane tabClosingPolicy="UNAVAILABLE">
-                   <Tab text="Attendance Management">
-                       <VBox spacing="15" style="-fx-padding: 20;">
-                           <Label style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;" text="Attendance Recording" />
-   
-                           <HBox spacing="15">
-                               <ComboBox promptText="Select Course" style="-fx-pref-width: 200;">
-                                   <items>
-                                       <FXCollections fx:factory="observableArrayList">
-                                           <String fx:value="OOP (Theory)" />
-                                           <String fx:value="OOP (Practical)" />
-                                           <String fx:value="Database (Theory)" />
-                                           <String fx:value="Database (Practical)" />
-                                       </FXCollections>
-                                   </items>
-                               </ComboBox>
-                               <DatePicker promptText="Select Date" />
-                               <Button style="-fx-background-color: #3498db; -fx-text-fill: white;" text="Load Students" />
-                           </HBox>
-   
-                           <!-- Attendance Table -->
-                           <TableView style="-fx-pref-height: 350;">
-                               <columns>
-                                   <TableColumn prefWidth="100" text="Student ID" />
-                                   <TableColumn prefWidth="200" text="Name" />
-                                   <TableColumn prefWidth="120" text="Present/Absent">
-                                    <!-- CheckBox would be here -->
-                                </TableColumn>
-                                   <TableColumn prefWidth="150" text="Remarks" />
-                               </columns>
-                           </TableView>
-   
-                           <HBox spacing="15">
-                               <Button style="-fx-background-color: #27ae60; -fx-text-fill: white;" text="Mark All Present" />
-                               <Button style="-fx-background-color: #2980b9; -fx-text-fill: white;" text="Save Attendance" />
-                               <Label style="-fx-text-fill: #7f8c8d;" text="Theory Credits: 3T (6 hours)" />
-                           </HBox>
-   
-                           <Separator />
-   
-                           <Label style="-fx-font-size: 16px; -fx-font-weight: bold;" text="Attendance Summary" />
-   
-                           <HBox spacing="20">
-                               <VBox spacing="5">
-                                   <Label text="Course: OOP" />
-                                   <Label text="Theory Sessions Completed: 10/15" />
-                                   <Label text="Practical Sessions Completed: 8/15" />
-                                   <ProgressBar progress="0.67" style="-fx-pref-width: 200;" />
-                               </VBox>
-                           </HBox>
-                       </VBox>
-                   </Tab>
-   
-                   <Tab text="Medical Management">
-                       <VBox spacing="15" style="-fx-padding: 20;">
-                           <Label style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;" text="Medical Records" />
-   
-                           <HBox spacing="15">
-                               <TextField promptText="Student ID or Name" style="-fx-pref-width: 200;" />
-                               <Button style="-fx-background-color: #3498db; -fx-text-fill: white;" text="Search" />
-                               <Button style="-fx-background-color: #27ae60; -fx-text-fill: white;" text="Add Medical Record" />
-                           </HBox>
-   
-                           <!-- Medical Records Table -->
-                           <TableView style="-fx-pref-height: 300;">
-                               <columns>
-                                   <TableColumn prefWidth="100" text="Student ID" />
-                                   <TableColumn prefWidth="150" text="Name" />
-                                   <TableColumn prefWidth="100" text="Date" />
-                                   <TableColumn prefWidth="150" text="Reason" />
-                                   <TableColumn prefWidth="100" text="Status">
-                                    <!-- ComboBox for Approved/Not Approved -->
-                                </TableColumn>
-                                   <TableColumn prefWidth="100" text="Actions" />
-                               </columns>
-                           </TableView>
-   
-                           <!-- Add Medical Form -->
-                           <TitledPane expanded="false" text="Add New Medical Record">
-                               <VBox spacing="10" style="-fx-padding: 15;">
-                                   <HBox spacing="15">
-                                       <Label style="-fx-pref-width: 100;" text="Student ID:" />
-                                       <TextField promptText="Enter Student ID" />
-                                   </HBox>
-                                   <HBox spacing="15">
-                                       <Label style="-fx-pref-width: 100;" text="Date:" />
-                                       <DatePicker />
-                                   </HBox>
-                                   <HBox spacing="15">
-                                       <Label style="-fx-pref-width: 100;" text="Reason:" />
-                                       <TextArea promptText="Medical reason" style="-fx-pref-width: 300; -fx-pref-height: 80;" />
-                                   </HBox>
-                                   <HBox spacing="15">
-                                       <Label style="-fx-pref-width: 100;" text="Approved:" />
-                                       <CheckBox text="Approve" />
-                                   </HBox>
-                                   <Button style="-fx-background-color: #27ae60; -fx-text-fill: white;" text="Submit Medical" />
-                               </VBox>
-                           </TitledPane>
-                       </VBox>
-                   </Tab>
-   
-                   <Tab text="Timetables">
-                       <VBox spacing="10" style="-fx-padding: 20;">
-                           <Label style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;" text="Department Timetable" />
-   
-                           <ComboBox promptText="Select Week" style="-fx-pref-width: 150;" />
-   
-                           <TableView style="-fx-pref-height: 400;">
-                               <columns>
-                                   <TableColumn prefWidth="100" text="Time" />
-                                   <TableColumn prefWidth="150" text="Monday" />
-                                   <TableColumn prefWidth="150" text="Tuesday" />
-                                   <TableColumn prefWidth="150" text="Wednesday" />
-                                   <TableColumn prefWidth="150" text="Thursday" />
-                                   <TableColumn prefWidth="150" text="Friday" />
-                               </columns>
-                           </TableView>
-                       </VBox>
-                   </Tab>
+    <center>
+        <ScrollPane BorderPane.alignment="CENTER">
+            <content>
 
-                   <!--- NOTICE BAR -->
-                   <Tab text="Notices">
-                       <VBox spacing="15" style="-fx-padding: 20;">
-                           <Label text="University Notices">
-                               <font>
-                                   <Font name="Arial Bold" size="18" />
-                               </font>
-                           </Label>
+                <TabPane tabClosingPolicy="UNAVAILABLE">
+                    <Tab text="Attendance Management">
+                        <VBox spacing="15" style="-fx-padding: 20;">
 
-                           <!-- Search and Filter Bar -->
-                           <HBox spacing="15">
-                               <TextField fx:id="searchNoticeField" prefWidth="250" promptText="Search by title..." />
-                               <Button fx:id="searchNoticeButton" style="-fx-background-color: #3498db; -fx-text-fill: white; -fx-cursor: hand;" text="Search" />
+                            <!-- ── Section Title ── -->
+                            <Label style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;" text="Attendance Management" />
 
-                               <Region HBox.hgrow="ALWAYS" />
+                            <!-- ── Filter / Search Bar ── -->
+                            <HBox spacing="12" style="-fx-background-color: #ecf0f1; -fx-padding: 12; -fx-background-radius: 6;">
+                                <Label style="-fx-font-weight: bold; -fx-alignment: center-left; -fx-pref-height: 30;" text="Filter by Student:" />
+                                <ComboBox fx:id="attStudentFilterCombo" prefWidth="230" promptText="— All Students —" />
+                                <Region HBox.hgrow="ALWAYS" />
+                                <Button fx:id="attClearFilterBtn" onAction="#handleAttClearFilter"
+                                        style="-fx-background-color: #95a5a6; -fx-text-fill: white; -fx-cursor: hand; -fx-background-radius: 5;"
+                                        text="Clear Filter" />
+                                <Button fx:id="attRefreshBtn" onAction="#handleAttRefresh"
+                                        style="-fx-background-color: #3498db; -fx-text-fill: white; -fx-cursor: hand; -fx-background-radius: 5;"
+                                        text="⟳  Refresh" />
+                            </HBox>
 
-                               <Label text="Filter by Audience:" />
-                               <ComboBox fx:id="filterAudienceCombo" prefWidth="120" />
+                            <!-- ── Attendance Table ── -->
+                            <TableView fx:id="attendanceTableView" VBox.vgrow="ALWAYS" style="-fx-pref-height: 320;">
+                                <columns>
+                                    <TableColumn fx:id="attIdCol"          prefWidth="60"  text="ID" />
+                                    <TableColumn fx:id="attStuIdCol"       prefWidth="110" text="Student ID" />
+                                    <TableColumn fx:id="attStudentNameCol" prefWidth="160" text="Student Name" />
+                                    <TableColumn fx:id="attCourseIdCol"    prefWidth="100" text="Course ID" />
+                                    <TableColumn fx:id="attCourseNameCol"  prefWidth="160" text="Course Name" />
+                                    <TableColumn fx:id="attSessionCol"     prefWidth="80"  text="Session" />
+                                    <TableColumn fx:id="attSessionTypeCol" prefWidth="85"  text="Type" />
+                                    <TableColumn fx:id="attStatusCol"      prefWidth="85"  text="Status" />
+                                    <TableColumn fx:id="attDateCol"        prefWidth="105" text="Date" />
+                                </columns>
+                                <placeholder>
+                                    <Label style="-fx-text-fill: #95a5a6; -fx-font-size: 14;" text="No attendance records found. Add one below." />
+                                </placeholder>
+                            </TableView>
 
-                               <CheckBox fx:id="showImportantOnlyCheck" text="Show Important Only" />
-                           </HBox>
+                            <!-- ── Action Buttons row ── -->
+                            <HBox spacing="10">
+                                <Button fx:id="attEditBtn" onAction="#handleAttEdit"
+                                        style="-fx-background-color: #f39c12; -fx-text-fill: white; -fx-cursor: hand; -fx-background-radius: 5;"
+                                        text="✎  Edit Selected" />
+                                <Button fx:id="attDeleteBtn" onAction="#handleAttDelete"
+                                        style="-fx-background-color: #e74c3c; -fx-text-fill: white; -fx-cursor: hand; -fx-background-radius: 5;"
+                                        text="🗑  Delete Selected" />
+                                <Region HBox.hgrow="ALWAYS" />
+                                <Label fx:id="attRecordCountLabel" style="-fx-text-fill: #7f8c8d; -fx-font-size: 12;" text="0 records" />
+                            </HBox>
 
-                           <!-- Statistics Bar -->
-                           <HBox spacing="20">
-                               <VBox spacing="5" style="-fx-background-color: #ecf0f1; -fx-padding: 10; -fx-background-radius: 5;">
-                                   <Label style="-fx-font-size: 12px; -fx-text-fill: #7f8c8d;" text="Total Notices" />
-                                   <Label fx:id="totalNoticesLabel" style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #3498db;" text="0" />
-                               </VBox>
+                            <Separator />
 
-                               <VBox spacing="5" style="-fx-background-color: #ecf0f1; -fx-padding: 10; -fx-background-radius: 5;">
-                                   <Label style="-fx-font-size: 12px; -fx-text-fill: #7f8c8d;" text="Important Notices" />
-                                   <Label fx:id="importantNoticesLabel" style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #e74c3c;" text="0" />
-                               </VBox>
-                           </HBox>
+                            <!-- ── Add / Edit Form ── -->
+                            <TitledPane fx:id="attFormPane" animated="true" expanded="true" text="Add New Attendance Record">
+                                <VBox spacing="12" style="-fx-padding: 15;">
 
-                           <!-- Notices Table and Details Split View -->
-                           <SplitPane dividerPositions="0.6" VBox.vgrow="ALWAYS">
-                               <TableView fx:id="noticesTableView" prefHeight="400">
-                                   <columns>
-                                       <TableColumn prefWidth="60" text="ID" />
-                                       <TableColumn prefWidth="250" text="Title" />
-                                       <TableColumn prefWidth="100" text="Date" />
-                                       <TableColumn prefWidth="100" text="Audience" />
-                                       <TableColumn prefWidth="80" text="Important" />
-                                   </columns>
-                               </TableView>
+                                    <!-- Row 1: Student + Course -->
+                                    <GridPane hgap="20" vgap="10">
+                                        <columnConstraints>
+                                            <ColumnConstraints prefWidth="130" minWidth="130" />
+                                            <ColumnConstraints prefWidth="240" hgrow="ALWAYS" />
+                                            <ColumnConstraints prefWidth="130" minWidth="130" />
+                                            <ColumnConstraints prefWidth="240" hgrow="ALWAYS" />
+                                        </columnConstraints>
+                                        <rowConstraints>
+                                            <RowConstraints minHeight="35" />
+                                            <RowConstraints minHeight="35" />
+                                            <RowConstraints minHeight="35" />
+                                            <RowConstraints minHeight="35" />
+                                        </rowConstraints>
 
-                               <VBox spacing="10" style="-fx-padding: 10;">
-                                   <Label fx:id="noticeTitleLabel" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;" text="Select a notice to view details" />
-                                   <Separator />
-                                   <TextArea fx:id="noticeDetailArea" editable="false" prefHeight="350" style="-fx-font-size: 14px;" wrapText="true" />
-                               </VBox>
-                           </SplitPane>
+                                        <!-- Student -->
+                                        <Label style="-fx-font-weight: bold;" text="Student *"
+                                               GridPane.columnIndex="0" GridPane.rowIndex="0" />
+                                        <ComboBox fx:id="attFormStudentCombo" prefWidth="240" promptText="Select student..."
+                                                  GridPane.columnIndex="1" GridPane.rowIndex="0" />
 
-                           <!-- Note for Lecturer -->
-                           <HBox alignment="CENTER_RIGHT">
-                               <Label style="-fx-text-fill: #7f8c8d; -fx-font-size: 11px;" text="📢 Notices are published by Admin. Contact Admin for any corrections." />
-                           </HBox>
-                       </VBox>
-                   </Tab>
-                   <Tab text="My Profile">
-                       <content>
-                           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-                               <children>
-                                   <HBox prefHeight="562.0" prefWidth="1126.0" spacing="30" style="-fx-padding: 20;">
-                                       <children>
-                                           <VBox spacing="15" style="-fx-alignment: center; -fx-pref-width: 250;">
-                                               <children>
-                                                   <ImageView fx:id="userMainImage" fitHeight="150" fitWidth="150" style="-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 5);" />
-                                                   <Button fx:id="updateProPicBtn" onAction="#handleUploadButton" style="-fx-background-color: #3498db; -fx-text-fill: white;" text="Change Profile Picture" />
-                                               </children>
-                                           </VBox>
-                                           <VBox prefHeight="522.0" prefWidth="771.0" spacing="15" style="-fx-pref-width: 400;">
-                                               <children>
-                                                   <Label style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;" text="Personal Information" />
-                                       <GridPane hgap="15" vgap="10">
-                                          <columnConstraints>
-                                             <ColumnConstraints maxWidth="110.79996337890623" minWidth="93.19998779296873" prefWidth="97.99997558593748" />
-                                             <ColumnConstraints maxWidth="291.6000122070312" minWidth="274.0000366210937" prefWidth="286.8000244140625" />
-                                          </columnConstraints>
-                                          <rowConstraints>
-                                             <RowConstraints />
-                                             <RowConstraints />
-                                             <RowConstraints minHeight="10.0" prefHeight="30.0" />
-                                             <RowConstraints minHeight="10.0" prefHeight="30.0" />
-                                             <RowConstraints />
-                                             <RowConstraints minHeight="10.0" prefHeight="30.0" />
-                                             <RowConstraints />
-                                             <RowConstraints />
-                                             <RowConstraints />
-                                          </rowConstraints>
-                                          <children>
-                                             <Label prefHeight="18.0" prefWidth="270.0" style="-fx-font-weight: bold;" text="Full Name:" GridPane.columnIndex="0" GridPane.rowIndex="0" />
-                                             <Label style="-fx-font-weight: bold;" text="To ID:" GridPane.columnIndex="0" GridPane.rowIndex="1" />
-                                             <Label fx:id="regNoField" text="lecID" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                                             <Label style="-fx-font-weight: bold;" text="Email:" GridPane.columnIndex="0" GridPane.rowIndex="4" />
-                                             <TextField fx:id="emailField" promptText="john.doe@students.ruhuna.ac.lk" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-                                             <Label style="-fx-font-weight: bold;" text="Address:" GridPane.columnIndex="0" GridPane.rowIndex="7" />
-                                             <TextArea fx:id="addressField" prefHeight="60" promptText="No. 123, Main Street, Galle" GridPane.columnIndex="1" GridPane.rowIndex="7" />
-                                             <HBox spacing="10" GridPane.columnIndex="1" GridPane.rowIndex="8">
+                                        <!-- Course -->
+                                        <Label style="-fx-font-weight: bold;" text="Course *"
+                                               GridPane.columnIndex="2" GridPane.rowIndex="0" />
+                                        <ComboBox fx:id="attFormCourseCombo" prefWidth="240" promptText="Select course..."
+                                                  GridPane.columnIndex="3" GridPane.rowIndex="0" />
+
+                                        <!-- Session Number -->
+                                        <Label style="-fx-font-weight: bold;" text="Session No. *"
+                                               GridPane.columnIndex="0" GridPane.rowIndex="1" />
+                                        <ComboBox fx:id="attFormSessionCombo" prefWidth="240" promptText="e.g. Session 1"
+                                                  GridPane.columnIndex="1" GridPane.rowIndex="1" />
+
+                                        <!-- Session Type -->
+                                        <Label style="-fx-font-weight: bold;" text="Session Type *"
+                                               GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                                        <ComboBox fx:id="attFormSessionTypeCombo" prefWidth="240"
+                                                  GridPane.columnIndex="3" GridPane.rowIndex="1">
+                                            <items>
+                                                <FXCollections fx:factory="observableArrayList">
+                                                    <String fx:value="Theory" />
+                                                    <String fx:value="Practical" />
+                                                </FXCollections>
+                                            </items>
+                                        </ComboBox>
+
+                                        <!-- Status -->
+                                        <Label style="-fx-font-weight: bold;" text="Status *"
+                                               GridPane.columnIndex="0" GridPane.rowIndex="2" />
+                                        <ComboBox fx:id="attFormStatusCombo" prefWidth="240"
+                                                  GridPane.columnIndex="1" GridPane.rowIndex="2">
+                                            <items>
+                                                <FXCollections fx:factory="observableArrayList">
+                                                    <String fx:value="Present" />
+                                                    <String fx:value="Absent" />
+                                                </FXCollections>
+                                            </items>
+                                        </ComboBox>
+
+                                        <!-- Date -->
+                                        <Label style="-fx-font-weight: bold;" text="Date *"
+                                               GridPane.columnIndex="2" GridPane.rowIndex="2" />
+                                        <DatePicker fx:id="attFormDatePicker" prefWidth="240"
+                                                    GridPane.columnIndex="3" GridPane.rowIndex="2" />
+
+                                        <!-- Form Buttons -->
+                                        <HBox spacing="10"
+                                              GridPane.columnIndex="0" GridPane.rowIndex="3"
+                                              GridPane.columnSpan="4">
+                                            <Button fx:id="attSaveBtn" onAction="#handleAttSave"
+                                                    style="-fx-background-color: #27ae60; -fx-text-fill: white; -fx-cursor: hand; -fx-background-radius: 5; -fx-font-weight: bold;"
+                                                    text="💾  Save Record" />
+                                            <Button fx:id="attCancelEditBtn" onAction="#handleAttCancelEdit"
+                                                    style="-fx-background-color: #95a5a6; -fx-text-fill: white; -fx-cursor: hand; -fx-background-radius: 5;"
+                                                    text="Cancel" />
+                                            <Label fx:id="attFormModeLabel"
+                                                   style="-fx-text-fill: #2980b9; -fx-font-style: italic; -fx-alignment: center-left;"
+                                                   text="" />
+                                        </HBox>
+                                    </GridPane>
+                                </VBox>
+                            </TitledPane>
+
+                        </VBox>
+                    </Tab>
+
+                    <Tab text="Medical Management">
+                        <VBox spacing="15" style="-fx-padding: 20;">
+                            <Label style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;" text="Medical Records" />
+
+                            <HBox spacing="15">
+                                <TextField promptText="Student ID or Name" style="-fx-pref-width: 200;" />
+                                <Button style="-fx-background-color: #3498db; -fx-text-fill: white;" text="Search" />
+                                <Button style="-fx-background-color: #27ae60; -fx-text-fill: white;" text="Add Medical Record" />
+                            </HBox>
+
+                            <!-- Medical Records Table -->
+                            <TableView style="-fx-pref-height: 300;">
+                                <columns>
+                                    <TableColumn prefWidth="100" text="Student ID" />
+                                    <TableColumn prefWidth="150" text="Name" />
+                                    <TableColumn prefWidth="100" text="Date" />
+                                    <TableColumn prefWidth="150" text="Reason" />
+                                    <TableColumn prefWidth="100" text="Status">
+                                        <!-- ComboBox for Approved/Not Approved -->
+                                    </TableColumn>
+                                    <TableColumn prefWidth="100" text="Actions" />
+                                </columns>
+                            </TableView>
+
+                            <!-- Add Medical Form -->
+                            <TitledPane expanded="false" text="Add New Medical Record">
+                                <VBox spacing="10" style="-fx-padding: 15;">
+                                    <HBox spacing="15">
+                                        <Label style="-fx-pref-width: 100;" text="Student ID:" />
+                                        <TextField promptText="Enter Student ID" />
+                                    </HBox>
+                                    <HBox spacing="15">
+                                        <Label style="-fx-pref-width: 100;" text="Date:" />
+                                        <DatePicker />
+                                    </HBox>
+                                    <HBox spacing="15">
+                                        <Label style="-fx-pref-width: 100;" text="Reason:" />
+                                        <TextArea promptText="Medical reason" style="-fx-pref-width: 300; -fx-pref-height: 80;" />
+                                    </HBox>
+                                    <HBox spacing="15">
+                                        <Label style="-fx-pref-width: 100;" text="Approved:" />
+                                        <CheckBox text="Approve" />
+                                    </HBox>
+                                    <Button style="-fx-background-color: #27ae60; -fx-text-fill: white;" text="Submit Medical" />
+                                </VBox>
+                            </TitledPane>
+                        </VBox>
+                    </Tab>
+
+                    <Tab text="Timetables">
+                        <VBox spacing="10" style="-fx-padding: 20;">
+                            <Label style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;" text="Department Timetable" />
+
+                            <ComboBox promptText="Select Week" style="-fx-pref-width: 150;" />
+
+                            <TableView style="-fx-pref-height: 400;">
+                                <columns>
+                                    <TableColumn prefWidth="100" text="Time" />
+                                    <TableColumn prefWidth="150" text="Monday" />
+                                    <TableColumn prefWidth="150" text="Tuesday" />
+                                    <TableColumn prefWidth="150" text="Wednesday" />
+                                    <TableColumn prefWidth="150" text="Thursday" />
+                                    <TableColumn prefWidth="150" text="Friday" />
+                                </columns>
+                            </TableView>
+                        </VBox>
+                    </Tab>
+
+                    <!--- NOTICE BAR -->
+                    <Tab text="Notices">
+                        <VBox spacing="15" style="-fx-padding: 20;">
+                            <Label text="University Notices">
+                                <font>
+                                    <Font name="Arial Bold" size="18" />
+                                </font>
+                            </Label>
+
+                            <!-- Search and Filter Bar -->
+                            <HBox spacing="15">
+                                <TextField fx:id="searchNoticeField" prefWidth="250" promptText="Search by title..." />
+                                <Button fx:id="searchNoticeButton" style="-fx-background-color: #3498db; -fx-text-fill: white; -fx-cursor: hand;" text="Search" />
+
+                                <Region HBox.hgrow="ALWAYS" />
+
+                                <Label text="Filter by Audience:" />
+                                <ComboBox fx:id="filterAudienceCombo" prefWidth="120" />
+
+                                <CheckBox fx:id="showImportantOnlyCheck" text="Show Important Only" />
+                            </HBox>
+
+                            <!-- Statistics Bar -->
+                            <HBox spacing="20">
+                                <VBox spacing="5" style="-fx-background-color: #ecf0f1; -fx-padding: 10; -fx-background-radius: 5;">
+                                    <Label style="-fx-font-size: 12px; -fx-text-fill: #7f8c8d;" text="Total Notices" />
+                                    <Label fx:id="totalNoticesLabel" style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #3498db;" text="0" />
+                                </VBox>
+
+                                <VBox spacing="5" style="-fx-background-color: #ecf0f1; -fx-padding: 10; -fx-background-radius: 5;">
+                                    <Label style="-fx-font-size: 12px; -fx-text-fill: #7f8c8d;" text="Important Notices" />
+                                    <Label fx:id="importantNoticesLabel" style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #e74c3c;" text="0" />
+                                </VBox>
+                            </HBox>
+
+                            <!-- Notices Table and Details Split View -->
+                            <SplitPane dividerPositions="0.6" VBox.vgrow="ALWAYS">
+                                <TableView fx:id="noticesTableView" prefHeight="400">
+                                    <columns>
+                                        <TableColumn prefWidth="60" text="ID" />
+                                        <TableColumn prefWidth="250" text="Title" />
+                                        <TableColumn prefWidth="100" text="Date" />
+                                        <TableColumn prefWidth="100" text="Audience" />
+                                        <TableColumn prefWidth="80" text="Important" />
+                                    </columns>
+                                </TableView>
+
+                                <VBox spacing="10" style="-fx-padding: 10;">
+                                    <Label fx:id="noticeTitleLabel" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;" text="Select a notice to view details" />
+                                    <Separator />
+                                    <TextArea fx:id="noticeDetailArea" editable="false" prefHeight="350" style="-fx-font-size: 14px;" wrapText="true" />
+                                </VBox>
+                            </SplitPane>
+
+                            <!-- Note for Lecturer -->
+                            <HBox alignment="CENTER_RIGHT">
+                                <Label style="-fx-text-fill: #7f8c8d; -fx-font-size: 11px;" text="📢 Notices are published by Admin. Contact Admin for any corrections." />
+                            </HBox>
+                        </VBox>
+                    </Tab>
+                    <Tab text="My Profile">
+                        <content>
+                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                <children>
+                                    <HBox prefHeight="562.0" prefWidth="1126.0" spacing="30" style="-fx-padding: 20;">
+                                        <children>
+                                            <VBox spacing="15" style="-fx-alignment: center; -fx-pref-width: 250;">
                                                 <children>
-                                                   <Button onAction="#saveProfileDetails" style="-fx-background-color: #27ae60; -fx-text-fill: white; -fx-cursor: hand;" text="Update Profile" />
-                                                   <Button fx:id="selfDetailsCancelBtn" onAction="#cancelSelfFormDetails" style="-fx-background-color: #95a5a6; -fx-text-fill: white; -fx-cursor: hand;" text="Cancel" />
+                                                    <ImageView fx:id="userMainImage" fitHeight="150" fitWidth="150" style="-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 5);" />
+                                                    <Button fx:id="updateProPicBtn" onAction="#handleUploadButton" style="-fx-background-color: #3498db; -fx-text-fill: white;" text="Change Profile Picture" />
                                                 </children>
-                                             </HBox>
-                                             <TextField fx:id="fullNameField" promptText="Jhone Doe" GridPane.columnIndex="1" />
-                                             <Label layoutX="10.0" layoutY="78.0" style="-fx-font-weight: bold;" text="Gender:" GridPane.rowIndex="5" />
-                                             <TextField fx:id="genderField" layoutX="113.0" layoutY="74.0" promptText="Male / Female" GridPane.columnIndex="1" GridPane.rowIndex="5" />
-                                             <Label layoutX="10.0" layoutY="46.0" style="-fx-font-weight: bold;" text="Department" GridPane.rowIndex="2" />
-                                             <Label layoutX="10.0" layoutY="80.0" prefHeight="18.0" prefWidth="107.0" style="-fx-font-weight: bold;" text="Hired Date:" GridPane.rowIndex="3" />
-                                             <ComboBox fx:id="departmentSelect" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                                             <Label fx:id="hiredDateField" text="1970/01/01" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-                                          </children>
-                                       </GridPane>
-                                               </children>
-                                           </VBox>
-                                       </children>
-                                   </HBox>
-                               </children>
-                           </AnchorPane>
-                       </content>
-                   </Tab>
-               </TabPane>
-         </content>
-      </ScrollPane>
-   </center>
+                                            </VBox>
+                                            <VBox prefHeight="522.0" prefWidth="771.0" spacing="15" style="-fx-pref-width: 400;">
+                                                <children>
+                                                    <Label style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;" text="Personal Information" />
+                                                    <GridPane hgap="15" vgap="10">
+                                                        <columnConstraints>
+                                                            <ColumnConstraints maxWidth="110.79996337890623" minWidth="93.19998779296873" prefWidth="97.99997558593748" />
+                                                            <ColumnConstraints maxWidth="291.6000122070312" minWidth="274.0000366210937" prefWidth="286.8000244140625" />
+                                                        </columnConstraints>
+                                                        <rowConstraints>
+                                                            <RowConstraints />
+                                                            <RowConstraints />
+                                                            <RowConstraints minHeight="10.0" prefHeight="30.0" />
+                                                            <RowConstraints minHeight="10.0" prefHeight="30.0" />
+                                                            <RowConstraints />
+                                                            <RowConstraints minHeight="10.0" prefHeight="30.0" />
+                                                            <RowConstraints />
+                                                            <RowConstraints />
+                                                            <RowConstraints />
+                                                        </rowConstraints>
+                                                        <children>
+                                                            <Label prefHeight="18.0" prefWidth="270.0" style="-fx-font-weight: bold;" text="Full Name:" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+                                                            <Label style="-fx-font-weight: bold;" text="To ID:" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+                                                            <Label fx:id="regNoField" text="lecID" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                                            <Label style="-fx-font-weight: bold;" text="Email:" GridPane.columnIndex="0" GridPane.rowIndex="4" />
+                                                            <TextField fx:id="emailField" promptText="john.doe@students.ruhuna.ac.lk" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                                                            <Label style="-fx-font-weight: bold;" text="Address:" GridPane.columnIndex="0" GridPane.rowIndex="7" />
+                                                            <TextArea fx:id="addressField" prefHeight="60" promptText="No. 123, Main Street, Galle" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+                                                            <HBox spacing="10" GridPane.columnIndex="1" GridPane.rowIndex="8">
+                                                                <children>
+                                                                    <Button onAction="#saveProfileDetails" style="-fx-background-color: #27ae60; -fx-text-fill: white; -fx-cursor: hand;" text="Update Profile" />
+                                                                    <Button fx:id="selfDetailsCancelBtn" onAction="#cancelSelfFormDetails" style="-fx-background-color: #95a5a6; -fx-text-fill: white; -fx-cursor: hand;" text="Cancel" />
+                                                                </children>
+                                                            </HBox>
+                                                            <TextField fx:id="fullNameField" promptText="Jhone Doe" GridPane.columnIndex="1" />
+                                                            <Label layoutX="10.0" layoutY="78.0" style="-fx-font-weight: bold;" text="Gender:" GridPane.rowIndex="5" />
+                                                            <TextField fx:id="genderField" layoutX="113.0" layoutY="74.0" promptText="Male / Female" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+                                                            <Label layoutX="10.0" layoutY="46.0" style="-fx-font-weight: bold;" text="Department" GridPane.rowIndex="2" />
+                                                            <Label layoutX="10.0" layoutY="80.0" prefHeight="18.0" prefWidth="107.0" style="-fx-font-weight: bold;" text="Hired Date:" GridPane.rowIndex="3" />
+                                                            <ComboBox fx:id="departmentSelect" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                                                            <Label fx:id="hiredDateField" text="1970/01/01" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                                                        </children>
+                                                    </GridPane>
+                                                </children>
+                                            </VBox>
+                                        </children>
+                                    </HBox>
+                                </children>
+                            </AnchorPane>
+                        </content>
+                    </Tab>
+                </TabPane>
+            </content>
+        </ScrollPane>
+    </center>
 </BorderPane>
