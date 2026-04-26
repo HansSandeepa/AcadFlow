@@ -26,7 +26,7 @@ public class DisplayUser {
         this.userType = userType;
     }
 
-    public int getUserId() { return userId; }
+    public int getUserId() {return userId; }
     public String getFullname() { return fullname; }
     public String getAddress() { return address; }
     public LocalDate getDob() { return dob; }

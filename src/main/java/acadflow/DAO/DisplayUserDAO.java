@@ -1,5 +1,6 @@
 package acadflow.DAO;
 
+import acadflow.models.DisplayTimeTable;
 import acadflow.models.DisplayUser;
 import acadflow.util.DBConnection;
 
@@ -198,4 +199,119 @@ public class DisplayUserDAO {
                 rs.getString("User_type")
         );
     }
+
+/************************************************************************************************/
+
+    //ADD TIMETABLE
+    public boolean addDisplayTimeTable(DisplayTimeTable timeTable) {
+        String query = "INSERT INTO time_table (Timetable_id, Day, Time, Level_and_Semester, Session_type, Department, Course_id, Admin_id) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+
+
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
+
+            pstmt.setString(1, timeTable.getTimetableId());
+            pstmt.setString(2, timeTable.getDay());
+            pstmt.setString(3, timeTable.getTime());
+            pstmt.setString(4, timeTable.getLevelAndSem());
+            pstmt.setString(5, timeTable.getSessionType());
+            pstmt.setString(6, timeTable.getDept());
+            pstmt.setString(7, timeTable.getCourseId());
+            pstmt.setString(8, timeTable.getAdminId());
+
+            int affectedRows = pstmt.executeUpdate();
+            return affectedRows > 0;
+
+        } catch (SQLException e) {
+            System.err.println("Error adding time table: " + e.getMessage());
+            e.printStackTrace();
+            return false;
+        }
+
+    }
+
+    //GET ALL TIME TABLES
+    public List<DisplayTimeTable> getAllDisplayTimeTable() {
+        List<DisplayTimeTable> tables = new ArrayList<>();
+        String query = "SELECT * FROM time_table";
+
+        try (Connection conn = DBConnection.getConnection();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(query)) {
+
+            while (rs.next()) {
+                DisplayTimeTable table = new DisplayTimeTable(
+                        rs.getString("Timetable_id"),
+                        rs.getString("Day"),
+                        rs.getString("Time"),
+                        rs.getString("Level_and_Semester"),
+                        rs.getString("Session_type"),
+                        rs.getString("Department"),
+                        rs.getString("Course_id"),
+                        rs.getString("Admin_id")
+                );
+                tables.add(table);
+            }
+        } catch (SQLException e) {
+            System.err.println("Error getting all Tables: " + e.getMessage());
+            e.printStackTrace();
+        }
+        return tables;
+    }
+
+    //GET TABLES FROM DEPARTMENT
+    public List<DisplayTimeTable> getDisplayTablesByDept(String dept, String tableType) {
+        List<DisplayTimeTable> tables = new ArrayList<>();
+        String query = "SELECT * FROM time_table WHERE Department = ? AND Level_And_Semester = ?";
+
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(query)) {
+
+            pstmt.setString(1, dept);
+            pstmt.setString(2, tableType);
+            ResultSet rs = pstmt.executeQuery();
+
+            while (rs.next()) {
+                DisplayTimeTable table = new DisplayTimeTable(
+                        rs.getString("Timetable_id"),
+                        rs.getString("Day"),
+                        rs.getString("Time"),
+                        rs.getString("Level_and_Semester"),
+                        rs.getString("Session_type"),
+                        rs.getString("Department"),
+                        rs.getString("Course_id"),
+                        rs.getString("Admin_id")
+                );
+                tables.add(table);
+            }
+        } catch (SQLException e) {
+            System.err.println("Error Getting Tables by Department: " + e.getMessage());
+            e.printStackTrace();
+        }
+        return tables;
+
+    }
+
+    //BEHIND THE SCENE DELETE FUNCTION
+    public boolean deleteDisplayTable(String tableId) {
+        String query = "DELETE FROM time_table WHERE Timetable_id = ?";
+
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(query)) {
+
+            pstmt.setString(1, tableId);
+            int affectedRows = pstmt.executeUpdate();
+            return affectedRows > 0;
+
+        } catch (SQLException e) {
+            System.err.println("Error Deleting Table Row: " + e.getMessage());
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    /*********************************************************************************************************************/
+
+
 }

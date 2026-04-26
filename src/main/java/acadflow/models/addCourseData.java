@@ -15,7 +15,22 @@ public class addCourseData {
                 new CoursesData("BST2112", "Application of Biosystems Technology", 2, "Both","BST"),
                 new CoursesData("BST2123", "Engineering Properties of Biomaterials", 3, "Both","BST"),
                 new CoursesData("ENT2122", "Thermodynamics", 2, "T","ET"),
-                new CoursesData("ENT2152", "Properties of Materials and Application", 2, "Both","ET")
+                new CoursesData("ENT2152", "Properties of Materials and Application", 2, "Both","ET"),
+                new CoursesData("ICT1212", "Database Management Systems", 2, "T","ICT"),
+                new CoursesData("ICT1222", "Database Management Systems Practicum", 2, "P","ICT"),
+                new CoursesData("ICT1233", "Server Side Web Development", 3, "Both","ICT"),
+                new CoursesData("ICT1242", "Computer Architecture", 2, "T","ICT"),
+                new CoursesData("TMS1133", "Physics of Mechanical Systems", 1, "Both", "ET"),
+                new CoursesData("TMS1141", "Physics of Mechanical Systems Laboratory", 1, "P", "ET"),
+                new CoursesData("TMS1152", "Applied Calculus I", 2, "T", "ET"),
+                new CoursesData("ENG1212", "Language Skill Enhancement II", 2, "T", "ET"),
+                new CoursesData("ENT1212", "Advance Manufacturing Technology", 2, "Both", "ET"),
+                new CoursesData("BST1222", "Electronics for Biosystems Technology", 2, "Both", "BST"),
+                new CoursesData("BST1232", "Organic Chemistry", 2, "T", "BST"),
+                new CoursesData("BST1242", "Introduction to Environmental Science", 2, "T", "BST"),
+                new CoursesData("BST1253", "Biology II", 2, "Both", "BST"),
+                new CoursesData("BST1262", "Introduction to Fisheries Biology", 2, "Both", "BST")
+
         };
 
         try(Connection conn = DBConnection.getConnection()){
